@@ -2,52 +2,31 @@
   description = "Michael's flake";
 
   inputs = {
-    nixpkgs = {
-      url = "github:NixOS/nixpkgs/nixos-unstable";
-    };
-    home-manager = {
-      url = "github:nix-community/home-manager/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # Unstable and stable nixpkgs channels
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.11";
+
+    # Home manager
+    home-manager.url = "github:nix-community/home-manager/master";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Nix User Repository
+    nur.url = "github:nix-community/NUR";
+    nur.inputs.nixpkgs.follows = "nixpkgs";
+
+    # NixOS hardware configuration
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }:
-  let
-    systemSettings = {
-      system = "x86_64-linux";
-      hostname = "claptrap";
-      timeZone = "Europe/Berlin";
-      locale = "en_US.UTF-8";
-    };
-    userSettings = {
-      username = "michael";
-      name = "Michael Dyer";
-      email = "michaelowendyer@gmail.com";
+  outputs = inputs @ { nixpkgs, home-manager, nur, nixos-hardware, ... }: let 
+    nixosSystems = {
+      claptrap = import ./machines/claptrap { inherit inputs nixpkgs home-manager nur nixos-hardware; };
+      rustbucket = import ./machines/rustbucket { inherit inputs nixpkgs home-manager nur nixos-hardware; };
     };
   in {
-    nixosConfigurations = {
-      claptrap = nixpkgs.lib.nixosSystem {
-        system = systemSettings.system;
-        modules = [
-          ./configuration.nix
-        ];
-        specialArgs = {
-          inherit systemSettings;
-          inherit userSettings;
-        };
-      };
-    };
-    homeConfigurations = {
-      michael = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.${systemSettings.system};
-        modules = [
-          ./home.nix
-        ];
-        extraSpecialArgs = {
-          inherit systemSettings;
-          inherit userSettings;
-        };
-      };
-    };
+    nixosConfigurations = nixosSystems;
+    homeConfigurations = nixpkgs.lib.mapAttrs (name: system: 
+      system.config.home-manager.users.${system.config.username}.home
+    ) nixosSystems;
   };
 }
