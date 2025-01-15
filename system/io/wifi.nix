@@ -6,6 +6,7 @@
 		system.wifi.enable = true;
 		# Enable network manager
 		networking.networkmanager.enable = true;
+		# TODO: Separate the user configuration from the system configuration?
 		# Add user to network manager group on the system
 		users.users.${config.username}.extraGroups = [ "networkmanager" ];
 		# Add network manager applet to home packages

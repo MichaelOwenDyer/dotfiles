@@ -8,17 +8,17 @@ in nixpkgs.lib.nixosSystem {
 
 	modules = [
 
-		../. # Include top-level default.nix
+		../system # Include default system configuration
 
-		../profiles/michael
+		../home/profiles/michael
 
-		../development/ide/vscode.nix
+		../home/development/ide/vscode.nix
 
-		../browser/firefox.nix
+		../home/browser/firefox.nix
 
-		../shell/zsh.nix
+		../home/shell/zsh.nix
 
-		../system/wifi.nix
+		../system/io/wifi.nix
 
 		## This module will return a `home-manager' object that can be used
 		## in other modules (including this one).
