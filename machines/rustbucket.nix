@@ -12,13 +12,16 @@ in nixpkgs.lib.nixosSystem {
 
 		../profiles/michael.nix
 
+    ../shell/zsh.nix
+
     ../development/ide/vscode.nix
     ../development/ide/intellij-idea.nix
     ../development/ide/rust-rover.nix
 
     ../browser/firefox.nix
 
-    ../shell/zsh.nix
+    ../games/steam.nix
+    ../chat/discord.nix
 
     ## This module will return a `home-manager' object that can be used
     ## in other modules (including this one).
