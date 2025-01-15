@@ -10,8 +10,9 @@
         "sudo"
         "git"
         "git-prompt"
-      ]
-      ++ lib.optionals config.development.lang.rust.enable [ "rust" ];
+      ] ++ lib.optionals config.development.lang.rust.enable [
+        "rust"
+      ];
     };
   };
 }

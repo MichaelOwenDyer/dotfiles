@@ -2,16 +2,8 @@
   jetbrainsPlugins = import ./common-plugins.nix;
   rustRoverPlugins = [];
 in {
-
-  # Define the options for the RustRover module
-  options.development.ide.rust-rover = {
-    extraPlugins = lib.mkOption {
-      type = lib.types.listOf lib.types.string;
-      default = [];
-      description = "Extra plugins to install with RustRover";
-    };
-  };
-
+  # Mark RustRover as enabled for other modules to see
+  config.development.ide.rust-rover.enable = true;
   # If we are enabling RustRover, we probably also want Rust enabled
   config.development.lang.rust.enable = lib.mkDefault true;
 

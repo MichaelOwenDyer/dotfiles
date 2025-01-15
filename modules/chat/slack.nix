@@ -13,5 +13,5 @@
 		'';
 	});
 in {
-  config.home-manager.users.${config.user}.home.packages = [ slackPkg ];
+  config.home-manager.users.${config.username}.home.packages = [ slackPkg ];
 }

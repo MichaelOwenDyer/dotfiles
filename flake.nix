@@ -20,8 +20,8 @@
 
   outputs = inputs @ { nixpkgs, home-manager, nur, nixos-hardware, ... }: let 
     nixosSystems = {
-      claptrap = import ./machines/claptrap { inherit inputs nixpkgs home-manager nur nixos-hardware; };
-      rustbucket = import ./machines/rustbucket { inherit inputs nixpkgs home-manager nur nixos-hardware; };
+      claptrap = import ./machines/claptrap.nix { inherit inputs nixpkgs home-manager nur nixos-hardware; };
+      rustbucket = import ./machines/rustbucket.nix { inherit inputs nixpkgs home-manager nur nixos-hardware; };
     };
   in {
     nixosConfigurations = nixosSystems;

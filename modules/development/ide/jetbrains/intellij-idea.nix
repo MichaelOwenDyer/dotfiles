@@ -2,16 +2,8 @@
 	commonPlugins = import ./common-plugins.nix;
   plugins = [ ];
 in {
-
-  # Define the options for the IntelliJ IDEA module
-  options.development.ide.intellij-idea = {
-    extraPlugins = lib.mkOption {
-      type = lib.types.listOf lib.types.string;
-      default = [];
-      description = "Extra plugins to install with IntelliJ IDEA";
-    };
-  };
-
+  # Mark IntelliJ IDEA as enabled for other modules to see
+  config.development.ide.intellij-idea.enable = true;
   # If we are enabling IntelliJ IDEA, we probably also want Java enabled
   config.development.lang.java.enable = lib.mkDefault true;
 

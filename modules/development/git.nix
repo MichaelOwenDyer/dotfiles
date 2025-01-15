@@ -7,7 +7,7 @@
     
     ## Set username and email according to predefined options
     userName = "${config.fullName}";
-    userEmail = "michaelowendyer@gmail.com"; # TODO: Change this to use the email from the config
+    userEmail = "${config.email}";
 
     ## Set up signing key and auto-sign commits
     # signing.key = "${config.const.signingKey}"; TODO: Figure out signing key

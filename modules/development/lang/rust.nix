@@ -1,9 +1,6 @@
-{ config, settings, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
-	options.development.lang.rust = {
-		enable = lib.mkEnableOption "Rust programming language support";
-	};
-
+  config.development.lang.rust.enable = true;
   config.home-manager.users.${config.username}.home.packages = with pkgs; [ rustup ];
 }

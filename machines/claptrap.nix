@@ -1,10 +1,10 @@
-{ inputs, ... }:
-
-with inputs;
-
-nixpkgs.lib.nixosSystem {
+{ nixpkgs, home-manager, nur, nixos-hardware, ... }: let
 
   system = "x86_64-linux";
+  
+in nixpkgs.lib.nixosSystem {
+
+  inherit system;
 
   modules = [
 
@@ -16,13 +16,15 @@ nixpkgs.lib.nixosSystem {
 
     ../modules/shell/zsh.nix
 
+    ../modules/system/wifi.nix
+
     ## This module will return a `home-manager' object that can be used
     ## in other modules (including this one).
     home-manager.nixosModules.home-manager
 
     ## This module will return a `nur' object that can be used to access
     ## NUR packages.
-    nur.nixosModules.nur
+    nur.modules.nixos.default
 
     # Use pre-defined hardware configuration for Dell XPS 13 9360
     nixos-hardware.nixosModules.dell-xps-13-9360
@@ -34,6 +36,7 @@ nixpkgs.lib.nixosSystem {
 
       networking.hostName = "claptrap";
       time.timeZone = "Europe/Berlin";
+      machine.isLaptop = true;
 
       # Set cpu governor to powersave
       powerManagement.cpuFreqGovernor = "powersave";
@@ -62,16 +65,11 @@ nixpkgs.lib.nixosSystem {
       services.xserver.synaptics.palmDetect = true;
       
       ## Setting keymap to `us' for this machine.
-      os.keyboard.layout = "us";
+      # os.keyboard.layout = "us"; TODO: Introduce option
       
       console = {
         font = "Lat2-Terminus16";
-        keyMap = config.os.keyboard.layout;
-      };
-
-      users.users.${config.username} = {
-        extraGroups = [ "wheel" "video" "input" ]; 
-        isNormalUser = true;
+        keyMap = "us"; # TODO: Use os.keyboard.layout
       };
 
       ## Hardware configuration
@@ -82,7 +80,7 @@ nixpkgs.lib.nixosSystem {
       boot.extraModulePackages = [ ];
           
       # Use the latest kernel
-      boot.kernelPackages = (lib.mkDefault pkgs.linux_latest);
+      # boot.kernelPackages = (lib.mkDefault pkgs.linux_latest); TODO: Reintroduce this
 
       fileSystems."/" = {
         device = "/dev/disk/by-uuid/3bf7699c-c538-4368-842c-dce257ee819e";
@@ -99,15 +97,10 @@ nixpkgs.lib.nixosSystem {
         { device = "/dev/disk/by-uuid/96ea764b-fd7b-4445-b437-ddb55c24ceed"; }
       ];
 
-      # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
-      # (the default) this is the recommended approach. When using systemd-networkd it's
-      # still possible to use this option, but it's recommended to use it in conjunction
-      # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-      networking.useDHCP = lib.mkDefault true;
       # networking.interfaces.enp57s0u1u2.useDHCP = lib.mkDefault true;
       # networking.interfaces.wlp58s0.useDHCP = lib.mkDefault true;
 
-      nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+      nixpkgs.hostPlatform = lib.mkDefault system;
       hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     })
   ];

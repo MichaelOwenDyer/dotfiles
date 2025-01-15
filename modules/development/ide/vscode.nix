@@ -1,4 +1,4 @@
-{ config, settings, lib, pkgs, ... }: let
+{ config, lib, pkgs, ... }: let
 	vscodePkg = (pkgs.vscode-with-extensions.override {
 		vscodeExtensions = with pkgs.vscode-extensions; [
 			dracula-theme.theme-dracula # Dark theme
@@ -11,47 +11,53 @@
 		];
 	});
 in {
+  # Mark VSCode as enabled for other modules to see
+  config.development.ide.vscode.enable = true;
+
+  # TODO: Honor config.development.ide.vscode.extraExtensions
+  # TODO: Configure per-language settings
 	
-  config.home-manager.users.${config.user} = {
-		programs.vscode = {
-			enable = true;
-			package = vscodePkg;
-			
-			userSettings = {
-				window.titleBarStyle = "custom"; 
-
-				## No auto-sync
-				git.confirmSync = false;
-				
-				## Auto save
-				files.autoSave = "onFocusChange";
-
-				## No tabs
-				workbench.editor.showTabs = "none";
-
-				## Indentation
-			#   "editor.tabSize" =  2;
-			#   "editor.detectIndentation" = false;
-
-				## Font
-			#   "editor.fontFamily" = "'${config.os.fonts.mono.regular}', 'monospace', monospace";
-			#   "editor.fontSize" = config.os.fonts.size + 2;
-			#   "editor.fontLigatures" = true;
-
-				# typscript
-				#"typescript.tsserver.log" = "verbose";
-			#   "typescript.tsdk" = "${pkgs.nodePackages.typescript}/lib/node_modules/typescript/lib";
-			};
-
-			keybindings = [
-			#   { key = "ctrl+shift+alt+p"; command = "eslint.executeAutofix"; }
-				{
-					key = "ctrl+alt+o";
-					command = "editor.action.organizeImports";
-					when = "textInputFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/";
-				}
-			];
-		};
+  config.home-manager.users.${config.username} = {
+		home.packages = [ vscodePkg ];
+		# programs.vscode = {
+		# 	enable = true;
+		# 	package = pkgs.vscode; # TODO: Use vscodePkg
+		# 	
+		# 	userSettings = {
+		# 		window.titleBarStyle = "custom"; 
+# 
+		# 		## No auto-sync
+		# 		git.confirmSync = false;
+		# 		
+		# 		## Auto save
+		# 		files.autoSave = "onFocusChange";
+# 
+		# 		## No tabs
+		# 		workbench.editor.showTabs = "none";
+# 
+		# 		## Indentation
+		# 	#   "editor.tabSize" =  2;
+		# 	#   "editor.detectIndentation" = false;
+# 
+		# 		## Font
+		# 	#   "editor.fontFamily" = "'${config.os.fonts.mono.regular}', 'monospace', monospace";
+		# 	#   "editor.fontSize" = config.os.fonts.size + 2;
+		# 	#   "editor.fontLigatures" = true;
+# 
+		# 		# typscript
+		# 		#"typescript.tsserver.log" = "verbose";
+		# 	#   "typescript.tsdk" = "${pkgs.nodePackages.typescript}/lib/node_modules/typescript/lib";
+		# 	};
+# 
+		# 	keybindings = [
+		# 	#   { key = "ctrl+shift+alt+p"; command = "eslint.executeAutofix"; }
+		# 		{
+		# 			key = "ctrl+alt+o";
+		# 			command = "editor.action.organizeImports";
+		# 			when = "textInputFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/";
+		# 		}
+		# 	];
+		# };
 	};
 }
 
