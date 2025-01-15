@@ -1,5 +1,5 @@
 { config, lib, pkgs, ... }: let 
-  jetbrainsPlugins = import ./common-plugins.nix;
+  jetbrainsPlugins = import ./jetbrains-plugins.nix;
   rustRoverPlugins = [];
 in {
   # Mark RustRover as enabled for other modules to see
