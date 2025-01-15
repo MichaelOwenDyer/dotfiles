@@ -10,7 +10,7 @@ in nixpkgs.lib.nixosSystem {
 
 		../. # Include top-level default.nix
 
-		../profiles/michael.nix
+		../profiles/michael
 
 		../development/ide/vscode.nix
 
