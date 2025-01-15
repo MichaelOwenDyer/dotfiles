@@ -3,7 +3,7 @@
 
 {
 	imports = [
-		./modules/system/audio.nix
+		./system/audio.nix
 	];
 
 	options = import ./options.nix { inherit lib; };
