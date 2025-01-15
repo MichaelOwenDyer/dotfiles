@@ -9,7 +9,7 @@ in {
 
   config.home-manager.users.${config.username} = let 
     allPlugins = jetbrainsPlugins ++ plugins ++ config.development.ide.intellij-idea.extraPlugins;
-    ideaPkg = jetbrains.plugins.addPlugins jetbrains.idea-ultimate allPlugins;
+    ideaPkg = pkgs.jetbrains.plugins.addPlugins pkgs.jetbrains.idea-ultimate allPlugins;
   in {
     home.packages = [ ideaPkg ];
   };

@@ -33,7 +33,7 @@ in nixpkgs.lib.nixosSystem {
     ## Closure that returns the module containing configuration specific to this machine
     ({ lib, config, pkgs, ... }: {
 
-      networking.hostname = "rustbucket";
+      networking.hostName = "rustbucket";
       time.timeZone = "Europe/Berlin";
 
       # OpenGL

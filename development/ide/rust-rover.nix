@@ -9,7 +9,7 @@ in {
 
   config.home-manager.users.${config.username} = let
     allPlugins = jetbrainsPlugins ++ rustRoverPlugins ++ config.development.ide.rust-rover.extraPlugins;
-    rustRoverPkg = jetbrains.plugins.addPlugins jetbrains.rust-rover allPlugins;
+    rustRoverPkg = pkgs.jetbrains.plugins.addPlugins pkgs.jetbrains.rust-rover allPlugins;
   in {
     home.packages = [ rustRoverPkg ];
   };
