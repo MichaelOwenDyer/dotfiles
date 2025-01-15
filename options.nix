@@ -5,19 +5,16 @@
 in {
   username = mkOption {
     type = types.str;
-    default = "michael";
     description = "Primary user of the system";
   };
 
   fullName = mkOption {
     type = types.str;
-    default = "Michael Dyer";
     description = "Full name of the user";
   };
 
   email = mkOption {
     type = types.str;
-    default = "michaelowendyer@gmail.com";
     description = "Email address of the user";
   };
   

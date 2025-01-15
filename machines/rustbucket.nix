@@ -10,6 +10,8 @@ in nixpkgs.lib.nixosSystem {
 
     ../. # Include top-level default.nix
 
+		../profiles/michael.nix
+
     ../development/ide/vscode.nix
     ../development/ide/intellij-idea.nix
     ../development/ide/rust-rover.nix
