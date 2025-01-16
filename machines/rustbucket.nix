@@ -8,7 +8,7 @@ in nixpkgs.lib.nixosSystem {
 
   modules = [
 
-    ../. # Include top-level default.nix
+    ../system # Include default system configuration
 
 		../profiles/michael
 
@@ -39,8 +39,9 @@ in nixpkgs.lib.nixosSystem {
       networking.hostName = "rustbucket";
       time.timeZone = "Europe/Berlin";
 
-      # OpenGL
-      hardware.graphics.enable = true;
+      # Enable automatic login for the user.
+      services.displayManager.autoLogin.enable = true;
+      services.displayManager.autoLogin.user = config.username;
 
       # Nvidia drivers for Xorg and Wayland
       services.xserver.videoDrivers = [ "nvidia" ];

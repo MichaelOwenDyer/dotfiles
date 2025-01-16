@@ -8,32 +8,19 @@
 	# Locale
 	i18n.defaultLocale = "en_US.UTF-8";
 
-	nix = {
-		# Enable the nix command and flakes
-		settings.experimental-features = [ "nix-command" "flakes" ];
+	# Enable the nix command and flakes
+	nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-		# Optimize storage
-		# You can also manually optimize the store via:
-		#    nix-store --optimise
-		# Refer to the following link for more details:
-		# https://nixos.org/manual/nix/stable/command-ref/conf-file.html#conf-auto-optimise-store
-		settings.auto-optimise-store = true;
+	# Optimize storage after each build
+	nix.settings.auto-optimise-store = true;
+	# Optimize storage daily at 4am
+	nix.optimise.automatic = true;
+	nix.optimise.dates = [ "04:00" ];
 
-		# Store optimization
-		# optimise.automatic = true; TODO: Investigate difference to above
-
-		# Don't warn about building uncommitted git changes
-		extraOptions = ''
-			warn-dirty = false
-		'';
-
-		# Automatic garbage collection
-		# gc = {
-		# 	automatic = true;
-		# 	dates = "weekly";
-		# 	options = "--delete-older-than 7d";
-		# };
-	};
+	# Don't warn about building uncommitted git changes
+	nix.extraOptions = ''
+		warn-dirty = false
+	'';
 
 	# Bootloader
 	boot.loader.systemd-boot.enable = true;
@@ -83,10 +70,6 @@
 		extraGroups = [ "wheel" "video" "audio" "input" ];   
 	};
 
-	# Enable automatic login for the user.
-	# services.displayManager.autoLogin.enable = true;
-	# services.displayManager.autoLogin.user = config.username;
-
 	# Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
 	systemd.services."getty@tty1".enable = false;
 	systemd.services."autovt@tty1".enable = false;
@@ -115,18 +98,12 @@
 			# Set home directory
 			homeDirectory = "/home/${config.username}";
 
-			packages = with pkgs; [
-				# Global home packages
-			] ++ lib.optionals config.os.wayland [
-				# Wayland specific packages
-			];
-
 			# Set state version for home-manager
-			stateVersion = "${config.stateVersion}";
+			stateVersion = config.stateVersion;
 		};
 	};
 
 	# Set state version for system
-	system.stateVersion = "${config.stateVersion}";
+	system.stateVersion = config.stateVersion;
 }
 
