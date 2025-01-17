@@ -1,7 +1,11 @@
 { config, lib, pkgs, ... }:
 
 {
-  config = {  
+  # Declare the option to enable or disable Steam
+  options.games.steam.enable = lib.mkEnableOption "Steam";
+
+  # Configure Steam if enabled
+  config = lib.mkIf config.games.steam.enable {  
     hardware.steam-hardware.enable = true;
     programs.steam = {
       enable = true;
