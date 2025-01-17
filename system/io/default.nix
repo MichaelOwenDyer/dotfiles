@@ -4,6 +4,6 @@
 	imports = [
 		./audio.nix
 		./printing.nix
-    ./wifi.nix
+		./wifi.nix
 	];
 }

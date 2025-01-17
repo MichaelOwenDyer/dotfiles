@@ -1,16 +1,16 @@
 { config, lib, pkgs, ... }:
 
 {
-  # Declare configuration options for Firefox under options.profiles.<name>.browser.firefox
-  options.profiles = let inherit (lib) mkOption mkEnableOption; in with lib.types; mkOption {
-    type = attrsOf (submodule {
-      options.browser.firefox = {
-        enable = mkEnableOption "Firefox";
-      };
-    });
-  };
+	# Declare configuration options for Firefox under options.profiles.<name>.browser.firefox
+	options.profiles = let inherit (lib) mkOption mkEnableOption; in with lib.types; mkOption {
+		type = attrsOf (submodule {
+			options.browser.firefox = {
+				enable = mkEnableOption "Firefox";
+			};
+		});
+	};
 
-  # Configure Firefox for each user profile
+	# Configure Firefox for each user profile
 	config.home-manager.users = lib.mapAttrs (username: profile: {
 		# Setting the proper session variables for wayland
 		home.sessionVariables = lib.mkIf config.os.wayland {

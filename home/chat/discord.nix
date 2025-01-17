@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }: let
 	
 in {
-  # Declare configuration options for Discord under options.profiles.<name>.chat.discord
-  options.profiles = let inherit (lib) mkOption mkEnableOption; in with lib.types; mkOption {
-    type = attrsOf (submodule {
-      options.chat.discord.enable = mkEnableOption "Discord";
-    });
-  };
+	# Declare configuration options for Discord under options.profiles.<name>.chat.discord
+	options.profiles = let inherit (lib) mkOption mkEnableOption; in with lib.types; mkOption {
+		type = attrsOf (submodule {
+			options.chat.discord.enable = mkEnableOption "Discord";
+		});
+	};
 
 	config.home-manager.users = lib.mapAttrs (username: profile:
 		let
