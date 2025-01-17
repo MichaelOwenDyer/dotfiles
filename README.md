@@ -14,6 +14,9 @@
 ### Garbage collection:
 `sudo nix-collect-garbage --delete-older-than <age>`
 
+### Check why Home Manager failed to start
+`sudo journalctl -xe --unit home-manager-<username>`
+
 ## Nix Types
 
 https://nixos.org/manual/nixos/stable/#sec-option-types

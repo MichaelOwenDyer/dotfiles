@@ -44,7 +44,7 @@ in with lib.types; {
             };
             extraConfig = mkOption {
               type = attrs;
-              default = { };
+              default = {};
               description = "Extra Git configuration";
             };
           };
@@ -57,7 +57,7 @@ in with lib.types; {
               };
               additionalVersions = mkOption {
                 type = listOf (enum [ "8" "11" "17" ]);
-                default = [ ];
+                default = [];
                 description = "Additional Java versions to install.";
               };
             };
@@ -68,25 +68,29 @@ in with lib.types; {
           ide = {
             vscode = {
               enable = mkEnableOption "Visual Studio Code IDE";
-              # TODO
-              # extraExtensions = mkOption {
-              #   type = listOf str;
-              #   default = [];
-              #   description = "Extra extensions to install with Visual Studio Code";
-              # };
+              extensions = mkOption {
+                type = listOf package;
+                default = [];
+                description = "Extensions to install with VSCode";
+              };
+              userSettings = mkOption {
+                type = attrs;
+                default = {};
+                description = "Custom user settings for VSCode";
+              };
             };
             jetbrains = {
               default-plugins = mkOption {
                 type = listOf str;
                 default = [];
-                description = "Plugins to install by default in JetBrains IDEs";
+                description = "Plugins to install in all JetBrains IDEs";
               };
               rust-rover = {
                 enable = mkEnableOption "RustRover IDE";
                 plugins = mkOption {
                   type = listOf str;
                   default = [];
-                  description = "Extra plugins to install with RustRover";
+                  description = "Plugins to install with RustRover";
                 };
               };
               intellij-idea = {
@@ -94,7 +98,7 @@ in with lib.types; {
                 plugins = mkOption {
                   type = listOf str;
                   default = [];
-                  description = "Extra plugins to install with IntelliJ IDEA";
+                  description = "Plugins to install with IntelliJ IDEA";
                 };
               };
             };

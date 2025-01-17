@@ -36,7 +36,32 @@ in {
 				java.mainVersion = mkDefault "17";
 			};
 			ide = {
-				vscode.enable = mkDefault true;
+				vscode = {
+					enable = mkDefault true;
+					extensions = with pkgs.vscode-extensions; [
+						dracula-theme.theme-dracula # Dark theme
+						bbenoist.nix # Nix lang support
+						rust-lang.rust-analyzer # Rust lang support
+						vscjava.vscode-java-pack # Java bundle (Red Hat language support, Maven/Gradle, debugger, test runner, IntelliCode)
+						tamasfe.even-better-toml # TOML lang support
+						github.copilot
+						github.copilot-chat
+					];
+					userSettings = {
+						"files.autoSave" = "afterDelay";
+						"git.confirmSync" = false;
+						"git.autofetch" = true;
+						"explorer.confirmDragAndDrop" = false;
+						"explorer.confirmDelete" = false;
+						"github.copilot.enable" = {
+							"*" = true;
+						};
+						"[nix]" = {
+							"editor.tabSize" = 2;
+							"editor.detectIndentation" = false;
+						};
+					};
+				};
 				jetbrains = {
 					default-plugins = mkDefault [ "github-copilot" ];
 					# intellij-idea.enable = mkDefault true;
