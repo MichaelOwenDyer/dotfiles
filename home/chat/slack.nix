@@ -1,6 +1,14 @@
 { config, lib, pkgs, ... }: let
 	
 in {
+  # Declare configuration options for Slack under options.profiles.<name>.chat.slack
+  options.profiles = let inherit (lib) mkOption mkEnableOption; in with lib.types; mkOption {
+    type = attrsOf (submodule {
+      options.chat.slack.enable = mkEnableOption "Slack";
+    });
+  };
+
+  # Configure Slack for each user profile
 	config.home-manager.users = lib.mapAttrs (username: profile:
 		let
 			## Choosing the correct package in regards to the window system # TODO: Per-user window manager config

@@ -33,7 +33,7 @@ in {
 			lang = {
 				rust.enable = mkDefault true;
 				java.enable = mkDefault true;
-				java.mainVersion = mkDefault "17";
+				java.mainPackage = mkDefault pkgs.zulu17;
 			};
 			ide = {
 				vscode = {
