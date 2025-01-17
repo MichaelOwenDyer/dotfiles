@@ -10,18 +10,20 @@ in nixpkgs.lib.nixosSystem {
 
     ../../system # Include default system configuration
 
-		../../profiles/michael
+    ../../home # Include default home configuration
 
-    ../../shell/zsh.nix
+		../../home/profiles/michael
 
-    ../../development/ide/vscode.nix
-    ../../development/ide/intellij-idea.nix
-    ../../development/ide/rust-rover.nix
+    # ../../shell/zsh.nix
 
-    ../../browser/firefox.nix
+    # ../../development/ide/vscode.nix
+    # ../../development/ide/intellij-idea.nix
+    # ../../development/ide/rust-rover.nix
 
-    ../../games/steam.nix
-    ../../chat/discord.nix
+    # ../../browser/firefox.nix
+
+    # ../../games/steam.nix
+    # ../../chat/discord.nix
 
     ## This module will return a `home-manager' object that can be used
     ## in other modules (including this one).
@@ -39,9 +41,9 @@ in nixpkgs.lib.nixosSystem {
       networking.hostName = "rustbucket";
       time.timeZone = "Europe/Berlin";
 
-      # Enable automatic login for the user.
-      services.displayManager.autoLogin.enable = true;
-      services.displayManager.autoLogin.user = config.username;
+      # Enable automatic login for the user TODO: Figure out how to integrate this into the profile system
+      # services.displayManager.autoLogin.enable = true;
+      # services.displayManager.autoLogin.user = "michael";
 
       # Nvidia drivers for Xorg and Wayland
       services.xserver.videoDrivers = [ "nvidia" ];

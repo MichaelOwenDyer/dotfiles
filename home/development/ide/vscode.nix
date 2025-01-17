@@ -1,24 +1,29 @@
-{ config, lib, pkgs, ... }: let
-	vscodePkg = (pkgs.vscode-with-extensions.override {
-		vscodeExtensions = with pkgs.vscode-extensions; [
-			dracula-theme.theme-dracula # Dark theme
-			bbenoist.nix # Nix lang support
-			rust-lang.rust-analyzer # Rust lang support
-			vscjava.vscode-java-pack # Java bundle (Red Hat language support, Maven/Gradle, debugger, test runner, IntelliCode)
-			tamasfe.even-better-toml # TOML lang support
-			github.copilot
-			github.copilot-chat
-		];
-	});
-in {
-  # Mark VSCode as enabled for other modules to see
-  config.development.ide.vscode.enable = true;
+{ config, lib, pkgs, ... }: 
 
-  # TODO: Honor config.development.ide.vscode.extraExtensions
-  # TODO: Configure per-language settings
-	
-  config.home-manager.users.${config.username} = {
-		home.packages = [ vscodePkg ];
+{
+
+	config.home-manager.users = lib.mapAttrs (username: profile:
+		let
+			# Configure a custom VSCode package for each user
+			# TODO: Custom extensions per user
+			# TODO: VSCode custom language settings
+			vscodePkg = (pkgs.vscode-with-extensions.override {
+				vscodeExtensions = with pkgs.vscode-extensions; [
+					dracula-theme.theme-dracula # Dark theme
+					bbenoist.nix # Nix lang support
+					rust-lang.rust-analyzer # Rust lang support
+					vscjava.vscode-java-pack # Java bundle (Red Hat language support, Maven/Gradle, debugger, test runner, IntelliCode)
+					tamasfe.even-better-toml # TOML lang support
+					github.copilot
+					github.copilot-chat
+				];
+			});
+		in {
+			# Add VSCode to the user's home packages
+			home.packages = [ vscodePkg ];
+		}
+	) config.profiles;
+
 		# programs.vscode = {
 		# 	enable = true;
 		# 	package = pkgs.vscode; # TODO: Use vscodePkg
@@ -58,6 +63,5 @@ in {
 		# 		}
 		# 	];
 		# };
-	};
 }
 

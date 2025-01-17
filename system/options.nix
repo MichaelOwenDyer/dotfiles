@@ -3,20 +3,6 @@
 { lib, ... }: let
   inherit (lib) mkOption mkEnableOption;
 in with lib.types; {
-  username = mkOption {
-    type = str;
-    description = "Primary user of the system";
-  };
-
-  fullName = mkOption {
-    type = str;
-    description = "Full name of the user";
-  };
-
-  email = mkOption {
-    type = str;
-    description = "Email address of the user";
-  };
   
   stateVersion = mkOption {
     type = str;
@@ -62,50 +48,4 @@ in with lib.types; {
     };
   };
 
-  development = {
-    lang = {
-      java = {
-        enable = mkEnableOption "Java programming language support";
-        mainVersion = mkOption {
-          type = enum [ "8" "11" "17" ];
-          description = "Main Java version to install. Will be used as JAVA_HOME.";
-        };
-        additionalVersions = mkOption {
-          type = listOf (enum [ "8" "11" "17" ]);
-          default = [ ];
-          description = "Additional Java versions to install.";
-        };
-      };
-      rust = {
-        enable = mkEnableOption "Rust programming language support";
-      };
-    };
-    ide = {
-      vscode = {
-        enable = mkEnableOption "Visual Studio Code IDE";
-        # TODO
-        # extraExtensions = mkOption {
-        #   type = listOf str;
-        #   default = [];
-        #   description = "Extra extensions to install with Visual Studio Code";
-        # };
-      };
-      rust-rover = {
-        enable = mkEnableOption "RustRover IDE";
-        extraPlugins = mkOption {
-          type = listOf str;
-          default = [];
-          description = "Extra plugins to install with RustRover";
-        };
-      };
-      intellij-idea = {
-        enable = mkEnableOption "IntelliJ IDEA IDE";
-        extraPlugins = mkOption {
-          type = listOf str;
-          default = [];
-          description = "Extra plugins to install with IntelliJ IDEA";
-        };
-      };
-    };
-  };
 }

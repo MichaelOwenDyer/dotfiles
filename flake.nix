@@ -19,14 +19,20 @@
   };
 
   outputs = inputs @ { nixpkgs, home-manager, nur, nixos-hardware, ... }: let 
-    nixosSystems = {
+    machines = {
       claptrap = import ./machines/claptrap { inherit inputs nixpkgs home-manager nur nixos-hardware; };
       rustbucket = import ./machines/rustbucket { inherit inputs nixpkgs home-manager nur nixos-hardware; };
     };
   in {
-    nixosConfigurations = nixosSystems;
-    homeConfigurations = nixpkgs.lib.mapAttrs (name: system: 
-      system.config.home-manager.users.${system.config.username}.home
-    ) nixosSystems;
+    nixosConfigurations = machines;
+    # Flatten the list of lists and reconstruct an attribute set using the name-value pairs
+    homeConfigurations = let lib = nixpkgs.lib; in lib.listToAttrs (lib.flatten (
+      # Map machines to a list of lists of name-value pairs containing each user config under a unique name
+      lib.mapAttrsToList (systemName: machine:
+        lib.mapAttrsToList (username: user:
+          lib.nameValuePair "${systemName}-${username}" user
+        ) machine.config.home-manager.users
+      ) machines
+    ));
   };
 }

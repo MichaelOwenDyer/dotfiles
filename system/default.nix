@@ -1,4 +1,3 @@
-
 { config, lib, pkgs, ... }:
 
 {
@@ -10,4 +9,3 @@
 
 	config = import ./settings.nix { inherit config lib pkgs; };
 }
-

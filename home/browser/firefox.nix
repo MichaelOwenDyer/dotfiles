@@ -1,25 +1,23 @@
-{ config, lib, pkgs, ... }: let
-	# Choose the right package for the current window manager
-	firefoxPkg = if config.os.wayland then pkgs.firefox-wayland else pkgs.firefox;
-in {
-	config.home-manager.users.${config.username} = {
+{ config, lib, pkgs, ... }:
 
+{
+	config.home-manager.users = lib.mapAttrs (username: profile: {
 		# Setting the proper session variables for wayland
 		home.sessionVariables = lib.mkIf config.os.wayland {
 			MOZ_ENABLE_WAYLAND = "1";
 		};
 
 		programs.firefox = {
-			enable = true;
-			package = firefoxPkg;
+			enable = profile.browser.firefox.enable;
+			package = if config.os.wayland then pkgs.firefox-wayland else pkgs.firefox;
 
-			# Set the language packs
+			# Set the language packs # TODO: Configure via options
 			languagePacks = [ "en-US" "de" ];
 			
-			# Add ublock-origin
-			profiles."${config.username}".extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+			# Add ublock-origin # TODO: Configure via options
+			profiles."${username}".extensions = with pkgs.nur.repos.rycee.firefox-addons; [
 				ublock-origin
 			];
 		};
-	};
+	}) config.profiles;
 }

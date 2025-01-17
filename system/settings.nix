@@ -62,14 +62,6 @@
 	# Enable GNOME keyring TODO: Decide if this is necessary
 	services.gnome.gnome-keyring.enable = true;
 
-	# Register a user account on the system.
-	users.users.${config.username} = {
-		isNormalUser = true;
-		description = config.fullName;
-		hashedPassword = "$y$j9T$pSkVWxgO/9dyqt8MMHzaM0$RO5g8OOpFb4pdgMuDIVraPvsLMSvMTU2/y8JQWfmrs1";
-		extraGroups = [ "wheel" "video" "audio" "input" ];   
-	};
-
 	# Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
 	systemd.services."getty@tty1".enable = false;
 	systemd.services."autovt@tty1".enable = false;
@@ -78,29 +70,6 @@
 	services.xserver.xkb = {
 		layout = "us";
 		variant = "";
-	};
-
-	# Home manager settings
-	home-manager.useGlobalPkgs = true;
-	home-manager.useUserPackages = true;
-	home-manager.users.${config.username} = {
-
-		# Let Home Manager install and manage itself.
-		programs.home-manager.enable = true;
-
-		# Allow unfree packages
-		nixpkgs.config.allowUnfree = true;
-
-		home = {
-			# Set username
-			username = config.username;
-
-			# Set home directory
-			homeDirectory = "/home/${config.username}";
-
-			# Set state version for home-manager
-			stateVersion = config.stateVersion;
-		};
 	};
 
 	# Set state version for system

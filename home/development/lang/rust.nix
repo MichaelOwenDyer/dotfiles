@@ -1,6 +1,10 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
-  config.development.lang.rust.enable = true;
-  config.home-manager.users.${config.username}.home.packages = with pkgs; [ rustup ];
+  config.home-manager.users = lib.mapAttrs (username: profile: let rustConfig = profile.development.lang.rust; in {
+    # Install Rustup for the user if enabled
+    home.packages = lib.optionals rustConfig.enable [
+      pkgs.rustup
+    ];
+  }) config.profiles;
 }

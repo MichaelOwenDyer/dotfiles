@@ -10,15 +10,17 @@ in nixpkgs.lib.nixosSystem {
 
 		../../system # Include default system configuration
 
+		../../home # Include default home configuration
+
 		../../home/profiles/michael
 
-		../../home/development/ide/vscode.nix
+		# ../../home/development/ide/vscode.nix
 
-		../../home/browser/firefox.nix
+		# ../../home/browser/firefox.nix
 
-		../../home/shell/zsh.nix
+		# ../../home/shell/zsh.nix
 
-		../../system/io/wifi.nix
+		# ../../system/io/wifi.nix
 
 		## This module will return a `home-manager' object that can be used
 		## in other modules (including this one).
@@ -39,6 +41,7 @@ in nixpkgs.lib.nixosSystem {
 			networking.hostName = "claptrap";
 			time.timeZone = "Europe/Berlin";
 			machine.isLaptop = true;
+			system.wifi.enable = true; # TODO: Make this automatically enabled by machine.isLaptop
 
 			# Set cpu governor to powersave
 			powerManagement.cpuFreqGovernor = "powersave";

@@ -1,18 +1,13 @@
 { config, lib, pkgs, ... }:
 
 {
-  config.home-manager.users.${config.username}.programs.zsh = {
-    enable = true;
-    oh-my-zsh = {
-      enable = true;
-      # See https://github.com/ohmyzsh/ohmyzsh/wiki/plugins for a list of plugins
-      plugins = [
-        "sudo"
-        "git"
-        "git-prompt"
-      ] ++ lib.optionals config.development.lang.rust.enable [
-        "rust"
-      ];
+  config.home-manager.users = lib.mapAttrs (username: profile: let zshConfig = profile.development.shell.zsh; in {
+    programs.zsh = {
+      enable = zshConfig.enable;
+      oh-my-zsh = {
+        enable = zshConfig.oh-my-zsh.enable;
+        plugins = zshConfig.oh-my-zsh.plugins;
+      };
     };
-  };
+  }) config.profiles;
 }
