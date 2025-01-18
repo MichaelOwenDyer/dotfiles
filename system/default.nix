@@ -7,6 +7,7 @@
 		./io
 	];
 
+  # Declare basic system options
 	options = let inherit (lib) mkOption mkEnableOption; in with lib.types; {
 		stateVersion = mkOption {
 			type = str;

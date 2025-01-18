@@ -8,22 +8,9 @@ in nixpkgs.lib.nixosSystem {
 
 	modules = [
 
-		../../system # Include default system configuration
+		../system
 
-		../../home # Include default home configuration
-
-		../../home/profiles/michael
-
-		# ../../shell/zsh.nix
-
-		# ../../development/ide/vscode.nix
-		# ../../development/ide/intellij-idea.nix
-		# ../../development/ide/rust-rover.nix
-
-		# ../../browser/firefox.nix
-
-		# ../../games/steam.nix
-		# ../../chat/discord.nix
+		../home/profiles/michael
 
 		## This module will return a `home-manager' object that can be used
 		## in other modules (including this one).

@@ -15,7 +15,7 @@
 					type = str;
 					description = "Email to use with Git";
 				};
-				extraConfig = mkOption {
+				config = mkOption {
 					type = attrs;
 					default = {};
 					description = "Extra Git configuration";
@@ -34,7 +34,7 @@
 			userEmail = gitConfig.email;
 			# TODO: Set up signing key and auto-sign commits
 			# Set extra configuration options
-			extraConfig = gitConfig.extraConfig;
+			extraConfig = gitConfig.config;
 		};
 	}) config.profiles;
 }

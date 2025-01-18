@@ -2,7 +2,6 @@
 
 {
 	imports = [
-		# TODO: Figure out how to import home-manager here
 		./browser
 		./chat
 		./development
