@@ -9,11 +9,16 @@
 
   # Declare basic system options
 	options = let inherit (lib) mkOption mkEnableOption; in with lib.types; {
-		stateVersion = mkOption {
-			type = str;
-			default = "24.11";
-			description = "State version of NixOS and Home Manager";
-		};
+    system = {
+      hostName = mkOption {
+        type = str;
+        description = "The host name of the machine";
+      };
+      stateVersion = mkOption {
+        type = str;
+        description = "State version of NixOS and Home Manager";
+      };
+    };
 		machine = {
 			isLaptop = mkOption {
 				type = bool;
@@ -25,8 +30,8 @@
 		os = {
 			wayland = mkOption {
 				type = bool;
-				default = true;
 				description = "Whether wayland is used on the system";
+				default = true;
 			};
 		};
 	};
@@ -34,6 +39,9 @@
 	config = {
 		# Allow unfree packages
 		nixpkgs.config.allowUnfree = true;
+
+    # Set hostname
+    networking.hostName = config.system.hostName;
 
 		# Locale
 		i18n.defaultLocale = "en_US.UTF-8";
@@ -106,7 +114,7 @@
 		};
 
 		# Set state version for system
-		system.stateVersion = config.stateVersion;
+		system.stateVersion = config.system.stateVersion;
 	};
 
 }

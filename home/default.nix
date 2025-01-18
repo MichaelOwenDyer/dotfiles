@@ -66,7 +66,7 @@
 			home.homeDirectory = "/home/${username}";
 			home.packages = profile.home.packages;
 			# Set state version for home-manager
-			home.stateVersion = config.stateVersion;
+			home.stateVersion = config.system.stateVersion;
 		}) config.profiles;
 	};
 }

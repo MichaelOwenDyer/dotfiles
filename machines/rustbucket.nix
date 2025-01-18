@@ -25,7 +25,8 @@ in nixpkgs.lib.nixosSystem {
 		## Closure that returns the module containing configuration specific to this machine
 		({ lib, config, pkgs, ... }: {
 
-			networking.hostName = "rustbucket";
+			system.hostName = "rustbucket";
+      system.stateVersion = "24.11";
 			time.timeZone = "Europe/Berlin";
 
 			# Enable automatic login for the user TODO: Figure out how to integrate this into the profile system

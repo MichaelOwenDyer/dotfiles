@@ -28,7 +28,8 @@ in nixpkgs.lib.nixosSystem {
 		## Closure that returns the module containing configuration specific to this machine
 		({ lib, config, pkgs, ... }: {
 
-			networking.hostName = "claptrap";
+      system.hostName = "claptrap";
+      system.stateVersion = "24.11";
 			time.timeZone = "Europe/Berlin";
 			machine.isLaptop = true;
 			system.io.wifi.enable = true; # TODO: Make this automatically enabled by machine.isLaptop
