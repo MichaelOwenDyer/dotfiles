@@ -8,9 +8,9 @@ in nixpkgs.lib.nixosSystem {
 
 	modules = [
 
-		../system
+		../system/default.nix
 
-		../home/profiles/michael.nix
+		../home/profiles/michael/claptrap.nix
 
 		## This module will return a `home-manager' object that can be used
 		## in other modules (including this one).
