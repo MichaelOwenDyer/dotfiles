@@ -52,6 +52,7 @@
         "files.autoSave" = "afterDelay";
         "git.confirmSync" = false;
         "git.autofetch" = true;
+        "git.enableSmartCommit" = true;
         "explorer.confirmDragAndDrop" = false;
         "explorer.confirmDelete" = false;
         "github.copilot.enable" = {
