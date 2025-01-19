@@ -1,10 +1,12 @@
 { config, lib, pkgs, ... }:
 
 {
-	# Import the options and settings in the games and io modules
+	# Import the options and settings in the various system modules
 	imports = [
-		./games
-		./io
+		./audio.nix
+    ./printing.nix
+    ./steam.nix
+    ./wifi.nix
 	];
 
   # Declare basic system options

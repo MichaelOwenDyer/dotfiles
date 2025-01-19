@@ -34,7 +34,7 @@ in nixpkgs.lib.nixosSystem {
       system.stateVersion = "24.11";
 			time.timeZone = "Europe/Berlin";
 			machine.isLaptop = true;
-			system.io.wifi.enable = true; # TODO: Make this automatically enabled by machine.isLaptop
+			system.wifi.enable = true; # TODO: Make this automatically enabled by machine.isLaptop
 
 			# Set cpu governor to powersave
 			powerManagement.cpuFreqGovernor = "powersave";

@@ -2,13 +2,13 @@
 
 {
 	# Declare the option to enable or disable system audio (enabled by default)
-	options.system.io.audio.enable = lib.mkOption {
+	options.system.audio.enable = lib.mkOption {
 		type = lib.types.bool;
 		default = true;
 		description = "Whether to enable system audio.";
 	};
 
-	config = lib.mkIf config.system.io.audio.enable {
+	config = lib.mkIf config.system.audio.enable {
 		# Enable sound with pipewire.
 		services.pulseaudio.enable = false;
 		security.rtkit.enable = true;
