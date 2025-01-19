@@ -4,8 +4,7 @@
 	# Import the options and settings in the various system modules
 	imports = [
 		./audio.nix
-    ./printing.nix
-    ./steam.nix
+    ./gaming.nix
     ./wifi.nix
 	];
 
@@ -31,9 +30,6 @@
 	config = {
 		# Allow unfree packages
 		nixpkgs.config.allowUnfree = true;
-
-		# Locale
-		i18n.defaultLocale = "en_US.UTF-8";
 
 		# Enable the nix command and flakes
 		nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -101,6 +97,12 @@
 			layout = "us";
 			variant = "";
 		};
+
+		# Locale
+		i18n.defaultLocale = lib.mkDefault "en_US.UTF-8";
+
+    # Enable printing via CUPS
+    services.printing.enable = lib.mkDefault true;
 	};
 
 }
