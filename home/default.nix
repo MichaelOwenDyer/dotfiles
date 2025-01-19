@@ -52,11 +52,14 @@
 			extraGroups = profile.extraGroups;
 		}) config.profiles;
 
-		# Configure Home Manager for each user
+    # By default, home manager wants to use a separate nixpkgs instance for each user, but this tells it to use the system nixpkgs
 		home-manager.useGlobalPkgs = true;
+    # By default, home manager will install packages in /home/<username>/.nix-profile, but this puts them in /etc/profiles
 		home-manager.useUserPackages = true;
+
+		# Configure home manager for each profile
 		home-manager.users = lib.mapAttrs (username: profile: {
-			# Let Home Manager install and manage itself
+			# Let home manager install and manage itself
 			programs.home-manager.enable = true;
 			# Allow unfree packages
 			nixpkgs.config.allowUnfree = true;
@@ -64,8 +67,9 @@
 			home.username = username;
 			# Set home directory
 			home.homeDirectory = "/home/${username}";
+      # Set home packages
 			home.packages = profile.home.packages;
-			# Set state version for home-manager
+			# Set state version for home-manager as the system state version
 			home.stateVersion = config.system.stateVersion;
 		}) config.profiles;
 	};
