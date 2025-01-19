@@ -65,7 +65,7 @@
     };
 
     development.ide.jetbrains = {
-      default-plugins = [ "github-copilot" ];
+      plugins = [ "github-copilot" ];
       intellij-idea.enable = true;
       rust-rover.enable = true;
     };

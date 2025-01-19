@@ -21,7 +21,7 @@
 			# Get the JetBrains configuration for the profile
 			jetbrainsConfig = profile.development.ide.jetbrains;
 			# Combine the user's default Jetbrains plugins with the user's IntelliJ IDEA plugins
-			allPlugins = jetbrainsConfig.default-plugins ++ jetbrainsConfig.intellij-idea.plugins;
+			allPlugins = jetbrainsConfig.plugins ++ jetbrainsConfig.intellij-idea.plugins;
 			# Construct the IntelliJ IDEA package with all plugins
 			ideaPkg = pkgs.jetbrains.plugins.addPlugins pkgs.jetbrains.idea-ultimate allPlugins;
 		in {
