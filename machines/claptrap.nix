@@ -10,6 +10,8 @@ in nixpkgs.lib.nixosSystem {
 
 		../system/default.nix
 
+    ../home/default.nix
+
 		../home/profiles/michael/claptrap.nix
 
 		## This module will return a `home-manager' object that can be used
@@ -28,7 +30,7 @@ in nixpkgs.lib.nixosSystem {
 		## Closure that returns the module containing configuration specific to this machine
 		({ lib, config, pkgs, ... }: {
 
-      system.hostName = "claptrap";
+      networking.hostName = "claptrap";
       system.stateVersion = "24.11";
 			time.timeZone = "Europe/Berlin";
 			machine.isLaptop = true;

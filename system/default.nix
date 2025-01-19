@@ -9,16 +9,6 @@
 
   # Declare basic system options
 	options = let inherit (lib) mkOption mkEnableOption; in with lib.types; {
-    system = {
-      hostName = mkOption {
-        type = str;
-        description = "The host name of the machine";
-      };
-      stateVersion = mkOption {
-        type = str;
-        description = "State version of NixOS and Home Manager";
-      };
-    };
 		machine = {
 			isLaptop = mkOption {
 				type = bool;
@@ -39,9 +29,6 @@
 	config = {
 		# Allow unfree packages
 		nixpkgs.config.allowUnfree = true;
-
-    # Set hostname
-    networking.hostName = config.system.hostName;
 
 		# Locale
 		i18n.defaultLocale = "en_US.UTF-8";
@@ -112,9 +99,6 @@
 			layout = "us";
 			variant = "";
 		};
-
-		# Set state version for system
-		system.stateVersion = config.system.stateVersion;
 	};
 
 }

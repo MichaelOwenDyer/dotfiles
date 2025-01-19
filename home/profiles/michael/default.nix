@@ -1,10 +1,6 @@
 { config, lib, pkgs, ... }: 
 
 {
-  imports = [
-    ../default.nix
-  ];
-
 	config.profiles.michael = rec {
 		fullName = "Michael Dyer";
 		email = "michaelowendyer@gmail.com";
@@ -72,6 +68,10 @@
       default-plugins = [ "github-copilot" ];
       intellij-idea.enable = true;
       rust-rover.enable = true;
+    };
+
+    development.shell.aliases = {
+      "rebuild" = "sudo nixos-rebuild switch --flake $1";
     };
 
     development.shell.zsh = {
