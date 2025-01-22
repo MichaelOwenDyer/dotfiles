@@ -70,6 +70,7 @@
 			wget
 			gnugrep
 			gparted
+      libreoffice
 		];
 
 		# OpenGL support
