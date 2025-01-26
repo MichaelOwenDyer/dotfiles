@@ -6,6 +6,7 @@
 		./chat
 		./development
 		./shell
+    ./caffeine.nix
 	];
 
 	# Declare basic profile configuration options

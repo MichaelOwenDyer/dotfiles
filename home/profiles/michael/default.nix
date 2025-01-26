@@ -6,6 +6,8 @@
 		email = "michaelowendyer@gmail.com";
 		hashedPassword = "$y$j9T$pSkVWxgO/9dyqt8MMHzaM0$RO5g8OOpFb4pdgMuDIVraPvsLMSvMTU2/y8JQWfmrs1";
 
+    caffeine.enable = true;
+
 		browser.firefox.enable = true;
 
     development.git = {
