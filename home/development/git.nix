@@ -25,10 +25,10 @@
 	};
 
 	# Configure Git for each user profile
-	config.home-manager.users = lib.mapAttrs (username: profile: let gitConfig = profile.development.git; in {
+	config.home-manager.users = lib.mapAttrs (username: profile: let gitConfig = profile.development.git; in lib.mkIf gitConfig.enable {
 		programs.git = {
 			# Enable git for the user
-			enable = gitConfig.enable;
+			enable = true;
 			# Set username and email according to predefined options
 			userName = gitConfig.name;
 			userEmail = gitConfig.email;

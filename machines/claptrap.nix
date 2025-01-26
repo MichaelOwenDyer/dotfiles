@@ -76,9 +76,6 @@ in nixpkgs.lib.nixosSystem {
 			boot.initrd.kernelModules = [ ];
 			boot.kernelModules = [ "kvm-intel" ];
 			boot.extraModulePackages = [ ];
-					
-			# Use the latest kernel
-			# boot.kernelPackages = (lib.mkDefault pkgs.linux_latest); TODO: Reintroduce this
 
 			fileSystems."/" = {
 				device = "/dev/disk/by-uuid/3bf7699c-c538-4368-842c-dce257ee819e";

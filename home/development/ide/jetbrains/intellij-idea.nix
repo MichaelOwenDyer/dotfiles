@@ -24,7 +24,7 @@
 			allPlugins = jetbrainsConfig.plugins ++ jetbrainsConfig.intellij-idea.plugins;
 			# Construct the IntelliJ IDEA package with all plugins
 			ideaPkg = pkgs.jetbrains.plugins.addPlugins pkgs.jetbrains.idea-ultimate allPlugins;
-		in {
+		in lib.mkIf jetbrainsConfig.intellij-idea.enable {
 			# Add IntelliJ IDEA to the user's home packages
 			home.packages = [ ideaPkg ];
 		}

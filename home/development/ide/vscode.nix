@@ -21,9 +21,9 @@ in {
 	};
 
 	# Configure Visual Studio Code for each user profile
-	config.home-manager.users = lib.mapAttrs (username: profile: let vscodeConfig = profile.development.ide.vscode; in {
+	config.home-manager.users = lib.mapAttrs (username: profile: let vscodeConfig = profile.development.ide.vscode; in lib.mkIf vscodeConfig.enable {
 		programs.vscode = {
-			enable = vscodeConfig.enable;
+			enable = true;
 			enableUpdateCheck = mkDefault false;
 			enableExtensionUpdateCheck = mkDefault false;
 			mutableExtensionsDir = mkDefault false;

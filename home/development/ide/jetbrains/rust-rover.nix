@@ -24,7 +24,7 @@
 			allPlugins = jetbrainsConfig.plugins ++ jetbrainsConfig.rust-rover.plugins;
 			# Construct the RustRover package with all plugins
 			rustRoverPkg = pkgs.jetbrains.plugins.addPlugins pkgs.jetbrains.rust-rover allPlugins;
-		in {
+		in lib.mkIf jetbrainsConfig.rust-rover.enable {
 			# Add RustRover to the user's home packages
 			home.packages = [ rustRoverPkg ];
 		}

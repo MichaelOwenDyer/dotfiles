@@ -19,11 +19,11 @@
 	};
 
 	# Configure Zsh and Oh My Zsh for each user profile
-	config.home-manager.users = lib.mapAttrs (username: profile: let zshConfig = profile.development.shell.zsh; in {
+	config.home-manager.users = lib.mapAttrs (username: profile: let zshConfig = profile.development.shell.zsh; in lib.mkIf zshConfig.enable {
 		programs.zsh = {
-			enable = zshConfig.enable;
-			oh-my-zsh = {
-				enable = zshConfig.oh-my-zsh.enable;
+			enable = true;
+			oh-my-zsh = lib.mkIf zshConfig.oh-my-zsh.enable {
+				enable = true;
 				plugins = zshConfig.oh-my-zsh.plugins;
 			};
 		};
