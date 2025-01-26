@@ -2,11 +2,11 @@
 
 {
 	# Declare configuration options for JetBrains IntelliJ IDEA under options.profiles.<name>.development.ide.jetbrains.intellij-idea
-	options.profiles = let inherit (lib) mkOption mkEnableOption; in with lib.types; mkOption {
+	options.profiles = with lib.types; lib.mkOption {
 		type = attrsOf (submodule {
 			options.development.ide.jetbrains.intellij-idea = {
-				enable = mkEnableOption "IntelliJ IDEA";
-				plugins = mkOption {
+				enable = lib.mkEnableOption "IntelliJ IDEA";
+				plugins = lib.mkOption {
 					type = listOf str;
 					default = [];
 					description = "Plugins to install in IntelliJ IDEA";

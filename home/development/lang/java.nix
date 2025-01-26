@@ -2,15 +2,15 @@
 
 {
 	# Declare configuration options for Java under options.profiles.<name>.development.lang.java
-	options.profiles = let inherit (lib) mkOption mkEnableOption; in with lib.types; mkOption {
+	options.profiles = with lib.types; lib.mkOption {
 		type = attrsOf (submodule {
 			options.development.lang.java = {
-				enable = mkEnableOption "Java programming language support";
-				mainPackage = mkOption {
+				enable = lib.mkEnableOption "Java programming language support";
+				mainPackage = lib.mkOption {
 					type = package;
 					description = "Main Java package to install. Will be used as JAVA_HOME.";
 				};
-				additionalPackages = mkOption {
+				additionalPackages = lib.mkOption {
 					type = listOf package;
 					default = [];
 					description = "Additional Java packages to install.";

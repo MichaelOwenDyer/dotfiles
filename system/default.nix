@@ -9,9 +9,9 @@
 	];
 
   # Declare basic system options
-	options = let inherit (lib) mkOption mkEnableOption; in with lib.types; {
+	options = with lib.types; lib.mkOption {
 		machine = {
-			isLaptop = mkOption {
+			isLaptop = lib.mkOption {
 				type = bool;
 				description = "Whether the machine is a laptop";
 				default = false;
@@ -19,7 +19,7 @@
 		};
 		# TODO: Move to user configuration
 		os = {
-			wayland = mkOption {
+			wayland = lib.mkOption {
 				type = bool;
 				description = "Whether wayland is used on the system";
 				default = true;

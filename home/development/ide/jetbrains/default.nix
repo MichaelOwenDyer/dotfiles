@@ -7,9 +7,9 @@
 	];
 
 	# Declare configuration options for JetBrains IDEs under options.profiles.<name>.development.ide.jetbrains
-	options.profiles = let inherit (lib) mkOption mkEnableOption; in with lib.types; mkOption {
+	options.profiles = with lib.types; lib.mkOption {
 		type = attrsOf (submodule {
-			options.development.ide.jetbrains.plugins = mkOption {
+			options.development.ide.jetbrains.plugins = lib.mkOption {
 				type = listOf str;
 				default = [];
 				description = "Plugins to install in all JetBrains IDEs";

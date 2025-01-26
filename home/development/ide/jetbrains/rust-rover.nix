@@ -2,11 +2,11 @@
 
 {
 	# Declare configuration options for RustRover under options.profiles.<name>.development.ide.jetbrains.rust-rover
-	options.profiles = let inherit (lib) mkOption mkEnableOption; in with lib.types; mkOption {
+	options.profiles = with lib.types; lib.mkOption {
 		type = attrsOf (submodule {
 			options.development.ide.jetbrains.rust-rover = {
-				enable = mkEnableOption "RustRover IDE";
-				plugins = mkOption {
+				enable = lib.mkEnableOption "RustRover IDE";
+				plugins = lib.mkOption {
 					type = listOf str;
 					default = [];
 					description = "Plugins to install with RustRover";

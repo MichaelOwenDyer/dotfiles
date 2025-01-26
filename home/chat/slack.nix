@@ -2,9 +2,9 @@
 	
 in {
 	# Declare configuration options for Slack under options.profiles.<name>.chat.slack
-	options.profiles = let inherit (lib) mkOption mkEnableOption; in with lib.types; mkOption {
+	options.profiles = with lib.types; lib.mkOption {
 		type = attrsOf (submodule {
-			options.chat.slack.enable = mkEnableOption "Slack";
+			options.chat.slack.enable = lib.mkEnableOption "Slack";
 		});
 	};
 

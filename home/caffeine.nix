@@ -4,10 +4,10 @@
 
 {
 	# Declare the option to enable caffeine
-  options.profiles = let inherit (lib) mkOption mkEnableOption; in with lib.types; mkOption {
+  options.profiles = with lib.types; lib.mkOption {
 		type = attrsOf (submodule {
       options.caffeine = {
-        enable = mkEnableOption "Caffeine";
+        enable = lib.mkEnableOption "Caffeine";
       };
     });
   };

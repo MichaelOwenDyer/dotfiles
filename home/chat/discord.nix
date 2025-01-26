@@ -2,10 +2,10 @@
 	
 in {
 	# Declare configuration options for Discord under options.profiles.<name>.chat.discord
-	options.profiles = let inherit (lib) mkOption mkEnableOption; in with lib.types; mkOption {
+	options.profiles = with lib.types; lib.mkOption {
 		type = attrsOf (submodule {
 			options.chat.discord = {
-        enable = mkEnableOption "Discord";
+        enable = lib.mkEnableOption "Discord";
       };
 		});
 	};

@@ -2,10 +2,10 @@
 
 {
 	# Declare configuration options for Firefox under options.profiles.<name>.browser.firefox
-	options.profiles = let inherit (lib) mkOption mkEnableOption; in with lib.types; mkOption {
+	options.profiles = with lib.types; lib.mkOption {
 		type = attrsOf (submodule {
 			options.browser.firefox = {
-				enable = mkEnableOption "Firefox";
+				enable = lib.mkEnableOption "Firefox";
 			};
 		});
 	};

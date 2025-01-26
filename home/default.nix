@@ -10,22 +10,22 @@
 	];
 
 	# Declare basic profile configuration options
-	options.profiles = let inherit (lib) mkOption; in with lib.types; mkOption {
+	options.profiles = with lib.types; lib.mkOption {
 		type = attrsOf (submodule {
 			options = {
-				fullName = mkOption {
+				fullName = lib.mkOption {
 					type = str;
 					description = "Full name of the user";
 				};
-				email = mkOption {
+				email = lib.mkOption {
 					type = str;
 					description = "Email address of the user";
 				};
-				hashedPassword = mkOption {
+				hashedPassword = lib.mkOption {
 					type = str;
 					description = "Hashed password of the user";
 				};
-				extraGroups = mkOption {
+				extraGroups = lib.mkOption {
 					type = listOf str;
 					default = [
 						"wheel"
@@ -35,7 +35,7 @@
 					];
 					description = "Extra groups to add the user to";
 				};
-				home.packages = mkOption {
+				home.packages = lib.mkOption {
 					type = listOf package;
 					default = [];
 					description = "Packages to install for the user";

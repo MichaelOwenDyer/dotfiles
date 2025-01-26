@@ -6,10 +6,10 @@
 	];
 
 	# Declare configuration options for all shells
-	options.profiles = let inherit (lib) mkOption mkEnableOption; in with lib.types; mkOption {
+	options.profiles = with lib.types; lib.mkOption {
 		type = attrsOf (submodule {
 			options.development.shell = {
-        aliases = mkOption {
+        aliases = lib.mkOption {
           type = attrsOf str;
           default = {};
           description = "Aliases to add for all shells";

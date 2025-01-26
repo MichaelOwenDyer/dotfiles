@@ -2,10 +2,10 @@
 
 {
 	# Declare configuration options for Rust under options.profiles.<name>.development.lang.rust
-	options.profiles = let inherit (lib) mkOption mkEnableOption; in with lib.types; mkOption {
+	options.profiles = with lib.types; lib.mkOption {
 		type = attrsOf (submodule {
 			options.development.lang.rust = {
-				enable = mkEnableOption "Rust programming language support";
+				enable = lib.mkEnableOption "Rust programming language support";
 			};
 		});
 	};

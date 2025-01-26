@@ -2,16 +2,16 @@
 	inherit (lib) mkDefault;
 in {
 	# Declare configuration options for Visual Studio Code under options.profiles.<name>.development.ide.vscode
-	options.profiles = let inherit (lib) mkOption mkEnableOption; in with lib.types; mkOption {
+	options.profiles = with lib.types; lib.mkOption {
 		type = attrsOf (submodule {
 			options.development.ide.vscode = {
-				enable = mkEnableOption "Visual Studio Code IDE";
-				extensions = mkOption {
+				enable = lib.mkEnableOption "Visual Studio Code IDE";
+				extensions = lib.mkOption {
 					type = listOf package;
 					default = [];
 					description = "Extensions to install with VSCode";
 				};
-				userSettings = mkOption {
+				userSettings = lib.mkOption {
 					type = attrs;
 					default = {};
 					description = "Custom user settings for VSCode";
