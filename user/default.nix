@@ -27,15 +27,10 @@
 				};
 				extraGroups = lib.mkOption {
 					type = listOf str;
-					default = [
-						"wheel"
-						"video"
-						"audio"
-						"input"
-					];
+					default = [];
 					description = "Extra groups to add the user to";
 				};
-				home.packages = lib.mkOption {
+				extraPackages = lib.mkOption {
 					type = listOf package;
 					default = [];
 					description = "Packages to install for the user";
@@ -62,14 +57,14 @@
 		home-manager.users = lib.mapAttrs (username: profile: {
 			# Let home manager install and manage itself
 			programs.home-manager.enable = true;
-			# Allow unfree packages
+			# Always allow unfree packages
 			nixpkgs.config.allowUnfree = true;
-			# Set username
+			# Set username to the profile name (the key in config.profiles)
 			home.username = username;
 			# Set home directory
 			home.homeDirectory = "/home/${username}";
-      # Set home packages
-			home.packages = profile.home.packages;
+      # Add extra packages in profile to home.packages
+			home.packages = profile.extraPackages;
 			# Set state version for home-manager as the system state version
 			home.stateVersion = config.system.stateVersion;
 		}) config.profiles;

@@ -26,6 +26,6 @@
 		# Add the main Java version to the PATH
 		programs.java.package = javaConfig.mainPackage;
 		# Install all additional Java versions (not in the PATH)
-		home.packages = lib.optionals javaConfig.enable javaConfig.additionalPackages;
+		home.packages = javaConfig.additionalPackages;
 	}) config.profiles;
 }

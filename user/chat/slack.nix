@@ -24,9 +24,9 @@ in {
 						--add-flags "--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer"
 				'';
 			});
-		in {
+		in lib.mkIf profile.chat.slack.enable {
 			# Add Slack to the user's home packages if enabled
-			home.packages = lib.optionals profile.chat.slack.enable [ slackPkg ];
+			home.packages = [ slackPkg ];
 		}
 	) config.profiles;
 }
