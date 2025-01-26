@@ -1,46 +1,38 @@
-{ nixpkgs, home-manager, nur, nixos-hardware, ... }: let
+# NixOS configuration for my desktop PC
 
-	system = "x86_64-linux";
-	
-in nixpkgs.lib.nixosSystem {
+{ nixpkgs, home-manager, nur, ... }: let platform = "x86_64-linux"; in nixpkgs.lib.nixosSystem {
 
-	inherit system;
+	# Define the system platform
+	system = platform;
+
+	# Allow the modules listed below to import these modules
+	specialArgs = { inherit home-manager nur };
 
 	modules = [
 
 		../system/default.nix
 
-    ../user/default.nix
+		../user/default.nix
 
 		../profiles/michael/rustbucket.nix
 
-		## This module will return a `home-manager' object that can be used
-		## in other modules (including this one).
-		home-manager.nixosModules.home-manager
+		# Machine-specific module closure
+		({ lib, ... }: {
 
-		## This module will return a `nur' object that can be used to access
-		## NUR packages.
-		nur.modules.nixos.default
-
-		## System specific
-		##
-		## Closure that returns the module containing configuration specific to this machine
-		({ lib, config, pkgs, ... }: {
-
-      imports = [
-        ./default.nix
-      ];
+			imports = [
+				./default.nix
+			];
 
 			networking.hostName = "rustbucket";
-      system.stateVersion = "24.11";
+			system.stateVersion = "24.11";
 			time.timeZone = "Europe/Berlin";
 
 			# Enable automatic login for the user
 			services.displayManager.autoLogin.enable = true;
 			services.displayManager.autoLogin.user = "michael";
-      # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
-      systemd.services."getty@tty1".enable = false;
-      systemd.services."autovt@tty1".enable = false;
+			# Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
+			systemd.services."getty@tty1".enable = false;
+			systemd.services."autovt@tty1".enable = false;
 
 			# Nvidia drivers for Xorg and Wayland
 			services.xserver.videoDrivers = [ "nvidia" ];
@@ -51,7 +43,7 @@ in nixpkgs.lib.nixosSystem {
 				powerManagement.finegrained = false;
 				open = false;
 				nvidiaSettings = true;
-				package = config.boot.kernelPackages.nvidiaPackages.stable;
+				package = boot.kernelPackages.nvidiaPackages.stable;
 			};
 
 			boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" "sr_mod" ];
@@ -79,7 +71,7 @@ in nixpkgs.lib.nixosSystem {
 			networking.useDHCP = false;
 			# networking.interfaces.enp4s0.useDHCP = lib.mkDefault true;
 
-			nixpkgs.hostPlatform = lib.mkDefault system;
+			nixpkgs.hostPlatform = lib.mkDefault platform;
 			hardware.enableRedistributableFirmware = true;
 			hardware.cpu.intel.updateMicrocode = true;
 

@@ -1,74 +1,76 @@
+## Common configuration for all machines.
+
 { config, lib, pkgs, ... }:
 
 {
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+	# Allow unfree packages
+	nixpkgs.config.allowUnfree = true;
 
-  # Enable the nix command and flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+	# Enable the nix command and flakes
+	nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # Optimize storage after each build
-  nix.settings.auto-optimise-store = true;
-  # Optimize storage daily at 4am
-  nix.optimise.automatic = true;
-  nix.optimise.dates = [ "04:00" ];
+	# Optimize storage after each build
+	nix.settings.auto-optimise-store = true;
+	# Optimize storage daily at 4am
+	nix.optimise.automatic = true;
+	nix.optimise.dates = [ "04:00" ];
 
-  # Don't warn about building uncommitted git changes
-  nix.extraOptions = ''
-    warn-dirty = false
-  '';
+	# Don't warn about building uncommitted git changes
+	nix.extraOptions = ''
+		warn-dirty = false
+	'';
 
-  # Bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+	# Bootloader
+	boot.loader.systemd-boot.enable = true;
+	boot.loader.efi.canTouchEfiVariables = true;
 
-  # Limit the number of generations to keep
-  boot.loader.systemd-boot.configurationLimit = 10;
-  
-  # Use latest kernel
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+	# Limit the number of generations to keep
+	boot.loader.systemd-boot.configurationLimit = 10;
+	
+	# Use latest kernel
+	boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # Setting correct application settings if we're running wayland
-  environment.sessionVariables = lib.mkIf config.os.wayland {
-    NIXOS_OZONE_WL = "1";
-    GTK_USE_PORTAL = "1";
-  };
+	# Setting correct application settings if we're running wayland
+	environment.sessionVariables = lib.mkIf config.os.wayland {
+		NIXOS_OZONE_WL = "1";
+		GTK_USE_PORTAL = "1";
+	};
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    git
-    vim
-    curl
-    wget
-    gnugrep
-    gparted
-    libreoffice
-  ];
+	# List packages installed in system profile. To search, run:
+	# $ nix search wget
+	environment.systemPackages = with pkgs; [
+		git
+		vim
+		curl
+		wget
+		gnugrep
+		gparted
+		libreoffice
+	];
 
-  # OpenGL support
-  hardware.graphics.enable = true;
+	# OpenGL support
+	hardware.graphics.enable = true;
 
-  # Enable the X11 windowing system (and implicitly Wayland).
-  services.xserver.enable = true;
-  
-  # Use the GNOME display manager for the login screen
-  services.xserver.displayManager.gdm.enable = true;
-  # TODO: Remove this and configure desktop environments with user profile
-  # Enable GNOME desktop manager
-  services.xserver.desktopManager.gnome.enable = true;
-  # Enable GNOME keyring
-  services.gnome.gnome-keyring.enable = true;
+	# Enable the X11 windowing system (and implicitly Wayland).
+	services.xserver.enable = true;
+	
+	# Use the GNOME display manager for the login screen
+	services.xserver.displayManager.gdm.enable = true;
+	# TODO: Remove this and configure desktop environments with user profile
+	# Enable GNOME desktop manager
+	services.xserver.desktopManager.gnome.enable = true;
+	# Enable GNOME keyring
+	services.gnome.gnome-keyring.enable = true;
 
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
+	# Configure keymap in X11
+	services.xserver.xkb = {
+		layout = "us";
+		variant = "";
+	};
 
-  # Locale
-  i18n.defaultLocale = lib.mkDefault "en_US.UTF-8";
+	# Locale
+	i18n.defaultLocale = lib.mkDefault "en_US.UTF-8";
 
-  # Enable printing via CUPS
-  services.printing.enable = lib.mkDefault true;
+	# Enable printing via CUPS
+	services.printing.enable = lib.mkDefault true;
 }

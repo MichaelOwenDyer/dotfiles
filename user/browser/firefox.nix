@@ -1,6 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, nur, ... }:
 
 {
+	imports = [
+		nur.modules.nixos.default
+	];
+
 	# Declare configuration options for Firefox under options.profiles.<name>.browser.firefox
 	options.profiles = with lib.types; lib.mkOption {
 		type = attrsOf (submodule {
@@ -11,14 +15,15 @@
 	};
 
 	# Configure Firefox for each user profile
-	config.home-manager.users = lib.mapAttrs (username: profile: {
+	config.home-manager.users = lib.mapAttrs (username: profile: lib.mkIf profile.browser.firefox.enable {
 		# Setting the proper session variables for wayland
 		home.sessionVariables = lib.mkIf config.os.wayland {
 			MOZ_ENABLE_WAYLAND = "1";
 		};
 
+		# Enable firefox
 		programs.firefox = {
-			enable = profile.browser.firefox.enable;
+			enable = true;
 			package = if config.os.wayland then pkgs.firefox-wayland else pkgs.firefox;
 
 			# Set the language packs # TODO: Configure via options

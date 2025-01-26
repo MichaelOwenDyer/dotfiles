@@ -13,8 +13,6 @@
 	# Configure Rust for each user profile
 	config.home-manager.users = lib.mapAttrs (username: profile: let rustConfig = profile.development.lang.rust; in lib.mkIf rustConfig.enable {
 		# Install Rustup for the user if enabled
-		home.packages = [
-			pkgs.rustup
-		];
+		home.packages = with pkgs; [ rustup ];
 	}) config.profiles;
 }

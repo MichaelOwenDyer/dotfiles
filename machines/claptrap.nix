@@ -1,41 +1,31 @@
-{ nixpkgs, home-manager, nur, nixos-hardware, ... }: let
+# NixOS configuration for my laptop
 
-	system = "x86_64-linux";
-	
-in nixpkgs.lib.nixosSystem {
+{ nixpkgs, home-manager, nur, nixos-hardware, ... }: let platform = "x86_64-linux"; in nixpkgs.lib.nixosSystem {
 
-	inherit system;
+	# Define the system platform
+	system = platform;
+
+	# Allow the modules listed below to import these modules
+	specialArgs = { inherit home-manager nur nixos-hardware; };
 
 	modules = [
 
 		../system/default.nix
 
-    ../user/default.nix
+		../user/default.nix
 
 		../profiles/michael/claptrap.nix
 
-		## This module will return a `home-manager' object that can be used
-		## in other modules (including this one).
-		home-manager.nixosModules.home-manager
+		# Machine-specific module closure
+		({ lib, nixos-hardware, ... }: {
 
-		## This module will return a `nur' object that can be used to access
-		## NUR packages.
-		nur.modules.nixos.default
+			imports = [
+				./default.nix
+				nixos-hardware.nixosModules.dell-xps-13-9360 # Use pre-defined hardware configuration for Dell XPS 13 9360
+			];
 
-		# Use pre-defined hardware configuration for Dell XPS 13 9360
-		nixos-hardware.nixosModules.dell-xps-13-9360
-
-		## System specific
-		##
-		## Closure that returns the module containing configuration specific to this machine
-		({ lib, config, pkgs, ... }: {
-
-      imports = [
-        ./default.nix
-      ];
-
-      networking.hostName = "claptrap";
-      system.stateVersion = "24.11";
+			networking.hostName = "claptrap";
+			system.stateVersion = "24.11";
 			time.timeZone = "Europe/Berlin";
 			machine.isLaptop = true;
 			system.wifi.enable = true; # TODO: Make this automatically enabled by machine.isLaptop
@@ -99,7 +89,7 @@ in nixpkgs.lib.nixosSystem {
 			# networking.interfaces.enp57s0u1u2.useDHCP = lib.mkDefault true;
 			# networking.interfaces.wlp58s0.useDHCP = lib.mkDefault true;
 
-			nixpkgs.hostPlatform = lib.mkDefault system;
+			nixpkgs.hostPlatform = lib.mkDefault platform;
 			hardware.enableAllFirmware = true;
 			hardware.cpu.intel.updateMicrocode = lib.mkDefault true;
 		})

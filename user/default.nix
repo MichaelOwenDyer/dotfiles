@@ -1,13 +1,15 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, home-manager, ... }:
 
 {
 	imports = [
+		# Everything in the user directory uses home-manager, so the nixos module is imported here
+		home-manager.nixosModules.home-manager
 		./browser
 		./chat
 		./development
 		./shell
-    ./wm
-    ./caffeine.nix
+		./wm
+		./caffeine.nix
 	];
 
 	# Declare basic profile configuration options
@@ -49,11 +51,10 @@
 			extraGroups = profile.extraGroups;
 		}) config.profiles;
 
-    # By default, home manager wants to use a separate nixpkgs instance for each user, but this tells it to use the system nixpkgs
+		# By default, home manager wants to use a separate nixpkgs instance for each user, but this tells it to use the system nixpkgs
 		home-manager.useGlobalPkgs = true;
-    # By default, home manager will install packages in /home/<username>/.nix-profile, but this puts them in /etc/profiles
+		# By default, home manager will install packages in /home/<username>/.nix-profile, but this puts them in /etc/profiles
 		home-manager.useUserPackages = true;
-
 		# Configure home manager for each profile
 		home-manager.users = lib.mapAttrs (username: profile: {
 			# Let home manager install and manage itself
@@ -64,7 +65,7 @@
 			home.username = username;
 			# Set home directory
 			home.homeDirectory = "/home/${username}";
-      # Add extra packages in profile to home.packages
+			# Add extra packages in profile to home.packages
 			home.packages = profile.extraPackages;
 			# Set state version for home-manager as the system state version
 			home.stateVersion = config.system.stateVersion;

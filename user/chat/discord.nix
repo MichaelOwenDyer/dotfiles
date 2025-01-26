@@ -32,9 +32,9 @@ in {
 						--add-flags "--ozone-platform=wayland --enable-features=UseOzonePlatform,WebRTCPipeWireCapturer"
 				'';
 			});
-		in {
+		in lib.mkIf profile.chat.discord.enable {
 			# Add Discord to the user's home packages
-			home.packages = lib.optionals profile.chat.discord.enable [ discordPkg ];
+			home.packages = [ discordPkg ];
 		}
 	) config.profiles;
 }
