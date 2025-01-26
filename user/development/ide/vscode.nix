@@ -19,6 +19,10 @@ in {
 			};
 		});
 	};
+  
+  # TODO: Investigate issue with VSCode authentication keyring "no longer matches"
+  # security.pam.services.gdm-password.enableGnomeKeyring = true;
+  # environment.variables.XDG_RUNTIME_DIR = "/run/user/$UID";
 
 	# Configure Visual Studio Code for each user profile
 	config.home-manager.users = lib.mapAttrs (username: profile: let vscodeConfig = profile.development.ide.vscode; in lib.mkIf vscodeConfig.enable {

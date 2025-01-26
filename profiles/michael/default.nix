@@ -13,6 +13,8 @@
       "networkmanager"
     ];
 
+    # wm = "gnome";
+
     caffeine.enable = true;
 
 		browser.firefox.enable = true;

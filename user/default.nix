@@ -6,6 +6,7 @@
 		./chat
 		./development
 		./shell
+    ./wm
     ./caffeine.nix
 	];
 

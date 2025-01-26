@@ -35,9 +35,12 @@ in nixpkgs.lib.nixosSystem {
       system.stateVersion = "24.11";
 			time.timeZone = "Europe/Berlin";
 
-			# Enable automatic login for the user TODO: Figure out how to integrate this into the profile system
-			# services.displayManager.autoLogin.enable = true;
-			# services.displayManager.autoLogin.user = "michael";
+			# Enable automatic login for the user
+			services.displayManager.autoLogin.enable = true;
+			services.displayManager.autoLogin.user = "michael";
+      # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
+      systemd.services."getty@tty1".enable = false;
+      systemd.services."autovt@tty1".enable = false;
 
 			# Nvidia drivers for Xorg and Wayland
 			services.xserver.videoDrivers = [ "nvidia" ];

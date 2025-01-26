@@ -51,20 +51,14 @@
 
   # Enable the X11 windowing system (and implicitly Wayland).
   services.xserver.enable = true;
-
-  # Enable the GNOME Desktop Environment (uses Wayland by default).
+  
+  # Use the GNOME display manager for the login screen
   services.xserver.displayManager.gdm.enable = true;
+  # TODO: Remove this and configure desktop environments with user profile
+  # Enable GNOME desktop manager
   services.xserver.desktopManager.gnome.enable = true;
-
   # Enable GNOME keyring
   services.gnome.gnome-keyring.enable = true;
-  # TODO: Investigate issue with VSCode authentication keyring "no longer matches"
-  # security.pam.services.gdm-password.enableGnomeKeyring = true;
-  # environment.variables.XDG_RUNTIME_DIR = "/run/user/$UID";
-
-  # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
-  systemd.services."getty@tty1".enable = false;
-  systemd.services."autovt@tty1".enable = false;
 
   # Configure keymap in X11
   services.xserver.xkb = {
