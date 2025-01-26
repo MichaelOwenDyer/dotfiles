@@ -10,9 +10,9 @@ in nixpkgs.lib.nixosSystem {
 
 		../system/default.nix
 
-    ../home/default.nix
+    ../user/default.nix
 
-		../home/profiles/michael/rustbucket.nix
+		../profiles/michael/rustbucket.nix
 
 		## This module will return a `home-manager' object that can be used
 		## in other modules (including this one).
@@ -26,6 +26,10 @@ in nixpkgs.lib.nixosSystem {
 		##
 		## Closure that returns the module containing configuration specific to this machine
 		({ lib, config, pkgs, ... }: {
+
+      imports = [
+        ./default.nix
+      ];
 
 			networking.hostName = "rustbucket";
       system.stateVersion = "24.11";
