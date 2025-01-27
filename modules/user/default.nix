@@ -2,7 +2,7 @@
 
 {
 	imports = [
-		# Everything in the user directory uses home-manager, so the nixos module is imported here
+		# Everything in the user directory uses home-manager, so its module is made available here
 		home-manager.nixosModules.home-manager
 		./browser
 		./chat

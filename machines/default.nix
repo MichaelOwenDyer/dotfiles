@@ -1,4 +1,5 @@
 ## Common configuration for all machines.
+## Since no options are declared here, every definition is implicitly inside "config".
 
 { config, lib, pkgs, ... }:
 
@@ -27,6 +28,9 @@
 	# Limit the number of generations to keep
 	boot.loader.systemd-boot.configurationLimit = 10;
 	
+	# Do not allow editing the kernel command-line before boot, which is a security risk (you could add init=/bin/sh and get a root shell)
+	boot.loader.systemd-boot.editor = false;
+
 	# Use latest kernel
 	boot.kernelPackages = pkgs.linuxPackages_latest;
 

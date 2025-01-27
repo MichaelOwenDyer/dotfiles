@@ -44,6 +44,9 @@
 				package = boot.kernelPackages.nvidiaPackages.stable;
 			};
 
+			# Allow 15 seconds to choose OS in the bootloader
+			boot.loader.timeout = 15;
+
 			boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" "sr_mod" ];
 			boot.initrd.kernelModules = [ ];
 			boot.kernelModules = [ "kvm-intel" ];

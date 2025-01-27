@@ -3,7 +3,7 @@
 { config, lib, pkgs, ... }:
 
 {
-	# Declare the option to enable caffeine
+	# Declare the option to enable caffeine under options.profiles.<name>.caffeine
 	options.profiles = with lib.types; lib.mkOption {
 		type = attrsOf (submodule {
 			options.caffeine = {

@@ -14,7 +14,7 @@
 
 		../profiles/michael/claptrap.nix
 
-		# Machine-specific module closure
+		# Machine-specific module closure. This is the closest thing to a configuration.nix in this setup.
 		({ lib, nixos-hardware, ... }: {
 
 			imports = [
