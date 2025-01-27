@@ -10,13 +10,11 @@
 
 	modules = [
 
-		../system/default.nix
-
-		../user/default.nix
+		../modules
 
 		../profiles/michael/rustbucket.nix
 
-		# Machine-specific module closure
+		# Machine-specific module closure. This is the closest thing to a configuration.nix in this setup.
 		({ lib, ... }: {
 
 			imports = [

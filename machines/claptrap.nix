@@ -10,9 +10,7 @@
 
 	modules = [
 
-		../system/default.nix
-
-		../user/default.nix
+		../modules
 
 		../profiles/michael/claptrap.nix
 
