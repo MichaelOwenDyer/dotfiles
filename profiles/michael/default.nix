@@ -84,10 +84,6 @@
 			rust-rover.enable = true;
 		};
 
-		development.shell.aliases = {
-			"rebuild" = "sudo nixos-rebuild switch --flake $1";
-		};
-
 		development.shell.zsh = {
 			enable = true;
 			oh-my-zsh.enable = true;
