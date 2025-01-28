@@ -36,7 +36,7 @@ https://noogle.dev/f/builtins/map
 map :: (a -> b) -> [a] -> [b]
 
 #### Example
-```nix
+```
 map (x: x * 2) [1 2 3]
 => [2 4 6]
 ```
@@ -53,7 +53,7 @@ https://noogle.dev/f/builtins/mapAttrs
 mapAttrs :: (String -> Any -> Any) -> AttrSet -> AttrSet
 
 #### Example
-```nix
+```
 mapAttrs
     (name: value: name + "-" + value)
     { x = "foo"; y = "bar"; }
@@ -72,10 +72,10 @@ https://noogle.dev/f/lib/misc/mapAttrsFlatten
 mapAttrsToList :: (String -> a -> b) -> AttrSet -> [b]
 
 #### Example
-```nix
-let mapAttrsToList
+```
+mapAttrsToList
     (name: value: name + "-" + value)
-   { x = "foo"; y = "bar"; }
+    { x = "foo"; y = "bar"; }
 => [ "x-foo" "y-bar" ]
 ```
 
@@ -94,7 +94,7 @@ mkOverride :: int -> any -> any
 
 #### Example
 
-```nix
+```
 services.nginx.enable = mkOverride 100 true;
 ```
 
