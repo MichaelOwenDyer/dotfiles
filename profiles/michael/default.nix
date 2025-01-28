@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }: 
+{ config, lib, pkgs, ... }:
 
 {
 	config.profiles.michael = rec {
@@ -78,8 +78,9 @@
 		};
 
 		development.ide.jetbrains = {
-			plugins = [ "github-copilot" ];
+			plugins = [ "com.github.copilot" ];
 			intellij-idea.enable = true;
+			intellij-idea.plugins = [ "nix-idea" ];
 			rust-rover.enable = true;
 		};
 

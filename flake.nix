@@ -16,6 +16,8 @@
 
 		# NixOS hardware configuration
 		nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
+		nix-jetbrains-plugins.url = "github:theCapypara/nix-jetbrains-plugins";
 	};
 
 	outputs = { nixpkgs, ... } @ inputs : let
