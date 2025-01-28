@@ -4,6 +4,9 @@
 { config, lib, pkgs, ... }:
 
 {
+	# Configure the platform the system is running on
+	nixpkgs.hostPlatform = config.hostPlatform;
+
 	# Allow unfree packages
 	nixpkgs.config.allowUnfree = true;
 

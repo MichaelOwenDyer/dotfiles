@@ -1,9 +1,9 @@
 # NixOS configuration for my laptop
 
-{ nixpkgs, ... } @ inputs: let platform = "x86_64-linux"; in nixpkgs.lib.nixosSystem {
+{ nixpkgs, ... } @ inputs: let hostPlatform = "x86_64-linux"; in nixpkgs.lib.nixosSystem {
 
 	# Define the system platform
-	system = platform;
+	system = hostPlatform;
 
 	# Allow the modules listed below to import any input from the flake
 	specialArgs = inputs;
@@ -24,6 +24,7 @@
 				nixos-hardware.nixosModules.dell-xps-13-9360 # Use pre-defined hardware configuration for Dell XPS 13 9360
 			];
 
+			inherit hostPlatform;
 			networking.hostName = "claptrap";
 			system.stateVersion = "24.11";
 			time.timeZone = "Europe/Berlin";
@@ -89,7 +90,6 @@
 			# networking.interfaces.enp57s0u1u2.useDHCP = lib.mkDefault true;
 			# networking.interfaces.wlp58s0.useDHCP = lib.mkDefault true;
 
-			nixpkgs.hostPlatform = lib.mkDefault platform;
 			hardware.enableAllFirmware = true;
 			hardware.cpu.intel.updateMicrocode = lib.mkDefault true;
 		})

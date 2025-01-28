@@ -25,7 +25,7 @@
 			# Combine the user's default Jetbrains plugins with the user's RustRover plugins
 			allPlugins = jetbrainsConfig.plugins ++ jetbrainsConfig.rust-rover.plugins;
 			# Use nix-jetbrains-plugins helper
-			mkIde = nix-jetbrains-plugins.lib."${pkgs.hostPlatform}".buildIdeWithPlugins;
+			mkIde = nix-jetbrains-plugins.lib."${config.hostPlatform}".buildIdeWithPlugins;
 			# Construct the RustRover package with all plugins
 			rustRoverPkg = mkIde pkgs.jetbrains "rust-rover" allPlugins;
 		in lib.mkIf jetbrainsConfig.rust-rover.enable {

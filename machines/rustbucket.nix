@@ -1,9 +1,9 @@
 # NixOS configuration for my desktop PC
 
-{ nixpkgs, ... } @ inputs: let platform = "x86_64-linux"; in nixpkgs.lib.nixosSystem {
+{ nixpkgs, ... } @ inputs: let hostPlatform = "x86_64-linux"; in nixpkgs.lib.nixosSystem {
 
 	# Define the system platform
-	system = platform;
+	system = hostPlatform;
 
 	# Allow the modules listed below to import any input from the flake
 	specialArgs = inputs;
@@ -23,6 +23,7 @@
 				./default.nix
 			];
 
+			inherit hostPlatform;
 			networking.hostName = "rustbucket";
 			system.stateVersion = "24.11";
 			time.timeZone = "Europe/Berlin";
@@ -74,7 +75,6 @@
 			networking.useDHCP = false;
 			# networking.interfaces.enp4s0.useDHCP = lib.mkDefault true;
 
-			nixpkgs.hostPlatform = lib.mkDefault platform;
 			hardware.enableRedistributableFirmware = true;
 			hardware.cpu.intel.updateMicrocode = true;
 

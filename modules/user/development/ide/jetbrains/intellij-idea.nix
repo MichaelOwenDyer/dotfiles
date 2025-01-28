@@ -25,9 +25,9 @@
 			# Combine the user's default Jetbrains plugins with the user's IntelliJ IDEA plugins
 			allPlugins = jetbrainsConfig.plugins ++ jetbrainsConfig.intellij-idea.plugins;
 			# Use nix-jetbrains-plugins helper
-			mkIde = nix-jetbrains-plugins.lib."${pkgs.hostPlatform}".buildIdeWithPlugins;
+			mkIde = nix-jetbrains-plugins.lib."${config.hostPlatform}".buildIdeWithPlugins;
 			# Construct the IntelliJ IDEA package with all plugins
-			ideaPkg = mkIde pkgs.jetbrains "intellij-idea" allPlugins;
+			ideaPkg = mkIde pkgs.jetbrains "idea-ultimate" allPlugins;
 		in lib.mkIf jetbrainsConfig.intellij-idea.enable {
 			# Add IntelliJ IDEA to the user's home packages
 			home.packages = [ ideaPkg ];
