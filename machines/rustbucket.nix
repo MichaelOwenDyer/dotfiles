@@ -1,12 +1,12 @@
 # NixOS configuration for my desktop PC
 
-{ nixpkgs, home-manager, nur, ... }: let platform = "x86_64-linux"; in nixpkgs.lib.nixosSystem {
+{ nixpkgs, ... } @ inputs: let platform = "x86_64-linux"; in nixpkgs.lib.nixosSystem {
 
 	# Define the system platform
 	system = platform;
 
-	# Allow the modules listed below to import these modules
-	specialArgs = { inherit home-manager nur };
+	# Allow the modules listed below to import any input from the flake
+	specialArgs = inputs;
 
 	modules = [
 

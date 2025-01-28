@@ -1,12 +1,12 @@
 # NixOS configuration for my laptop
 
-{ nixpkgs, home-manager, nur, nixos-hardware, ... }: let platform = "x86_64-linux"; in nixpkgs.lib.nixosSystem {
+{ nixpkgs, ... } @ inputs: let platform = "x86_64-linux"; in nixpkgs.lib.nixosSystem {
 
 	# Define the system platform
 	system = platform;
 
-	# Allow the modules listed below to import these modules
-	specialArgs = { inherit home-manager nur nixos-hardware; };
+	# Allow the modules listed below to import any input from the flake
+	specialArgs = inputs;
 
 	modules = [
 
@@ -55,10 +55,10 @@
 					clickMethod = "clickfinger";
 			};
 			services.xserver.synaptics.palmDetect = true;
-			
+
 			## Setting keymap to `us' for this machine.
 			# os.keyboard.layout = "us"; TODO: Introduce option
-			
+
 			console = {
 				font = "Lat2-Terminus16";
 				keyMap = "us"; # TODO: Use os.keyboard.layout

@@ -18,10 +18,10 @@
 		nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 	};
 
-	outputs = { nixpkgs, home-manager, nur, nixos-hardware, ... }: let 
+	outputs = { nixpkgs, ... } @ inputs : let
 		machines = {
-			claptrap = import ./machines/claptrap.nix { inherit nixpkgs home-manager nur nixos-hardware; };
-			rustbucket = import ./machines/rustbucket.nix { inherit nixpkgs home-manager nur nixos-hardware; };
+			claptrap = import ./machines/claptrap.nix inputs;
+			rustbucket = import ./machines/rustbucket.nix inputs;
 		};
 	in {
 		nixosConfigurations = machines;
