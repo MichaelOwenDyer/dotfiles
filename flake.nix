@@ -23,8 +23,8 @@
 
 	outputs = { nixpkgs, ... } @ inputs : let
 		machines = {
-			claptrap = import ./machines/claptrap.nix inputs;
-			rustbucket = import ./machines/rustbucket.nix inputs;
+			claptrap = import ./system/machines/claptrap.nix inputs;
+			rustbucket = import ./system/machines/rustbucket.nix inputs;
 		};
 	in {
 		nixosConfigurations = machines;

@@ -10,11 +10,14 @@
 
 	modules = [
 
-		# Import everything from the modules directory so that all the options exist for us to configure how we want
+		# System modules
 		../modules
 
+		# User modules
+		../../user/modules
+
 		# Add michael as a user
-		../profiles/michael/rustbucket.nix
+		../../user/profiles/michael/rustbucket.nix
 
 		# Machine-specific module closure. This is the closest thing to a configuration.nix in this setup
 		({ lib, ... }: {
@@ -24,6 +27,7 @@
 			];
 
 			inherit hostPlatform;
+			
 			networking.hostName = "rustbucket";
 			system.stateVersion = "24.11";
 			time.timeZone = "Europe/Berlin";
