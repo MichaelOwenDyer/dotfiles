@@ -77,13 +77,6 @@
 			};
 		};
 
-		development.ide.jetbrains = {
-			plugins = [ "com.github.copilot" ];
-			intellij-idea.enable = true;
-			intellij-idea.plugins = [ "nix-idea" ];
-			rust-rover.enable = true;
-		};
-
 		development.shell.zsh = {
 			enable = true;
 			oh-my-zsh.enable = true;
