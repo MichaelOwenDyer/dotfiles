@@ -22,17 +22,18 @@
 	};
 
 	outputs = { nixpkgs, ... } @ inputs : let
+		lib = nixpkgs.lib;
 		machines = {
 			claptrap = import ./system/machines/claptrap.nix inputs;
 			rustbucket = import ./system/machines/rustbucket.nix inputs;
 		};
 	in {
 		nixosConfigurations = machines;
-		homeConfigurations = let lib = nixpkgs.lib; in lib.listToAttrs (
+		homeConfigurations = lib.listToAttrs (
 			lib.flatten (
 				lib.mapAttrsToList (systemName: machine:
 					lib.mapAttrsToList (username: user:
-						lib.nameValuePair "${systemName}-${username}" user
+						lib.nameValuePair "${username}@${systemName}" user
 					) machine.config.home-manager.users
 				) machines
 			)

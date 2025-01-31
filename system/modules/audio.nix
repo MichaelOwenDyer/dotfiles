@@ -2,11 +2,7 @@
 
 {
 	# Declare the option to enable or disable system audio (enabled by default)
-	options.system.audio.enable = lib.mkOption {
-		type = lib.types.bool;
-		default = true;
-		description = "Whether to enable system audio.";
-	};
+	options.system.audio.enable = lib.mkEnableOption "system audio";
 
 	config = lib.mkIf config.system.audio.enable {
 		# Enable sound with pipewire.

@@ -12,10 +12,8 @@
 
 		# System modules
 		../modules
-
 		# User modules
 		../../user/modules
-
 		# Add michael as a user
 		../../user/profiles/michael/claptrap.nix
 
@@ -23,12 +21,14 @@
 		({ lib, nixos-hardware, ... }: {
 
 			imports = [
+				# Common machine configuration
 				./default.nix
-				nixos-hardware.nixosModules.dell-xps-13-9360 # Use pre-defined hardware configuration for Dell XPS 13 9360
+				# XPS 13 9360 hardware configuration
+				nixos-hardware.nixosModules.dell-xps-13-9360
 			];
 
 			inherit hostPlatform;
-			
+
 			networking.hostName = "claptrap";
 			system.stateVersion = "24.11";
 			time.timeZone = "Europe/Berlin";

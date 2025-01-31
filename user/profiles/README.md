@@ -1,8 +1,7 @@
-# Profiles
+# User Profiles
 
 This directory contains user profiles which can be applied to a system configuration.
-Importing a module in this directory in a system configuration will automatically add that user to the system
-with all of their preferences and configurations.
+Importing a module in this directory in a system configuration will automatically add that user to the system with all of their preferences and configurations.
 
 A profile is simply a set of definitions for the convenience options declared in the `modules/user` directory.
 These options modify the configuration *indirectly*:

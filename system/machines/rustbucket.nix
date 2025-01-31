@@ -12,10 +12,8 @@
 
 		# System modules
 		../modules
-
 		# User modules
 		../../user/modules
-
 		# Add michael as a user
 		../../user/profiles/michael/rustbucket.nix
 
@@ -27,7 +25,7 @@
 			];
 
 			inherit hostPlatform;
-			
+
 			networking.hostName = "rustbucket";
 			system.stateVersion = "24.11";
 			time.timeZone = "Europe/Berlin";

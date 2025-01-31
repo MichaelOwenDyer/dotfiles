@@ -56,8 +56,8 @@
 				rust-lang.rust-analyzer # Rust lang support
 				vscjava.vscode-java-pack # Java bundle (Red Hat language support, Maven/Gradle, debugger, test runner, IntelliCode)
 				tamasfe.even-better-toml # TOML lang support
-				github.copilot
-				github.copilot-chat
+				github.copilot # Copilot AI
+				github.copilot-chat # Copilot chat
 			];
 			userSettings = {
 				"files.autoSave" = "afterDelay";

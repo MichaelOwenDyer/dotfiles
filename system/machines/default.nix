@@ -43,8 +43,7 @@
 		GTK_USE_PORTAL = "1";
 	};
 
-	# List packages installed in system profile. To search, run:
-	# $ nix search wget
+	# List packages installed by default
 	environment.systemPackages = with pkgs; [
 		git
 		vim
@@ -76,8 +75,11 @@
 	};
 
 	# Locale
-	i18n.defaultLocale = lib.mkDefault "en_US.UTF-8";
+	i18n.defaultLocale = "en_US.UTF-8";
 
 	# Enable printing via CUPS
-	services.printing.enable = lib.mkDefault true;
+	services.printing.enable = true;
+
+	# Enable sound
+	system.audio.enable = true;
 }
