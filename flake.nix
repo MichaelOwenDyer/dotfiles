@@ -18,7 +18,8 @@
 		nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
 		# Nix JetBrains plugins
-		nix-jetbrains-plugins.url = "github:theCapypara/nix-jetbrains-plugins";
+		nix-jetbrains-plugins.url = "github:MichaelOwenDyer/nix-jetbrains-plugins/MichaelOwenDyer-reuse-systems-input";
+		nix-jetbrains-plugins.inputs.nixpkgs.follows = "nixpkgs";
 	};
 
 	outputs = { nixpkgs, ... } @ inputs : let
