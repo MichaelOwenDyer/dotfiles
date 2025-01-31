@@ -4,11 +4,11 @@
 	# Import the options and settings in the various system modules
 	imports = [
 		./audio.nix
-    ./gaming.nix
-    ./wifi.nix
+		./gaming.nix
+		./wifi.nix
 	];
 
-  # Declare basic system options
+	# Declare basic system options
 	options = with lib.types; {
 		hostPlatform = lib.mkOption {
 			type = str;

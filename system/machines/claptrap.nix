@@ -1,4 +1,4 @@
-# NixOS configuration for my laptop
+## NixOS configuration for my old Dell XPS 13 9360 laptop.
 
 { nixpkgs, ... } @ inputs: let hostPlatform = "x86_64-linux"; in nixpkgs.lib.nixosSystem {
 

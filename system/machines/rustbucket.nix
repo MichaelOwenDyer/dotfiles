@@ -1,4 +1,12 @@
-# NixOS configuration for my desktop PC
+## NixOS configuration for my gaming PC which I built in 2015. Dual-boots Windows 10 and NixOS.
+##
+## Specs:
+## 
+## - Motherboard: MSI Z97A Gaming 7
+## - CPU: Intel Core i7 4790K
+## - RAM: 32 GB DDR3
+## - GPU: Nvidia 1660 Ti
+## - Storage: 1TB Samsung 970 Pro SSD, 2TB Western Digital HDD, various other tiny drives
 
 { nixpkgs, ... } @ inputs: let hostPlatform = "x86_64-linux"; in nixpkgs.lib.nixosSystem {
 
