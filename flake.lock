@@ -72,16 +72,15 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1738337865,
-        "narHash": "sha256-YOTWq8L9ShYtdhiQ7Ssuu98w/ZPnOtIml+1Ug0/f8IY=",
-        "owner": "MichaelOwenDyer",
+        "lastModified": 1738342296,
+        "narHash": "sha256-SE/H2C++KYrd5esKXnsLHABLJlgs5SErxTqI2IBYPI4=",
+        "owner": "theCapypara",
         "repo": "nix-jetbrains-plugins",
-        "rev": "da74e2e41c4808d349b9928e63a4ab43a1501c2c",
+        "rev": "0e4981b071e78d0df2a1bf202a9f9d100b71822e",
         "type": "github"
       },
       "original": {
-        "owner": "MichaelOwenDyer",
-        "ref": "MichaelOwenDyer-reuse-systems-input",
+        "owner": "theCapypara",
         "repo": "nix-jetbrains-plugins",
         "type": "github"
       }

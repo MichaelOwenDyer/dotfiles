@@ -18,12 +18,12 @@
 		nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
 		# Nix JetBrains plugins
-		nix-jetbrains-plugins.url = "github:MichaelOwenDyer/nix-jetbrains-plugins/MichaelOwenDyer-reuse-systems-input";
+		nix-jetbrains-plugins.url = "github:theCapypara/nix-jetbrains-plugins";
 		nix-jetbrains-plugins.inputs.nixpkgs.follows = "nixpkgs";
 	};
 
-	outputs = { nixpkgs, ... } @ inputs : let
-		lib = nixpkgs.lib;
+	outputs = inputs: let
+		lib = inputs.nixpkgs.lib;
 		machines = {
 			claptrap = import ./system/machines/claptrap.nix inputs;
 			rustbucket = import ./system/machines/rustbucket.nix inputs;
