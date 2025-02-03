@@ -26,7 +26,7 @@
 		../../user/profiles/michael/rustbucket.nix
 
 		# Machine-specific module closure. This is the closest thing to a configuration.nix in this setup
-		({ lib, ... }: {
+		({ config, lib, ... }: {
 
 			imports = [
 				./default.nix
@@ -54,7 +54,7 @@
 				powerManagement.finegrained = false;
 				open = false;
 				nvidiaSettings = true;
-				package = boot.kernelPackages.nvidiaPackages.stable;
+				package = config.boot.kernelPackages.nvidiaPackages.stable;
 			};
 
 			# Allow 15 seconds to choose OS in the bootloader
