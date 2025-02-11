@@ -79,15 +79,18 @@
 
 		development.shell.zsh = {
 			enable = true;
-			oh-my-zsh.enable = true;
-			oh-my-zsh.plugins = [
-				"sudo"
-				"git"
-				"git-prompt"
-			];
-			#  ++ lib.optionals development.lang.rust.enable [
-			# 	"rust"
-			# ];
+			oh-my-zsh = {
+				enable = true;
+				theme = "robbyrussell";
+				plugins = [
+					"sudo"
+					"git"
+					"git-prompt"
+				];
+				#  ++ lib.optionals development.lang.rust.enable [
+				# 	"rust"
+				# ];
+			};
 		};
 	};
 }
