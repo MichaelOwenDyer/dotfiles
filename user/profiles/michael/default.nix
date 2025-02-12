@@ -50,6 +50,7 @@
 
 		development.ide.vscode = {
 			enable = true;
+			# pkgs.vscode-extensions: https://github.com/nix-community/nix-vscode-extensions
 			extensions = with pkgs.vscode-extensions; [
 				dracula-theme.theme-dracula # Dark theme
 				bbenoist.nix # Nix lang support
@@ -58,6 +59,8 @@
 				tamasfe.even-better-toml # TOML lang support
 				github.copilot # Copilot AI
 				github.copilot-chat # Copilot chat
+				eamodio.gitlens # GitLens
+				k--kato.intellij-idea-keybindings # IntelliJ keybindings
 			];
 			userSettings = {
 				"files.autoSave" = "afterDelay";
@@ -86,10 +89,9 @@
 					"sudo"
 					"git"
 					"git-prompt"
+				] ++ lib.optionals development.lang.rust.enable [
+					"rust"
 				];
-				#  ++ lib.optionals development.lang.rust.enable [
-				# 	"rust"
-				# ];
 			};
 		};
 	};

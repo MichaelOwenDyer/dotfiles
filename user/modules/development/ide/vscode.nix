@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
 	# Declare configuration options for Visual Studio Code under options.profiles.<name>.development.ide.vscode
