@@ -8,7 +8,7 @@
 ## - GPU: Nvidia 1660 Ti
 ## - Storage: 1TB Samsung 970 Pro SSD, 2TB Western Digital HDD, various other tiny drives
 
-{ nixpkgs, ... } @ inputs: let hostPlatform = "x86_64-linux"; in nixpkgs.lib.nixosSystem {
+inputs: let hostPlatform = "x86_64-linux"; in inputs.nixpkgs.lib.nixosSystem {
 
 	# Define the system platform
 	system = hostPlatform;

@@ -29,7 +29,7 @@
 	boot.loader.efi.canTouchEfiVariables = true;
 
 	# Limit the number of generations to keep
-	boot.loader.systemd-boot.configurationLimit = 10;
+	boot.loader.systemd-boot.configurationLimit = 7;
 	
 	# Do not allow editing the kernel command-line before boot, which is a security risk (you could add init=/bin/sh and get a root shell)
 	boot.loader.systemd-boot.editor = false;
@@ -51,7 +51,6 @@
 		wget
 		gnugrep
 		gparted
-		libreoffice
 	];
 
 	# OpenGL support
