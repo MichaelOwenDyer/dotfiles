@@ -41,6 +41,8 @@
 			};
 		};
 
+		development.lang.nix.enable = true;
+
 		development.lang.rust.enable = true;
 
 		development.lang.java = {
@@ -52,15 +54,18 @@
 			enable = true;
 			# pkgs.vscode-extensions: https://github.com/nix-community/nix-vscode-extensions
 			extensions = with pkgs.vscode-extensions; [
+				k--kato.intellij-idea-keybindings # IntelliJ keybindings
 				dracula-theme.theme-dracula # Dark theme
-				bbenoist.nix # Nix lang support
-				rust-lang.rust-analyzer # Rust lang support
-				vscjava.vscode-java-pack # Java bundle (Red Hat language support, Maven/Gradle, debugger, test runner, IntelliCode)
-				tamasfe.even-better-toml # TOML lang support
 				github.copilot # Copilot AI
 				github.copilot-chat # Copilot chat
 				eamodio.gitlens # GitLens
-				k--kato.intellij-idea-keybindings # IntelliJ keybindings
+			] ++ lib.optionals development.lang.nix.enable [
+				jnoortheen.nix-ide
+			] ++ lib.optionals development.lang.rust.enable [
+				tamasfe.even-better-toml # TOML lang support
+				rust-lang.rust-analyzer # Rust lang support
+			] ++ lib.optionals development.lang.java.enable [
+				vscjava.vscode-java-pack # Java bundle (Red Hat language support, Maven/Gradle, debugger, test runner, IntelliCode)
 			];
 			userSettings = {
 				"files.autoSave" = "afterDelay";
@@ -77,6 +82,8 @@
 					"editor.detectIndentation" = false;
     			"editor.insertSpaces" = false;
 				};
+				"nix.formatterPath" = "nixfmt";
+				"nix.serverPath" = "nixd";
 			};
 		};
 
