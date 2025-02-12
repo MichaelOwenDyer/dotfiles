@@ -4,7 +4,7 @@
 	# Declare the option to enable or disable system audio (enabled by default)
 	options.system.audio.enable = lib.mkEnableOption "system audio";
 
-	config = lib.mkIf config.system.audio.enable {
+	config = let cfg = config.system.audio; in lib.mkIf cfg.enable {
 		# Enable sound with pipewire.
 		services.pulseaudio.enable = false;
 		security.rtkit.enable = true;

@@ -20,17 +20,17 @@
 	# Configure RustRover for each user profile
 	config.home-manager.users = lib.mapAttrs (username: profile:
 		let
-			# Get the Jetbrains configuration for the profile
-			jetbrainsConfig = profile.development.ide.jetbrains;
+			# Get the RustRover configuration for the profile
+			cfg = profile.development.ide.jetbrains.rust-rover;
 			# Combine the user's default Jetbrains plugins with the user's RustRover plugins
-			allPlugins = jetbrainsConfig.plugins ++ jetbrainsConfig.rust-rover.plugins;
+			plugins = profile.development.ide.jetbrains.plugins ++ cfg.plugins;
 			# Use nix-jetbrains-plugins helper
 			mkIde = nix-jetbrains-plugins.lib."${config.hostPlatform}".buildIdeWithPlugins;
 			# Construct the RustRover package with all plugins
-			rustRoverPkg = mkIde pkgs.jetbrains "rust-rover" allPlugins;
-		in lib.mkIf jetbrainsConfig.rust-rover.enable {
+			rust-rover = mkIde pkgs.jetbrains "rust-rover" plugins;
+		in lib.mkIf cfg.enable {
 			# Add RustRover to the user's home packages
-			home.packages = [ rustRoverPkg ];
+			home.packages = [ rust-rover ];
 		}
 	) config.profiles;
 }

@@ -12,8 +12,9 @@ in {
 
 	config.home-manager.users = lib.mapAttrs (username: profile:
 		let
+			cfg = profile.chat.discord;
 			## Choosing the correct package in regards to the window system # TODO: Per-user window manager config
-			discordPkg = if (! config.os.wayland) then pkgs.discord else pkgs.discord.overrideAttrs (old: {
+			discord = if (!config.os.wayland) then pkgs.discord else pkgs.discord.overrideAttrs (old: {
 				# Wrapping the discord package to enable wayland-specific features
 				installPhase = old.installPhase + ''
 					# Remove the binaries that were just installed
@@ -32,9 +33,9 @@ in {
 						--add-flags "--ozone-platform=wayland --enable-features=UseOzonePlatform,WebRTCPipeWireCapturer"
 				'';
 			});
-		in lib.mkIf profile.chat.discord.enable {
+		in lib.mkIf cfg.enable {
 			# Add Discord to the user's home packages
-			home.packages = [ discordPkg ];
+			home.packages = [ discord ];
 		}
 	) config.profiles;
 }

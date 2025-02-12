@@ -25,16 +25,16 @@
 	};
 
 	# Configure Git for each user profile
-	config.home-manager.users = lib.mapAttrs (username: profile: let gitConfig = profile.development.git; in lib.mkIf gitConfig.enable {
+	config.home-manager.users = lib.mapAttrs (username: profile: let cfg = profile.development.git; in lib.mkIf cfg.enable {
 		programs.git = {
 			# Enable git for the user
 			enable = true;
 			# Set username and email according to predefined options
-			userName = gitConfig.name;
-			userEmail = gitConfig.email;
+			userName = cfg.name;
+			userEmail = cfg.email;
 			# TODO: Set up signing key and auto-sign commits
 			# Set extra configuration options
-			extraConfig = gitConfig.config;
+			extraConfig = cfg.config;
 		};
 	}) config.profiles;
 }

@@ -4,7 +4,7 @@
 	# Declare the option to enable or disable Steam
 	options.games.steam.enable = lib.mkEnableOption "Steam";
 
-	config = lib.mkIf config.games.steam.enable {
+	config = let cfg = config.games.steam; in lib.mkIf cfg.enable {
 		# Configure Steam
 		hardware.steam-hardware.enable = true;
 		programs.steam = {

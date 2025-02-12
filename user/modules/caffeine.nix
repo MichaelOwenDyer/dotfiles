@@ -13,7 +13,7 @@
 	};
 
 	# Configure caffeine for each profile
-	config.home-manager.users = lib.mapAttrs (username: profile: (lib.mkIf profile.caffeine.enable {
+	config.home-manager.users = lib.mapAttrs (username: profile: (let cfg = profile.caffeine; in lib.mkIf cfg.enable {
 		# Enable the caffeine service
 		services.caffeine.enable = true;
 		# Add caffeine-ng to the user's home packages

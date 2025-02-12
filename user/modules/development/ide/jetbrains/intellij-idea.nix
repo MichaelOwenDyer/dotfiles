@@ -20,17 +20,17 @@
 	# Configure JetBrains IntelliJ IDEA for each user profile
 	config.home-manager.users = lib.mapAttrs (username: profile:
 		let
-			# Get the JetBrains configuration for the profile
-			jetbrainsConfig = profile.development.ide.jetbrains;
+			# Get the IntelliJ IDEA configuration for the profile
+			cfg = profile.development.ide.jetbrains.intellij-idea;
 			# Combine the user's default Jetbrains plugins with the user's IntelliJ IDEA plugins
-			allPlugins = jetbrainsConfig.plugins ++ jetbrainsConfig.intellij-idea.plugins;
+			plugins = profile.development.ide.jetbrains.plugins ++ cfg.plugins;
 			# Use nix-jetbrains-plugins helper
 			mkIde = nix-jetbrains-plugins.lib."${config.hostPlatform}".buildIdeWithPlugins;
 			# Construct the IntelliJ IDEA package with all plugins
-			ideaPkg = mkIde pkgs.jetbrains "idea-ultimate" allPlugins;
-		in lib.mkIf jetbrainsConfig.intellij-idea.enable {
+			idea-ultimate = mkIde pkgs.jetbrains "idea-ultimate" plugins;
+		in lib.mkIf cfg.enable {
 			# Add IntelliJ IDEA to the user's home packages
-			home.packages = [ ideaPkg ];
+			home.packages = [ idea-ultimate ];
 		}
 	) config.profiles;
 }

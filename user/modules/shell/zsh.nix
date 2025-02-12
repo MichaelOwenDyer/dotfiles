@@ -23,17 +23,16 @@
 	};
 
 	config = lib.mkIf (lib.any (profile: profile.development.shell.zsh.enable) (lib.attrValues config.profiles)) {
-		# Apply some system-wide Zsh configuration if Zsh is enabled in any profile
-		# Enable Zsh globally
+		# Enable Zsh globally if Zsh is enabled in any profile
 		programs.zsh.enable = true;
 
 		# Set the user shell to Zsh for those profiles that have it enabled
-		users.users = lib.mapAttrs (username: profile: let zshConfig = profile.development.shell.zsh; in lib.mkIf zshConfig.enable {
+		users.users = lib.mapAttrs (username: profile: let cfg = profile.development.shell.zsh; in lib.mkIf cfg.enable {
 			shell = pkgs.zsh;
 		}) config.profiles;
 
 		# Configure Zsh and Oh My Zsh for each user profile using Home Manager
-		home-manager.users = lib.mapAttrs (username: profile: let zshConfig = profile.development.shell.zsh; in lib.mkIf zshConfig.enable {
+		home-manager.users = lib.mapAttrs (username: profile: let cfg = profile.development.shell.zsh; in lib.mkIf cfg.enable {
 			programs.zsh = {
 				enable = true;
 				enableCompletion = true;
@@ -56,10 +55,10 @@
 					];
 				};
 
-				oh-my-zsh = lib.mkIf zshConfig.oh-my-zsh.enable {
+				oh-my-zsh = lib.mkIf cfg.oh-my-zsh.enable {
 					enable = true;
-					plugins = zshConfig.oh-my-zsh.plugins;
-					theme = zshConfig.oh-my-zsh.theme;
+					plugins = cfg.oh-my-zsh.plugins;
+					theme = cfg.oh-my-zsh.theme;
 				};
 			};
 		}) config.profiles;

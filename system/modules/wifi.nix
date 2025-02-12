@@ -5,7 +5,7 @@
 	options.system.wifi.enable = lib.mkEnableOption "wifi";
 
 	# Forward config definition to NetworkManager
-	config = lib.mkIf config.system.wifi.enable {
+	config = let cfg = config.system.wifi; in lib.mkIf cfg.enable {
 		networking.networkmanager.enable = true;
 	};
 }

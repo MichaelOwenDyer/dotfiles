@@ -20,12 +20,12 @@
 	};
 
 	# Configure Java for each user profile
-	config.home-manager.users = lib.mapAttrs (username: profile: let javaConfig = profile.development.lang.java; in lib.mkIf javaConfig.enable {
+	config.home-manager.users = lib.mapAttrs (username: profile: let cfg = profile.development.lang.java; in lib.mkIf cfg.enable {
 		# Enable Java for the user
 		programs.java.enable = true;
 		# Add the main Java version to the PATH
-		programs.java.package = javaConfig.mainPackage;
+		programs.java.package = cfg.mainPackage;
 		# Install all additional Java versions (not in the PATH)
-		home.packages = javaConfig.additionalPackages;
+		home.packages = cfg.additionalPackages;
 	}) config.profiles;
 }

@@ -15,8 +15,8 @@
 	};
 
 	# Configure Firefox for each user profile
-	config.home-manager.users = lib.mapAttrs (username: profile: lib.mkIf profile.browser.firefox.enable {
-		# Setting the proper session variables for wayland
+	config.home-manager.users = lib.mapAttrs (username: profile: let cfg = profile.browser.firefox; in lib.mkIf cfg.enable {
+		# Set the proper session variables for wayland
 		home.sessionVariables = lib.mkIf config.os.wayland {
 			MOZ_ENABLE_WAYLAND = "1";
 		};
