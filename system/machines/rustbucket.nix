@@ -26,7 +26,7 @@ inputs: let hostPlatform = "x86_64-linux"; in inputs.nixpkgs.lib.nixosSystem {
 		../../user/profiles/michael/rustbucket.nix
 
 		# Machine-specific module closure. This is the closest thing to a configuration.nix in this setup
-		({ config, lib, ... }: {
+		(inputs: {
 
 			imports = [
 				./default.nix
@@ -54,7 +54,7 @@ inputs: let hostPlatform = "x86_64-linux"; in inputs.nixpkgs.lib.nixosSystem {
 				powerManagement.finegrained = false;
 				open = false;
 				nvidiaSettings = true;
-				package = config.boot.kernelPackages.nvidiaPackages.stable;
+				package = boot.kernelPackages.nvidiaPackages.stable;
 			};
 
 			# Allow 15 seconds to choose OS in the bootloader
@@ -83,7 +83,6 @@ inputs: let hostPlatform = "x86_64-linux"; in inputs.nixpkgs.lib.nixosSystem {
 			# still possible to use this option, but it's recommended to use it in conjunction
 			# with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
 			networking.useDHCP = false;
-			# networking.interfaces.enp4s0.useDHCP = lib.mkDefault true;
 
 			hardware.enableRedistributableFirmware = true;
 			hardware.cpu.intel.updateMicrocode = true;

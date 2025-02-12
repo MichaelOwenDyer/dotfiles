@@ -18,13 +18,13 @@ inputs: let hostPlatform = "x86_64-linux"; in inputs.nixpkgs.lib.nixosSystem {
 		../../user/profiles/michael/claptrap.nix
 
 		# Machine-specific module closure. This is the closest thing to a configuration.nix in this setup
-		({ lib, nixos-hardware, ... }: {
+		(inputs: {
 
 			imports = [
 				# Common machine configuration
 				./default.nix
 				# XPS 13 9360 hardware configuration
-				nixos-hardware.nixosModules.dell-xps-13-9360
+				inputs.nixos-hardware.nixosModules.dell-xps-13-9360
 			];
 
 			inherit hostPlatform;
@@ -91,11 +91,8 @@ inputs: let hostPlatform = "x86_64-linux"; in inputs.nixpkgs.lib.nixosSystem {
 				{ device = "/dev/disk/by-uuid/96ea764b-fd7b-4445-b437-ddb55c24ceed"; }
 			];
 
-			# networking.interfaces.enp57s0u1u2.useDHCP = lib.mkDefault true;
-			# networking.interfaces.wlp58s0.useDHCP = lib.mkDefault true;
-
 			hardware.enableAllFirmware = true;
-			hardware.cpu.intel.updateMicrocode = lib.mkDefault true;
+			hardware.cpu.intel.updateMicrocode = true;
 		})
 	];
 }
