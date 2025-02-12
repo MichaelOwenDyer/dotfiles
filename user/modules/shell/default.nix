@@ -19,7 +19,9 @@
 	};
 
 	# Configure shell aliases for all shells for each user profile
-	config.home-manager.users = lib.mapAttrs (username: profile: {
-		home.shellAliases = profile.development.shellAliases;
-	}) config.profiles;
+	config = {
+		home-manager.users = lib.mapAttrs (username: profile: {
+			home.shellAliases = profile.development.shellAliases;
+		}) config.profiles;
+	};
 }

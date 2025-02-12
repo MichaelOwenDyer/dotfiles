@@ -25,14 +25,16 @@
   # environment.variables.XDG_RUNTIME_DIR = "/run/user/$UID";
 
 	# Configure Visual Studio Code for each user profile
-	config.home-manager.users = lib.mapAttrs (username: profile: let cfg = profile.development.ide.vscode; in lib.mkIf cfg.enable {
-		programs.vscode = {
-			enable = true;
-			enableUpdateCheck = lib.mkDefault false;
-			enableExtensionUpdateCheck = lib.mkDefault false;
-			mutableExtensionsDir = lib.mkDefault false;
-			extensions = cfg.extensions;
-			userSettings = cfg.userSettings;
-		};
-	}) config.profiles;
+	config = {
+		home-manager.users = lib.mapAttrs (username: profile: let cfg = profile.development.ide.vscode; in lib.mkIf cfg.enable {
+			programs.vscode = {
+				enable = true;
+				enableUpdateCheck = lib.mkDefault false;
+				enableExtensionUpdateCheck = lib.mkDefault false;
+				mutableExtensionsDir = lib.mkDefault false;
+				extensions = cfg.extensions;
+				userSettings = cfg.userSettings;
+			};
+		}) config.profiles;
+	};
 }

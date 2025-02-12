@@ -10,8 +10,10 @@
 		});
 	};
 
-	# Configure Visual Studio Code for each user profile
-	config.home-manager.users = lib.mapAttrs (username: profile: let cfg = profile.development.ide.cursor; in lib.mkIf cfg.enable {
-		home.packages = with pkgs; [ code-cursor ];
-	}) config.profiles;
+	# Configure Cursor for each user profile
+	config = {
+		home-manager.users = lib.mapAttrs (username: profile: let cfg = profile.development.ide.cursor; in lib.mkIf cfg.enable {
+			home.packages = with pkgs; [ code-cursor ];
+		}) config.profiles;
+	};
 }
