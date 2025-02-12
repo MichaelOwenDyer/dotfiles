@@ -1,8 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-	imports = [
-		./slack.nix
-		./discord.nix
-	];
+  imports = [
+    ./slack.nix
+    ./discord.nix
+  ];
 }

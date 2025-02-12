@@ -1,11 +1,15 @@
-{ config, lib, pkgs, ... }: 
+{
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
     ./default.nix
   ];
 
-	config.profiles.michael = {
+  profiles.michael = {
     development.ide.jetbrains = {
       plugins = [ "com.github.copilot" ];
       intellij-idea.enable = true;

@@ -1,9 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-	imports = [
-		./java.nix
-		./rust.nix
-		./nix.nix
-	];
+  imports = [
+    ./java.nix
+    ./rust.nix
+    ./nix.nix
+  ];
 }

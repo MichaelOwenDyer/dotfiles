@@ -1,9 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-	imports = [
-		./vscode.nix
-		./cursor.nix
-		./jetbrains
-	];
+  imports = [
+    ./vscode.nix
+    ./cursor.nix
+    ./jetbrains
+  ];
 }
