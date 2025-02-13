@@ -1,41 +1,44 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
 {
   # Declare configuration options for Zsh and Oh My Zsh under options.profiles.<name>.development.shell.zsh
-  options.profiles =
-    with lib.types;
-    lib.mkOption {
-      type = attrsOf (submodule {
-        options.development.shell.zsh = {
-          enable = lib.mkEnableOption "Zsh shell";
-          oh-my-zsh = {
-            enable = lib.mkEnableOption "Oh My Zsh";
-            theme = lib.mkOption {
-              type = str;
-              description = "Oh My Zsh theme to use. See https://github.com/ohmyzsh/ohmyzsh/wiki/themes for a list of themes.";
-            };
-            plugins = lib.mkOption {
-              type = listOf str;
-              default = [ ];
-              description = "List of Oh My Zsh plugins to install. See https://github.com/ohmyzsh/ohmyzsh/wiki/plugins for a list of plugins.";
+  options = {
+    profiles =
+      with lib.types;
+      lib.mkOption {
+        type = attrsOf (submodule {
+          options.development.shell.zsh = {
+            enable = lib.mkEnableOption "Zsh shell";
+            oh-my-zsh = {
+              enable = lib.mkEnableOption "Oh My Zsh";
+              theme = lib.mkOption {
+                type = str;
+                description = "Oh My Zsh theme to use. See https://github.com/ohmyzsh/ohmyzsh/wiki/themes for a list of themes.";
+              };
+              plugins = lib.mkOption {
+                type = listOf str;
+                default = [ ];
+                description = "List of Oh My Zsh plugins to install. See https://github.com/ohmyzsh/ohmyzsh/wiki/plugins for a list of plugins.";
+              };
             };
           };
-        };
-      });
-    };
+        });
+      };
+  };
 
   config =
+		# Only configure Zsh if it is enabled in any profile (to avoid unnecessary system configuration)
     lib.mkIf (lib.any (profile: profile.development.shell.zsh.enable) (lib.attrValues config.profiles))
       {
-        # Enable Zsh globally if Zsh is enabled in any profile
+        # Enable Zsh globally
         programs.zsh.enable = true;
 
-        # Set the user shell to Zsh for those profiles that have it enabled
+        # Set Zsh as the user shell for each profile where it is enabled
+				# This will conflict if a profile has multiple shells enabled
         users.users = lib.mapAttrs (
           username: profile:
           let
@@ -46,7 +49,7 @@
           }
         ) config.profiles;
 
-        # Configure Zsh and Oh My Zsh for each user profile using Home Manager
+        # Configure Zsh and Oh My Zsh in home-manager for each profile where it is enabled
         home-manager.users = lib.mapAttrs (
           username: profile:
           let

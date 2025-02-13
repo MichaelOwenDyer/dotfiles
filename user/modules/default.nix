@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   home-manager,
   ...
 }:
@@ -19,36 +18,38 @@
   ];
 
   # Declare basic profile configuration options
-  options.profiles =
-    with lib.types;
-    lib.mkOption {
-      type = attrsOf (submodule {
-        options = {
-          fullName = lib.mkOption {
-            type = str;
-            description = "Full name of the user";
+  options = {
+    profiles =
+      with lib.types;
+      lib.mkOption {
+        type = attrsOf (submodule {
+          options = {
+            fullName = lib.mkOption {
+              type = str;
+              description = "Full name of the user";
+            };
+            email = lib.mkOption {
+              type = str;
+              description = "Email address of the user";
+            };
+            hashedPassword = lib.mkOption {
+              type = str;
+              description = "Hashed password of the user";
+            };
+            extraGroups = lib.mkOption {
+              type = listOf str;
+              default = [ ];
+              description = "Extra groups to add the user to";
+            };
+            extraPackages = lib.mkOption {
+              type = listOf package;
+              default = [ ];
+              description = "Packages to install for the user";
+            };
           };
-          email = lib.mkOption {
-            type = str;
-            description = "Email address of the user";
-          };
-          hashedPassword = lib.mkOption {
-            type = str;
-            description = "Hashed password of the user";
-          };
-          extraGroups = lib.mkOption {
-            type = listOf str;
-            default = [ ];
-            description = "Extra groups to add the user to";
-          };
-          extraPackages = lib.mkOption {
-            type = listOf package;
-            default = [ ];
-            description = "Packages to install for the user";
-          };
-        };
-      });
-    };
+        });
+      };
+  };
 
   config = {
     # Register a system user account for each profile

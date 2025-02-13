@@ -36,9 +36,9 @@
       homeConfigurations = lib.listToAttrs (
         lib.flatten (
           lib.mapAttrsToList (
-            systemName: machine:
+            host: machine:
             lib.mapAttrsToList (
-              username: user: lib.nameValuePair "${username}@${systemName}" user
+              user: home: lib.nameValuePair "${user}@${host}" home
             ) machine.config.home-manager.users
           ) machines
         )

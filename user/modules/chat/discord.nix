@@ -4,24 +4,24 @@
   pkgs,
   ...
 }:
-let
 
-in
 {
   # Declare configuration options for Discord under options.profiles.<name>.chat.discord
-  options.profiles =
-    with lib.types;
-    lib.mkOption {
-      type = attrsOf (submodule {
-        options.chat.discord = {
-          enable = lib.mkEnableOption "Discord";
-        };
-      });
-    };
+  options = {
+    profiles =
+      with lib.types;
+      lib.mkOption {
+        type = attrsOf (submodule {
+          options.chat.discord = {
+            enable = lib.mkEnableOption "Discord";
+          };
+        });
+      };
+  };
 
   config = {
     home-manager.users = lib.mapAttrs (
-			username: profile:
+      username: profile:
       let
         cfg = profile.chat.discord;
         ## Choosing the correct package in regards to the window system # TODO: Per-user window manager config
@@ -31,8 +31,7 @@ in
           else
             pkgs.discord.overrideAttrs (old: {
               # Wrapping the discord package to enable wayland-specific features
-              installPhase =
-                old.installPhase
+              installPhase = old.installPhase
                 + ''
 									# Remove the binaries that were just installed
 									rm $out/bin/Discord

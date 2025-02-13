@@ -7,18 +7,20 @@
 
 {
   # Declare configuration options for Nix under options.profiles.<name>.development.lang.nix
-  options.profiles =
-    with lib.types;
-    lib.mkOption {
-      type = attrsOf (submodule {
-        options.development.lang.nix = {
-          enable = lib.mkEnableOption "Nix programming language support";
-        };
-      });
-    };
+  options = {
+    profiles =
+      with lib.types;
+      lib.mkOption {
+        type = attrsOf (submodule {
+          options.development.lang.nix = {
+            enable = lib.mkEnableOption "Nix programming language support";
+          };
+        });
+      };
+  };
 
+	# Configure Nix for each user profile
   config = {
-    # Configure Nix for each user profile
     home-manager.users = lib.mapAttrs (
       username: profile:
       let

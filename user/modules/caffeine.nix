@@ -9,22 +9,30 @@
 
 {
   # Declare the option to enable caffeine under options.profiles.<name>.caffeine
-  options.profiles =
-    with lib.types;
-    lib.mkOption {
-      type = attrsOf (submodule {
-        options.caffeine = {
-          enable = lib.mkEnableOption "Caffeine";
-        };
-      });
-    };
+  options = {
+    profiles =
+      with lib.types;
+      lib.mkOption {
+        type = attrsOf (submodule {
+          options.caffeine = {
+            enable = lib.mkEnableOption "Caffeine";
+          };
+        });
+      };
+  };
 
   # Configure caffeine for each profile
   config = {
-		home-manager.users = lib.mapAttrs (username: profile: (let cfg = profile.caffeine; in lib.mkIf cfg.enable {
-			# Enable the caffeine service
-			services.caffeine.enable = true;
-			# Add caffeine-ng to the user's home packages
+    home-manager.users = lib.mapAttrs (
+      username: profile:
+      (
+        let
+          cfg = profile.caffeine;
+        in
+        lib.mkIf cfg.enable {
+          # Enable the caffeine service
+          services.caffeine.enable = true;
+          # Add caffeine-ng to the user's home packages
           home.packages =
             with pkgs;
             [

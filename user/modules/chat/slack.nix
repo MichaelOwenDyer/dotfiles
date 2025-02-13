@@ -4,26 +4,26 @@
   pkgs,
   ...
 }:
-let
 
-in
 {
   # Declare configuration options for Slack under options.profiles.<name>.chat.slack
-  options.profiles =
-    with lib.types;
-    lib.mkOption {
-      type = attrsOf (submodule {
-        options.chat.slack.enable = lib.mkEnableOption "Slack";
-      });
-    };
+  options = {
+    profiles =
+      with lib.types;
+      lib.mkOption {
+        type = attrsOf (submodule {
+          options.chat.slack.enable = lib.mkEnableOption "Slack";
+        });
+      };
+  };
 
   # Configure Slack for each user profile
   config = {
     home-manager.users = lib.mapAttrs (
-			username: profile:
+      username: profile:
       let
         cfg = profile.chat.slack;
-        ## Choosing the correct package in regards to the window system # TODO: Per-user window manager config
+        # Choose the correct Slack package for the window system
         slack =
           if (!config.os.wayland) then
             pkgs.slack
