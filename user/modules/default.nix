@@ -2,6 +2,7 @@
   config,
   lib,
   home-manager,
+  stylix,
   ...
 }:
 
@@ -15,6 +16,7 @@
     ./shell
     ./wm
     ./caffeine.nix
+    ./stylix.nix
   ];
 
   # Declare basic profile configuration options
@@ -64,20 +66,16 @@
     home-manager.useGlobalPkgs = true;
     # By default, home manager will install packages in /home/<username>/.nix-profile, but this puts them in /etc/profiles
     home-manager.useUserPackages = true;
+
     # Configure home manager for each profile
     home-manager.users = lib.mapAttrs (username: profile: {
-      # Let home manager install and manage itself
-      programs.home-manager.enable = true;
-      # Always allow unfree packages
-      nixpkgs.config.allowUnfree = true;
-      # Set username to the profile name (the key in config.profiles)
-      home.username = username;
-      # Set home directory
-      home.homeDirectory = "/home/${username}";
-      # Add extra packages in profile to home.packages
-      home.packages = profile.extraPackages;
-      # Set state version for home-manager as the system state version
-      home.stateVersion = config.system.stateVersion;
+      programs.home-manager.enable = true; # Let home manager install and manage itself
+      home = {
+        inherit username; # Set username to the profile name (the key in config.profiles)
+        homeDirectory = "/home/${username}"; # Set home directory
+        packages = profile.extraPackages; # Add extra packages in profile to home.packages
+        stateVersion = config.system.stateVersion; # Set state version for home-manager as the system state version
+      };
     }) config.profiles;
   };
 }

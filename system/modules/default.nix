@@ -11,6 +11,7 @@
     ./audio.nix
     ./gaming.nix
     ./wifi.nix
+		./stylix.nix
   ];
 
   # Declare basic system options

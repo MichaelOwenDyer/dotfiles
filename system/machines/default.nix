@@ -89,4 +89,15 @@
 
   # Enable sound
   system.audio.enable = true;
+
+  stylix = {
+    enable = true;
+    image = ./nix-wallpaper-nineish-catppuccin-macchiato-alt.png;
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/darcula.yaml";
+    autoEnable = false; # Disable targets
+    homeManagerIntegration = {
+      autoImport = true; # Create home-manager.users.<user>.stylix options
+      followSystem = false; # Don't inherit system theme
+    };
+  };
 }

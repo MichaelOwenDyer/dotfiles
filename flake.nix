@@ -7,19 +7,32 @@
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.11";
 
     # Home manager
-    home-manager.url = "github:nix-community/home-manager/master";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager = {
+      url = "github:nix-community/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    stylix = {
+      url = "github:danth/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Nix User Repository
-    nur.url = "github:nix-community/NUR";
-    nur.inputs.nixpkgs.follows = "nixpkgs";
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # NixOS hardware configuration
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware/master";
+    };
 
     # Nix JetBrains plugins
-    nix-jetbrains-plugins.url = "github:theCapypara/nix-jetbrains-plugins";
-    nix-jetbrains-plugins.inputs.nixpkgs.follows = "nixpkgs";
+    nix-jetbrains-plugins = {
+      url = "github:theCapypara/nix-jetbrains-plugins";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
