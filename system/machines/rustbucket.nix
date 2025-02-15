@@ -58,7 +58,7 @@ inputs.nixpkgs.lib.nixosSystem {
         powerManagement.finegrained = false;
         open = false;
         nvidiaSettings = true;
-        package = boot.kernelPackages.nvidiaPackages.stable;
+        package = inputs.config.boot.kernelPackages.nvidiaPackages.stable;
       };
 
       # Allow 15 seconds to choose OS in the bootloader
