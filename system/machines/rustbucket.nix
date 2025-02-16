@@ -42,6 +42,16 @@ inputs.nixpkgs.lib.nixosSystem {
       system.stateVersion = "24.11";
       time.timeZone = "Europe/Berlin";
 
+			stylix = {
+				cursor.size = 24;
+				fonts.sizes = let fontSize = 11; in {
+					applications = fontSize;
+					desktop = fontSize;
+					popups = fontSize;
+					terminal = fontSize;
+				};
+			};
+
       # Enable automatic login for the user
       services.displayManager.autoLogin.enable = true;
       services.displayManager.autoLogin.user = "michael";

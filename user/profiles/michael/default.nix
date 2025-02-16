@@ -19,12 +19,6 @@
 
     # wm = "gnome";
 
-    stylix = {
-      enable = true;
-      image = ./wallpaper.png;
-			base16Scheme = "${pkgs.base16-schemes}/share/themes/da-one-ocean.yaml";
-    };
-
     caffeine.enable = true;
 
     browser.firefox.enable = true;

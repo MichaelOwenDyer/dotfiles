@@ -39,6 +39,16 @@ inputs.nixpkgs.lib.nixosSystem {
       machine.isLaptop = true;
       system.wifi.enable = true; # TODO: Make this automatically enabled by machine.isLaptop
 
+			stylix = {
+				cursor.size = 28;
+				fonts.sizes = let fontSize = 14; in {
+					applications = fontSize;
+					desktop = fontSize;
+					popups = fontSize;
+					terminal = fontSize;
+				};
+			};
+
       # Set cpu governor to powersave
       powerManagement.cpuFreqGovernor = "powersave";
 

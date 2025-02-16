@@ -93,11 +93,45 @@
   stylix = {
     enable = true;
     image = ./nix-wallpaper-nineish-catppuccin-macchiato-alt.png;
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/darcula.yaml";
-    autoEnable = false; # Disable targets
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-macchiato.yaml";
+		polarity = "dark";
+		
+    autoEnable = true;
+
     homeManagerIntegration = {
       autoImport = true; # Create home-manager.users.<user>.stylix options
-      followSystem = false; # Don't inherit system theme
+      followSystem = true; # Inherit system theme
+    };
+
+    opacity =
+      let
+        opacity = 0.95;
+      in
+      {
+        terminal = opacity;
+        popups = opacity;
+      };
+
+    fonts = {
+      serif = {
+        package = pkgs.dejavu_fonts;
+        name = "DejaVu Serif";
+      };
+
+      sansSerif = {
+        package = pkgs.dejavu_fonts;
+        name = "DejaVu Sans";
+      };
+
+      monospace = {
+        package = pkgs.dejavu_fonts;
+        name = "DejaVu Sans Mono";
+      };
+
+      emoji = {
+        package = pkgs.noto-fonts-emoji;
+        name = "Noto Color Emoji";
+      };
     };
   };
 }
