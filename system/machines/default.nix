@@ -5,6 +5,7 @@
   config,
   lib,
   pkgs,
+  nix-wallpaper,
   ...
 }:
 
@@ -92,10 +93,16 @@
 
   stylix = {
     enable = true;
-    image = ./nix-wallpaper-nineish-catppuccin-macchiato-alt.png;
+    image =
+      let
+        wallpaper = nix-wallpaper.packages.${config.hostPlatform}.default.override {
+          preset = "catppuccin-macchiato-rainbow";
+        };
+      in
+      "${wallpaper}/share/wallpapers/nixos-wallpaper.png";
     base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-macchiato.yaml";
-		polarity = "dark";
-		
+    polarity = "dark";
+
     autoEnable = true;
 
     homeManagerIntegration = {
