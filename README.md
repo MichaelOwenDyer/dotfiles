@@ -20,3 +20,16 @@ They represent individual instantiations of the configuration options for a spec
 See the `README.md` files in each subdirectory for more information on the modules contained within.
 
 See `flake.nix` for the entry point to the configuration.
+
+# TODO
+
+# Bugfixes
+
+- VSCode complains on first startup about authentication with the OS keyring not matching
+- 
+
+## Modules to add
+
+- Vencord
+- Hyprland
+- 
