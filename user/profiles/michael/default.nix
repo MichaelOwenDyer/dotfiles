@@ -1,6 +1,8 @@
 {
   lib,
   pkgs,
+	config,
+	nixpkgs-stable,
   ...
 }:
 
@@ -71,7 +73,8 @@
         ]
         ++ lib.optionals development.lang.rust.enable [
           tamasfe.even-better-toml # TOML lang support
-          rust-lang.rust-analyzer # Rust lang support
+					# TODO: Bring back to unstable
+          nixpkgs-stable.legacyPackages.${config.hostPlatform}.vscode-extensions.rust-lang.rust-analyzer # Rust lang support
         ]
         ++ lib.optionals development.lang.java.enable [
           vscjava.vscode-java-pack # Java bundle (Red Hat language support, Maven/Gradle, debugger, test runner, IntelliCode)
