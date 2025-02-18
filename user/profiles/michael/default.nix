@@ -52,14 +52,14 @@
       };
     };
 
-    development.lang.nix.enable = true;
-
-    development.lang.rust.enable = true;
-
-    development.lang.java = {
-      enable = true;
-      mainPackage = pkgs.zulu17;
-    };
+    development.lang = {
+			nix.enable = true;
+			rust.enable = true;
+			java = {
+				enable = true;
+				mainPackage = pkgs.zulu17;
+			};
+		};
 
     development.ide.vscode = {
       enable = true;
@@ -95,9 +95,9 @@
           "*" = true;
         };
         "[nix]" = {
-          "editor.tabSize" = 2;
           "editor.detectIndentation" = false;
-          "editor.insertSpaces" = false;
+          "editor.insertSpaces" = true;
+          "editor.tabSize" = 2;
         };
         "nix.formatterPath" = "nixfmt";
         "nix.serverPath" = "nixd";
