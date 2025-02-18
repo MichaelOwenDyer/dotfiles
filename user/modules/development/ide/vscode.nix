@@ -11,12 +11,12 @@
             enable = lib.mkEnableOption "Visual Studio Code IDE";
             extensions = lib.mkOption {
               type = listOf package;
-              default = [ ];
+              default = [];
               description = "Extensions to install with VSCode";
             };
             userSettings = lib.mkOption {
               type = attrs;
-              default = { };
+              default = {};
               description = "Custom user settings for VSCode";
             };
           };
@@ -38,9 +38,9 @@
       lib.mkIf cfg.enable {
         programs.vscode = {
           enable = true;
-          enableUpdateCheck = lib.mkDefault false;
-          enableExtensionUpdateCheck = lib.mkDefault false;
-          mutableExtensionsDir = lib.mkDefault false;
+          enableUpdateCheck = false;
+          enableExtensionUpdateCheck = false;
+          mutableExtensionsDir = false;
           extensions = cfg.extensions;
           userSettings = cfg.userSettings;
         };

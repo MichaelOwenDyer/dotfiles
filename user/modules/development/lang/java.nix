@@ -20,7 +20,7 @@
             };
             additionalPackages = lib.mkOption {
               type = listOf package;
-              default = [ ];
+              default = [];
               description = "Additional Java packages to install.";
             };
           };

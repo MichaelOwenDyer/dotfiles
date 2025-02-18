@@ -18,7 +18,7 @@
           options.development = {
             shellAliases = lib.mkOption {
               type = attrsOf str;
-              default = { };
+              default = {};
               description = "Aliases to add for all shells";
             };
           };

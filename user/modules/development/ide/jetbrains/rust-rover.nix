@@ -19,7 +19,7 @@
             # https://raw.githubusercontent.com/theCapypara/nix-jetbrains-plugins/refs/heads/main/generated/all_plugins.json
             plugins = lib.mkOption {
               type = listOf str;
-              default = [ ];
+              default = [];
               description = "Plugins to install with RustRover";
             };
           };

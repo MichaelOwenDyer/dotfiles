@@ -24,7 +24,7 @@
             };
             config = lib.mkOption {
               type = attrs;
-              default = { };
+              default = {};
               description = "Extra Git configuration";
             };
           };

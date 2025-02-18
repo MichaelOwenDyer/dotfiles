@@ -92,9 +92,9 @@ inputs.nixpkgs.lib.nixosSystem {
         "sd_mod"
         "rtsx_pci_sdmmc"
       ];
-      boot.initrd.kernelModules = [ ];
+      boot.initrd.kernelModules = [];
       boot.kernelModules = [ "kvm-intel" ];
-      boot.extraModulePackages = [ ];
+      boot.extraModulePackages = [];
 
       fileSystems."/" = {
         device = "/dev/disk/by-uuid/3bf7699c-c538-4368-842c-dce257ee819e";

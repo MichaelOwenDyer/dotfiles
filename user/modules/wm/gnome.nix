@@ -38,7 +38,7 @@
           # Enable GNOME keyring
           enable = true;
           # list of (one of "pkcs11", "secrets", "ssh")
-          components = [ ];
+          components = [];
         };
       }
     ) config.profiles;

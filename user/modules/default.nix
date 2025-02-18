@@ -40,12 +40,12 @@
             };
             extraGroups = lib.mkOption {
               type = listOf str;
-              default = [ ];
+              default = [];
               description = "Extra groups to add the user to";
             };
             extraPackages = lib.mkOption {
               type = listOf package;
-              default = [ ];
+              default = [];
               description = "Packages to install for the user";
             };
           };

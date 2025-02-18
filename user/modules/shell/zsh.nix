@@ -22,7 +22,7 @@
               };
               plugins = lib.mkOption {
                 type = listOf str;
-                default = [ ];
+                default = [];
                 description = "List of Oh My Zsh plugins to install. See https://github.com/ohmyzsh/ohmyzsh/wiki/plugins for a list of plugins.";
               };
             };

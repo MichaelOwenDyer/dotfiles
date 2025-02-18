@@ -99,6 +99,7 @@
     };
 
     # https://github.com/danth/stylix
+		# https://tinted-theming.github.io/tinted-gallery/
     stylix = {
       url = "github:danth/stylix";
       inputs = {
