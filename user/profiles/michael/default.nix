@@ -23,7 +23,12 @@
 
     caffeine.enable = true;
 
-    browser.firefox.enable = true;
+    browser.firefox = {
+			enable = true;
+			extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+				ublock-origin
+			];
+		};
 
     development.git = {
       enable = true;

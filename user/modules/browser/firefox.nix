@@ -19,6 +19,10 @@
         type = attrsOf (submodule {
           options.browser.firefox = {
             enable = lib.mkEnableOption "Firefox";
+						extensions = lib.mkOption {
+							type = listOf package;
+							default = [];
+						};
           };
         });
       };
@@ -48,10 +52,7 @@
             "de"
           ];
 
-          # Add ublock-origin # TODO: Configure via options
-          profiles."${username}".extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-            ublock-origin
-          ];
+          profiles."${username}".extensions.packages = cfg.extensions;
         };
       }
     ) config.profiles;
