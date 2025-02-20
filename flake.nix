@@ -8,6 +8,7 @@
         inherit (inputs)
           nixpkgs
           nixpkgs-stable
+          nix-darwin
           home-manager
           nixos-hardware
           nur
@@ -17,13 +18,16 @@
           ;
       };
       lib = inputs.nixpkgs.lib;
-      machines = {
+      nixosConfigurations = {
         claptrap = import ./system/machines/claptrap.nix filteredInputs;
         rustbucket = import ./system/machines/rustbucket.nix filteredInputs;
       };
+      darwinConfigurations = {
+        mac = import ./system/machines/mac.nix filteredInputs;
+      };
     in
     {
-      nixosConfigurations = machines;
+      inherit nixosConfigurations darwinConfigurations;
       homeConfigurations = lib.listToAttrs (
         lib.flatten (
           lib.mapAttrsToList (
@@ -31,7 +35,7 @@
             lib.mapAttrsToList (
               user: home: lib.nameValuePair "${user}@${host}" home
             ) machine.config.home-manager.users
-          ) machines
+          ) nixosConfigurations
         )
       );
     };
@@ -45,6 +49,11 @@
     # Stable nixpkgs (used exceptionally)
     nixpkgs-stable = {
       url = "github:NixOS/nixpkgs/nixos-24.11";
+    };
+
+    nix-darwin = {
+        url = "github:LnL7/nix-darwin";
+        inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # https://github.com/nix-community/home-manager
