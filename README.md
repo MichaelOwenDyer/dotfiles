@@ -26,10 +26,11 @@ See `flake.nix` for the entry point to the configuration.
 # Bugfixes
 
 - VSCode complains on first startup about authentication with the OS keyring not matching
+- Caffeine doesn't show up in system tray
 - 
 
 ## Modules to add
 
-- Vencord
-- Hyprland
-- 
+- Vencord https://github.com/KaylorBen/nixcord/blob/main/docs/main.md
+- Hyprland https://wiki.nixos.org/wiki/Hyprland
+- Rclone https://wiki.nixos.org/wiki/Rclone
