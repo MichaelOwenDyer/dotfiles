@@ -1,20 +1,15 @@
 {
-  config,
   lib,
-  pkgs,
   ...
 }:
 
 {
-  # Import the options and settings in the various system modules
+  # Common modules should always be available
   imports = [
-    ./audio.nix
-    ./gaming.nix
-    ./wifi.nix
-		./stylix.nix
+    ./common
   ];
 
-  # Declare basic system options
+  # Declare basic system configuration options
   options = with lib.types; {
     hostPlatform = lib.mkOption {
       type = str;

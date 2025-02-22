@@ -1,22 +1,17 @@
+# Common user module for both NixOS and Darwin
+# Should be imported indirectly via ./nixos or ./darwin
+
 {
   config,
   lib,
   home-manager,
-  stylix,
   ...
 }:
 
 {
+  # Common modules should always be available
   imports = [
-    # Everything in the user directory uses home-manager, so its module is made available here
-    home-manager.nixosModules.home-manager
-    ./browser
-    ./chat
-    ./development
-    ./shell
-    ./wm
-    ./caffeine.nix
-    ./stylix.nix
+    ./common
   ];
 
   # Declare basic profile configuration options
@@ -34,19 +29,17 @@
               type = str;
               description = "Email address of the user";
             };
-            hashedPassword = lib.mkOption {
-              type = str;
-              description = "Hashed password of the user";
-            };
-            extraGroups = lib.mkOption {
-              type = listOf str;
-              default = [];
-              description = "Extra groups to add the user to";
-            };
             extraPackages = lib.mkOption {
               type = listOf package;
               default = [];
               description = "Packages to install for the user";
+            };
+            home-manager.stateVersion = lib.mkOption {
+              type = str;
+              # Use system state version by default
+              # On Darwin, system state version is not a string like "24.11" but rather a number, so this must be overridden
+              default = config.system.stateVersion;
+              description = "Value of home-manager.users.<username>.home.stateVersion";
             };
           };
         });
@@ -54,14 +47,8 @@
   };
 
   config = {
-    # Register a system user account for each profile
-    users.users = lib.mapAttrs (username: profile: {
-      isNormalUser = true;
-      description = profile.fullName;
-      hashedPassword = profile.hashedPassword;
-      extraGroups = profile.extraGroups;
-    }) config.profiles;
-
+    # Give an empty value for when no profiles are configured
+    profiles = {};
     # By default, home manager wants to use a separate nixpkgs instance for each user, but this tells it to use the system nixpkgs
     home-manager.useGlobalPkgs = true;
     # By default, home manager will install packages in /home/<username>/.nix-profile, but this puts them in /etc/profiles
@@ -72,9 +59,8 @@
       programs.home-manager.enable = true; # Let home manager install and manage itself
       home = {
         inherit username; # Set username to the profile name (the key in config.profiles)
-        homeDirectory = "/home/${username}"; # Set home directory
         packages = profile.extraPackages; # Add extra packages in profile to home.packages
-        stateVersion = config.system.stateVersion; # Set state version for home-manager as the system state version
+        stateVersion = profile.home-manager.stateVersion; # Set state version for home-manager as the system state version
       };
     }) config.profiles;
   };

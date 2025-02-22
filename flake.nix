@@ -19,11 +19,11 @@
       };
       lib = inputs.nixpkgs.lib;
       nixosConfigurations = {
-        claptrap = import ./system/machines/claptrap.nix filteredInputs;
-        rustbucket = import ./system/machines/rustbucket.nix filteredInputs;
+        claptrap = import ./system/machines/nixos/claptrap.nix filteredInputs;
+        rustbucket = import ./system/machines/nixos/rustbucket.nix filteredInputs;
       };
       darwinConfigurations = {
-        mac = import ./system/machines/mac.nix filteredInputs;
+        mac = import ./system/machines/darwin/macaroni.nix filteredInputs;
       };
     in
     {
@@ -42,38 +42,46 @@
 
   inputs = {
     # Unstable nixpkgs (used by default)
+    # https://github.com/NixOS/nixpkgs/tree/nixos-unstable
     nixpkgs = {
       url = "github:NixOS/nixpkgs/nixos-unstable";
     };
 
-    # Stable nixpkgs (used exceptionally)
+    # Stable nixpkgs for the occasional fallback
+    # https://github.com/NixOS/nixpkgs/tree/nixos-24.11
     nixpkgs-stable = {
       url = "github:NixOS/nixpkgs/nixos-24.11";
     };
 
+    # Nix on macOS
+    # https://github.com/LnL7/nix-darwin
     nix-darwin = {
         url = "github:LnL7/nix-darwin";
         inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # User home configuration
     # https://github.com/nix-community/home-manager
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Pre-built NixOS hardware configurations
     # https://github.com/NixOS/nixos-hardware
     nixos-hardware = {
       url = "github:NixOS/nixos-hardware/master";
     };
 
+    # NUR (Nix User Repository) - community packages
     # https://github.com/nix-community/NUR
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Only need x86_64-linux here
+    # List of systems for use in flake inputs
+    # TODO: Include darwin in list
     # https://github.com/nix-systems/nix-systems
     systems = {
       url = "github:nix-systems/x86_64-linux";
@@ -107,8 +115,9 @@
       };
     };
 
+    # Theming for NixOS
     # https://github.com/danth/stylix
-		# https://tinted-theming.github.io/tinted-gallery/
+		# Themes: https://tinted-theming.github.io/tinted-gallery/
     stylix = {
       url = "github:danth/stylix";
       inputs = {
@@ -121,6 +130,7 @@
       };
     };
 
+    # Generate wallpapers for NixOS
     # https://github.com/lunik1/nix-wallpaper
     nix-wallpaper = {
       url = "github:lunik1/nix-wallpaper";
@@ -131,6 +141,7 @@
       };
     };
 
+    # JetBrains IDE plugins (more up-to-date than nixpkgs)
     # https://github.com/theCapypara/nix-jetbrains-plugins
     nix-jetbrains-plugins = {
       url = "github:theCapypara/nix-jetbrains-plugins";

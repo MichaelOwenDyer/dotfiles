@@ -10,12 +10,12 @@
 
 inputs:
 let
-  hostPlatform = "x86_64-linux";
+  system = "x86_64-linux";
 in
 inputs.nixpkgs.lib.nixosSystem {
 
   # Define the system platform
-  system = hostPlatform;
+  inherit system;
 
   # Allow the modules listed below to import any input from the flake
   specialArgs = inputs;
@@ -23,11 +23,11 @@ inputs.nixpkgs.lib.nixosSystem {
   modules = [
 
     # System modules
-    ../modules
+    ../../modules/nixos
     # User modules
-    ../../user/modules
+    ../../../user/modules/nixos
     # Add michael as a user
-    ../../user/profiles/michael/rustbucket.nix
+    ../../../user/profiles/michael/rustbucket.nix
 
     # Machine-specific module closure. This is the closest thing to a configuration.nix in this setup
     (inputs: {
@@ -36,8 +36,7 @@ inputs.nixpkgs.lib.nixosSystem {
         ./default.nix
       ];
 
-      inherit hostPlatform;
-
+      hostPlatform = system;
       networking.hostName = "rustbucket";
       system.stateVersion = "24.11";
       time.timeZone = "Europe/Berlin";

@@ -85,22 +85,57 @@
           vscjava.vscode-java-pack # Java bundle (Red Hat language support, Maven/Gradle, debugger, test runner, IntelliCode)
         ];
       userSettings = {
+        "security.workspace.trust.untrustedFiles" = "open";
+        "window.zoomLevel" = 2;
         "files.autoSave" = "afterDelay";
         "git.confirmSync" = false;
         "git.autofetch" = true;
         "git.enableSmartCommit" = true;
         "explorer.confirmDragAndDrop" = false;
         "explorer.confirmDelete" = false;
+        "explorer.confirmPasteNative" = false;
+        "editor.suggest.showSnippets" = false;
+        "editor.suggest.showWords" = false;
+        "editor.largeFileOptimizations" = false;
+        "editor.minimap.enabled" = false;
+        "editor.suggestSelection" = "first";
+        "vsintellicode.modify.editor.suggestSelection" = "automaticallyOverrodeDefaultValue";
         "github.copilot.enable" = {
           "*" = true;
+          "plaintext" = true;
+          "markdown" = true;
+          "scminput" = false;
         };
+        "github.copilot.editor.enableAutoCompletions" = true;
+        "[java]" = {
+            "editor.suggest.snippetsPreventQuickSuggestions" = false;
+        };
+        "redhat.telemetry.enabled" = false;
+        "java.autobuild.enabled" = false;
+        "java.codeGeneration.hashCodeEquals.useInstanceof" = true;
+        "java.codeGeneration.hashCodeEquals.useJava7Objects" = true;
+        "java.sources.organizeImports.staticStarThreshold" = 6;
+        "java.sources.organizeImports.starThreshold" = 6;
+        "nix.formatterPath" = "nixfmt";
+        "nix.serverPath" = "nixd";
         "[nix]" = {
           "editor.detectIndentation" = false;
           "editor.insertSpaces" = true;
           "editor.tabSize" = 2;
         };
-        "nix.formatterPath" = "nixfmt";
-        "nix.serverPath" = "nixd";
+        "[typst]" = {
+            "editor.wordSeparators" = "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?";
+        };
+        "[typst-code]" = {
+            "editor.wordSeparators" = "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?";
+        };
+        "typst-lsp.exportPdf" = "never";
+        "files.exclude" = {
+            "**/.classpath" = true;
+            "**/.project" = true;
+            "**/.settings" = true;
+            "**/.factorypath" = true;
+        };
       };
     };
 

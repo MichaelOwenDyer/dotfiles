@@ -2,7 +2,7 @@
 
 inputs:
 let
-  hostPlatform = "x86_64-linux";
+  system = "x86_64-linux";
 in
 inputs.nixpkgs.lib.nixosSystem {
 
@@ -15,11 +15,11 @@ inputs.nixpkgs.lib.nixosSystem {
   modules = [
 
     # System modules
-    ../modules
+    ../../modules/nixos
     # User modules
-    ../../user/modules
+    ../../../user/modules/nixos
     # Add michael as a user
-    ../../user/profiles/michael/claptrap.nix
+    ../../../user/profiles/michael/claptrap.nix
 
     # Machine-specific module closure. This is the closest thing to a configuration.nix in this setup
     (inputs: {
@@ -31,8 +31,7 @@ inputs.nixpkgs.lib.nixosSystem {
         inputs.nixos-hardware.nixosModules.dell-xps-13-9360
       ];
 
-      inherit hostPlatform;
-
+      hostPlatform = system;
       networking.hostName = "claptrap";
       system.stateVersion = "24.11";
       time.timeZone = "Europe/Berlin";
