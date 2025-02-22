@@ -4,40 +4,88 @@
   outputs =
     inputs:
     let
-      filteredInputs = {
-        inherit (inputs)
-          nixpkgs
-          nixpkgs-stable
-          nix-darwin
-          home-manager
-          nixos-hardware
-          nur
-          stylix
-          nix-wallpaper
-          nix-jetbrains-plugins
-          ;
+      inherit (inputs.nixpkgs.lib) mapAttrs listToAttrs flatten mapAttrsToList nameValuePair;
+      nixosMachines = {
+        claptrap = "x86_64-linux";
+        rustbucket = "x86_64-linux";
       };
-      lib = inputs.nixpkgs.lib;
-      nixosConfigurations = {
-        claptrap = import ./system/machines/nixos/claptrap.nix filteredInputs;
-        rustbucket = import ./system/machines/nixos/rustbucket.nix filteredInputs;
-      };
-      darwinConfigurations = {
-        mac = import ./system/machines/darwin/macaroni.nix filteredInputs;
+      darwinMachines = {
+        macaroni = "x86_64-darwin";
       };
     in
-    {
-      inherit nixosConfigurations darwinConfigurations;
-      homeConfigurations = lib.listToAttrs (
-        lib.flatten (
-          lib.mapAttrsToList (
-            host: machine:
-            lib.mapAttrsToList (
-              user: home: lib.nameValuePair "${user}@${host}" home
-            ) machine.config.home-manager.users
-          ) nixosConfigurations
-        )
-      );
+    rec {
+      nixosConfigurations = mapAttrs (
+        name: system:
+        inputs.nixpkgs.lib.nixosSystem {
+          # Define the system platform
+          inherit system;
+          # Allow the modules listed below to import any of these flake inputs
+          specialArgs = {
+            inherit (inputs)
+              nixpkgs
+              nixpkgs-stable
+              home-manager
+              nixos-hardware
+              nur
+              stylix
+              nix-wallpaper
+              nix-jetbrains-plugins
+              ;
+          };
+          modules = [
+            {
+              # Define the hostPlatform option from ./system/module/default.nix
+              hostPlatform = system;
+            }
+            # System modules
+            ./system/modules/nixos
+            # User modules
+            ./user/modules/nixos
+            # Machine configuration
+            ./system/machines/nixos/${name}.nix
+          ];
+        }
+      ) nixosMachines;
+
+      darwinConfigurations = mapAttrs (
+        name: system:
+        inputs.nix-darwin.lib.darwinSystem {
+          # Define the system platform
+          inherit system;
+          # Allow the modules listed below to import any of these flake inputs
+          specialArgs = {
+            inherit (inputs)
+              nixpkgs
+              nixpkgs-stable
+              nix-darwin
+              nix-jetbrains-plugins
+              ;
+          };
+          modules = [
+            {
+              # Define the hostPlatform option from ./system/module/default.nix
+              hostPlatform = system;
+            }
+            # System modules
+            ./system/modules/darwin
+            # User modules
+            ./user/modules/darwin
+            # Machine configuration
+            ./system/machines/darwin/${name}.nix
+          ];
+        }
+      ) darwinMachines;
+
+      # TODO: Investigate how to make home-manager independently rebuildable
+      homeConfigurations = listToAttrs (flatten (
+        mapAttrsToList (
+          host: machine:
+          mapAttrsToList (
+            user: home:
+            nameValuePair "${user}@${host}" home
+          ) machine.config.home-manager.users
+        ) nixosConfigurations
+      ));
     };
 
   inputs = {
@@ -56,8 +104,8 @@
     # Nix on macOS
     # https://github.com/LnL7/nix-darwin
     nix-darwin = {
-        url = "github:LnL7/nix-darwin";
-        inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # User home configuration

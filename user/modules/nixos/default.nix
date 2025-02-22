@@ -54,7 +54,7 @@
 
     # On Linux, we put all user home directories in /home/
     home-manager.users = lib.mapAttrs (username: profile: {
-      home.homeDirectory = /home/${username};
+      home.homeDirectory = "/home/${username}";
     }) config.profiles;
   };
 }

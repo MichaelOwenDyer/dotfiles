@@ -1,5 +1,4 @@
-## Common configuration for all machines.
-## Since no options are declared here, every definition is implicitly inside "config".
+# Common configuration for all NixOS machines.
 
 {
   config,
