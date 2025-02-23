@@ -20,7 +20,8 @@
       # https://search.nixos.org/options?channel=unstable&show=programs.gamemode.enable
       programs.gamemode.enable = true;
       environment.systemPackages = with pkgs; [
-        wine # For running Windows games on Linux
+        wineWowPackages.waylandFull # Wine runs Windows games on Linux - experimental native Wayland support
+        # wineWowPackages.stable # Wine runs Windows games on Linux
         mangohud # In-game overlay
         lutris # Steam alternative
         heroic # Steam alternative
