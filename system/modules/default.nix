@@ -11,10 +11,6 @@
 
   # Declare basic system configuration options
   options = with lib.types; {
-    hostPlatform = lib.mkOption {
-      type = str;
-      description = "The platform the system is running on";
-    };
     machine = {
       isLaptop = lib.mkEnableOption "common laptop settings";
     };

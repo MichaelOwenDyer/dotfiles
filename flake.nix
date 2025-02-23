@@ -19,24 +19,22 @@
         inputs.nixpkgs.lib.nixosSystem {
           # Define the system platform
           inherit system;
-          # Allow the modules listed below to import any of these flake inputs
+          # Allow the modules listed below to import any of these inputs
+          # in addition to the default "pkgs", "lib", "config", and "options"
           specialArgs = {
+            pkgs-stable = import inputs.nixpkgs-stable { inherit system; config.allowUnfree = true; };
+            nix-jetbrains-plugins = inputs.nix-jetbrains-plugins.lib.${system};
+            nix-wallpaper = inputs.nix-wallpaper.packages.${system};
             inherit (inputs)
-              nixpkgs
-              nixpkgs-stable
               home-manager
               nixos-hardware
               nur
               stylix
-              nix-wallpaper
-              nix-jetbrains-plugins
               ;
           };
           modules = [
-            {
-              # Define the hostPlatform option from ./system/module/default.nix
-              hostPlatform = system;
-            }
+            # pkgs configuration
+            { nixpkgs.hostPlatform = system; nixpkgs.config.allowUnfree = true; }
             # System modules
             ./system/modules/nixos
             # User modules
@@ -52,20 +50,15 @@
         inputs.nix-darwin.lib.darwinSystem {
           # Define the system platform
           inherit system;
-          # Allow the modules listed below to import any of these flake inputs
+          # Allow the modules listed below to import any of these inputs
+          # in addition to the default "pkgs", "lib", "config", and "options"
           specialArgs = {
-            inherit (inputs)
-              nixpkgs
-              nixpkgs-stable
-              nix-darwin
-              nix-jetbrains-plugins
-              ;
+            pkgs-stable = import inputs.nixpkgs-stable { inherit system; config.allowUnfree = true; };
+            nix-jetbrains-plugins = inputs.nix-jetbrains-plugins.lib.${system};
           };
           modules = [
-            {
-              # Define the hostPlatform option from ./system/module/default.nix
-              hostPlatform = system;
-            }
+            # pkgs configuration
+            { nixpkgs.hostPlatform = system; nixpkgs.config.allowUnfree = true; }
             # System modules
             ./system/modules/darwin
             # User modules

@@ -36,10 +36,8 @@
         cfg = profile.development.ide.jetbrains.rust-rover;
         # Combine the user's default Jetbrains plugins with the user's RustRover plugins
         plugins = profile.development.ide.jetbrains.plugins ++ cfg.plugins;
-        # Use nix-jetbrains-plugins helper
-        mkIde = nix-jetbrains-plugins.lib."${config.hostPlatform}".buildIdeWithPlugins;
         # Construct the RustRover package with all plugins
-        rust-rover = mkIde pkgs.jetbrains "rust-rover" plugins;
+        rust-rover = nix-jetbrains-plugins.buildIdeWithPlugins pkgs.jetbrains "rust-rover" plugins;
       in
       lib.mkIf cfg.enable {
         # Add RustRover to the user's home packages

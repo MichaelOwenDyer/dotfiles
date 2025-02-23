@@ -9,11 +9,6 @@
 }:
 
 {
-  # Configure the platform the system is running on
-  nixpkgs.hostPlatform = config.hostPlatform;
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
 
   # Enable the nix command and flakes
   nix.settings.experimental-features = [
@@ -94,7 +89,7 @@
     enable = true;
     image =
       let
-        wallpaper = nix-wallpaper.packages.${config.hostPlatform}.default.override {
+        wallpaper = nix-wallpaper.default.override {
           preset = "catppuccin-macchiato-rainbow";
         };
       in

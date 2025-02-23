@@ -36,10 +36,8 @@
         cfg = profile.development.ide.jetbrains.intellij-idea;
         # Combine the user's default Jetbrains plugins with the user's IntelliJ IDEA plugins
         plugins = profile.development.ide.jetbrains.plugins ++ cfg.plugins;
-        # Use nix-jetbrains-plugins helper
-        mkIde = nix-jetbrains-plugins.lib."${config.hostPlatform}".buildIdeWithPlugins;
         # Construct the IntelliJ IDEA package with all plugins
-        idea-ultimate = mkIde pkgs.jetbrains "idea-ultimate" plugins;
+        idea-ultimate = nix-jetbrains-plugins.buildIdeWithPlugins pkgs.jetbrains "idea-ultimate" plugins;
       in
       lib.mkIf cfg.enable {
         # Add IntelliJ IDEA to the user's home packages

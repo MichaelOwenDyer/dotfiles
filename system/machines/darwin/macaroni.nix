@@ -3,13 +3,6 @@
 { self, ... }:
 
 {
-
-  # The platform the configuration will be used on.
-  nixpkgs.hostPlatform = system;
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
   # Let Determinate Nix handle the installation
   nix.enable = false;
 
