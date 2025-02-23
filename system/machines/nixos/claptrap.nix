@@ -16,8 +16,7 @@
   networking.hostName = "claptrap";
   system.stateVersion = "24.11";
   time.timeZone = "Europe/Berlin";
-  machine.isLaptop = true;
-  wifi.enable = true; # TODO: Make this automatically enabled by machine.isLaptop
+  wifi.enable = true;
 
   stylix = {
     cursor.size = 28;
