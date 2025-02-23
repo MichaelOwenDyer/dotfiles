@@ -6,18 +6,6 @@
 }:
 
 {
-  # options = {
-  #   profiles =
-  #     with lib.types;
-  #     lib.mkOption {
-  #       type = attrsOf (submodule {
-  #         options.wm.gnome = {
-  #           # TODO: Add gnome options
-  #         };
-  #       });
-  #     };
-  # };
-
   config = {
     home-manager.users = lib.mapAttrs (
       username: profile:

@@ -1,22 +1,17 @@
 {
   config,
   lib,
+  util,
   pkgs,
   ...
 }:
 
 {
   # Declare configuration options for Discord under options.profiles.<name>.chat.discord
-  options = {
-    profiles =
-      with lib.types;
-      lib.mkOption {
-        type = attrsOf (submodule {
-          options.chat.discord = {
-            enable = lib.mkEnableOption "Discord";
-          };
-        });
-      };
+  options = util.mkProfileOption lib {
+    chat.discord = {
+      enable = lib.mkEnableOption "Discord";
+    };
   };
 
   config = {

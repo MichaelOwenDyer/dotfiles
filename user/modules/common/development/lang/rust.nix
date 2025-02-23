@@ -1,22 +1,17 @@
 {
   config,
   lib,
+  util,
   pkgs,
   ...
 }:
 
 {
   # Declare configuration options for Rust under profiles.<name>.development.lang.rust
-  options = {
-    profiles =
-      with lib.types;
-      lib.mkOption {
-        type = attrsOf (submodule {
-          options.development.lang.rust = {
-            enable = lib.mkEnableOption "Rust programming language support";
-          };
-        });
-      };
+  options = util.mkProfileOption lib {
+    development.lang.rust = {
+      enable = lib.mkEnableOption "Rust programming language support";
+    };
   };
 
   # Configure Rust for each user profile

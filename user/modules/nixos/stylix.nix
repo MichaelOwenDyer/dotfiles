@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  util,
   stylix,
   ...
 }:
@@ -11,19 +12,13 @@
     # stylix.homeManagerModules.stylix
   ];
 
-  options = {
-    profiles =
-      with lib.types;
-      lib.mkOption {
-        type = attrsOf (submodule {
-          options.stylix = lib.mkOption {
-            type = attrs;
-            default = {
-              enable = false;
-            };
-          };
-        });
+  options = with lib.types; util.mkProfileOption lib {
+    stylix = lib.mkOption {
+      type = attrs;
+      default = {
+        enable = false;
       };
+    };
   };
 
   config = {

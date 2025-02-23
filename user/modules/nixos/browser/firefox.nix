@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  util,
   pkgs,
   nur,
   ...
@@ -12,20 +13,14 @@
   ];
 
   # Declare configuration options for Firefox under options.profiles.<name>.browser.firefox
-  options = {
-    profiles =
-      with lib.types;
-      lib.mkOption {
-        type = attrsOf (submodule {
-          options.browser.firefox = {
-            enable = lib.mkEnableOption "Firefox";
-						extensions = lib.mkOption {
-							type = listOf package;
-							default = [];
-						};
-          };
-        });
+  options = with lib.types; util.mkProfileOption lib {
+    browser.firefox = {
+      enable = lib.mkEnableOption "Firefox";
+      extensions = lib.mkOption {
+        type = listOf package;
+        default = [];
       };
+    };
   };
 
   # Configure Firefox for each user profile

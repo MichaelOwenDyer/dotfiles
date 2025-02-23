@@ -5,6 +5,7 @@
     inputs:
     let
       inherit (inputs.nixpkgs.lib) mapAttrs listToAttrs flatten mapAttrsToList nameValuePair;
+      util = import ./util.nix;
       nixosMachines = {
         claptrap = "x86_64-linux";
         rustbucket = "x86_64-linux";
@@ -26,6 +27,7 @@
             nix-jetbrains-plugins = inputs.nix-jetbrains-plugins.lib.${system};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system};
             inherit (inputs) home-manager nixos-hardware nur stylix;
+            inherit util;
           };
           modules = [
             # pkgs configuration
@@ -179,6 +181,7 @@
 
     # JetBrains IDE plugins (more up-to-date than nixpkgs)
     # https://github.com/theCapypara/nix-jetbrains-plugins
+    # All plugins: https://raw.githubusercontent.com/theCapypara/nix-jetbrains-plugins/refs/heads/main/generated/all_plugins.json
     nix-jetbrains-plugins = {
       url = "github:theCapypara/nix-jetbrains-plugins";
       inputs = {

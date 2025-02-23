@@ -1,34 +1,29 @@
 {
   config,
   lib,
+  util,
 	pkgs,
   ...
 }:
 
 {
   # Declare configuration options for Zsh and Oh My Zsh under options.profiles.<name>.development.shell.zsh
-  options = {
-    profiles =
-      with lib.types;
-      lib.mkOption {
-        type = attrsOf (submodule {
-          options.development.shell.zsh = {
-            enable = lib.mkEnableOption "Zsh shell";
-            oh-my-zsh = {
-              enable = lib.mkEnableOption "Oh My Zsh";
-              theme = lib.mkOption {
-                type = str;
-                description = "Oh My Zsh theme to use. See https://github.com/ohmyzsh/ohmyzsh/wiki/themes for a list of themes.";
-              };
-              plugins = lib.mkOption {
-                type = listOf str;
-                default = [];
-                description = "List of Oh My Zsh plugins to install. See https://github.com/ohmyzsh/ohmyzsh/wiki/plugins for a list of plugins.";
-              };
-            };
-          };
-        });
+  options = with lib.types; util.mkProfileOption lib {
+    development.shell.zsh = {
+      enable = lib.mkEnableOption "Zsh shell";
+      oh-my-zsh = {
+        enable = lib.mkEnableOption "Oh My Zsh";
+        theme = lib.mkOption {
+          type = str;
+          description = "Oh My Zsh theme to use. See https://github.com/ohmyzsh/ohmyzsh/wiki/themes for a list of themes.";
+        };
+        plugins = lib.mkOption {
+          type = listOf str;
+          default = [];
+          description = "List of Oh My Zsh plugins to install. See https://github.com/ohmyzsh/ohmyzsh/wiki/plugins for a list of plugins.";
+        };
       };
+    };
   };
 
   config =

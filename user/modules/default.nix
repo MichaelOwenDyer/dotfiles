@@ -4,6 +4,7 @@
 {
   config,
   lib,
+  util,
   home-manager,
   ...
 }:
@@ -15,35 +16,27 @@
   ];
 
   # Declare basic profile configuration options
-  options = {
-    profiles =
-      with lib.types;
-      lib.mkOption {
-        type = attrsOf (submodule {
-          options = {
-            fullName = lib.mkOption {
-              type = str;
-              description = "Full name of the user";
-            };
-            email = lib.mkOption {
-              type = str;
-              description = "Email address of the user";
-            };
-            extraPackages = lib.mkOption {
-              type = listOf package;
-              default = [];
-              description = "Packages to install for the user";
-            };
-            home-manager.stateVersion = lib.mkOption {
-              type = str;
-              # Use system state version by default
-              # On Darwin, system state version is not a string like "24.11" but rather a number, so this must be overridden
-              default = config.system.stateVersion;
-              description = "Value of home-manager.users.<username>.home.stateVersion";
-            };
-          };
-        });
-      };
+  options = with lib.types; util.mkProfileOption lib {
+    fullName = lib.mkOption {
+      type = str;
+      description = "Full name of the user";
+    };
+    email = lib.mkOption {
+      type = str;
+      description = "Email address of the user";
+    };
+    extraPackages = lib.mkOption {
+      type = listOf package;
+      default = [];
+      description = "Packages to install for the user";
+    };
+    home-manager.stateVersion = lib.mkOption {
+      type = str;
+      # Use system state version by default
+      # On Darwin, system state version is not a string like "24.11" but rather a number, so this must be overridden
+      default = config.system.stateVersion;
+      description = "Value of home-manager.users.<username>.home.stateVersion";
+    };
   };
 
   config = {

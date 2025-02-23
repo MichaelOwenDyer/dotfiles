@@ -1,20 +1,15 @@
 {
   config,
   lib,
+  util,
   pkgs,
   ...
 }:
 
 {
   # Declare configuration options for Slack under options.profiles.<name>.chat.slack
-  options = {
-    profiles =
-      with lib.types;
-      lib.mkOption {
-        type = attrsOf (submodule {
-          options.chat.slack.enable = lib.mkEnableOption "Slack";
-        });
-      };
+  options = util.mkProfileOption lib {
+    chat.slack.enable = lib.mkEnableOption "Slack";
   };
 
   # Configure Slack for each user profile
