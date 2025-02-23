@@ -25,12 +25,7 @@
             pkgs-stable = import inputs.nixpkgs-stable { inherit system; config.allowUnfree = true; };
             nix-jetbrains-plugins = inputs.nix-jetbrains-plugins.lib.${system};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system};
-            inherit (inputs)
-              home-manager
-              nixos-hardware
-              nur
-              stylix
-              ;
+            inherit (inputs) home-manager nixos-hardware nur stylix;
           };
           modules = [
             # pkgs configuration

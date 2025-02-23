@@ -1,4 +1,4 @@
-# Common configuration for all NixOS machines.
+# Common configuration for Linux machines.
 
 {
   config,
@@ -18,14 +18,11 @@
 
   # Optimize storage after each build
   nix.settings.auto-optimise-store = true;
-  # Optimize storage daily at 4am
-  nix.optimise.automatic = true;
-  nix.optimise.dates = [ "04:00" ];
 
   # Don't warn about building uncommitted git changes
   nix.extraOptions = ''
-    		warn-dirty = false
-    	'';
+    warn-dirty = false
+  '';
 
   # Bootloader
   boot.loader.systemd-boot.enable = true;
