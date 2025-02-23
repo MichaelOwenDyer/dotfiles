@@ -84,7 +84,7 @@
   services.printing.enable = true;
 
   # Enable sound
-  system.audio.enable = true;
+  audio.enable = true;
 
   stylix = {
     enable = true;

@@ -17,7 +17,7 @@
   system.stateVersion = "24.11";
   time.timeZone = "Europe/Berlin";
   machine.isLaptop = true;
-  system.wifi.enable = true; # TODO: Make this automatically enabled by machine.isLaptop
+  wifi.enable = true; # TODO: Make this automatically enabled by machine.isLaptop
 
   stylix = {
     cursor.size = 28;
