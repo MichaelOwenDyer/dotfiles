@@ -23,6 +23,8 @@
   system.stateVersion = "24.11";
   time.timeZone = "Europe/Berlin";
 
+  gaming.enable = true;
+
   stylix = {
     cursor.size = 24;
     fonts.sizes = let fontSize = 11; in {
@@ -40,16 +42,17 @@
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
-  # Nvidia drivers for Xorg and Wayland
+  # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = [ "nvidia" ];
 
+  # https://nixos.wiki/wiki/Nvidia
   hardware.nvidia = {
     modesetting.enable = true;
-    powerManagement.enable = false;
+    powerManagement.enable = true;
     powerManagement.finegrained = false;
-    open = false;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    open = true; # Use open source drivers
+    nvidiaSettings = true; # Nvidia settings menu
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
   };
 
   # Allow 15 seconds to choose OS in the bootloader

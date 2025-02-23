@@ -45,16 +45,20 @@
 
   # List packages installed by default
   environment.systemPackages = with pkgs; [
-    git
-    vim
-    curl
-    wget
-    gnugrep
-    gparted
+    git # version control
+    vim # text editor
+    curl # download files
+    wget # download files
+    lshw # list hardware
+    gnugrep # grep
+    gparted # partition manager
   ];
 
   # OpenGL support
-  hardware.graphics.enable = true;
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
 
   # Enable the X11 windowing system (and implicitly Wayland).
   services.xserver.enable = true;
