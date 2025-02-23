@@ -20,12 +20,16 @@
 
   stylix = {
     cursor.size = 28;
-    fonts.sizes = let fontSize = 14; in {
-      applications = fontSize;
-      desktop = fontSize;
-      popups = fontSize;
-      terminal = fontSize;
-    };
+    fonts.sizes =
+      let
+        fontSize = 14;
+      in
+      {
+        applications = fontSize;
+        desktop = fontSize;
+        popups = fontSize;
+        terminal = fontSize;
+      };
   };
 
   # Set cpu governor to powersave
@@ -33,16 +37,16 @@
 
   # Sleep for 30 minutes then hibernate when lid is closed
   systemd.sleep.extraConfig = ''
-              HibernateDelaySec=1800
-          '';
+    HibernateDelaySec=1800
+  '';
   services.logind.lidSwitch = "suspend-then-hibernate";
   # Hibernate when power button is short-pressed, power off when long-pressed
   services.logind.powerKey = "hibernate";
   services.logind.powerKeyLongPress = "poweroff";
   # TODO: Test without this
   services.logind.extraConfig = ''
-              HandlePowerKey=hibernate
-          '';
+    HandlePowerKey=hibernate
+  '';
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
@@ -71,9 +75,9 @@
     "sd_mod"
     "rtsx_pci_sdmmc"
   ];
-  boot.initrd.kernelModules = [];
+  boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [];
+  boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/3bf7699c-c538-4368-842c-dce257ee819e";
