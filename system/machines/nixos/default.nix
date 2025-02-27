@@ -9,7 +9,6 @@
 }:
 
 {
-
   # Enable the nix command and flakes
   nix.settings.experimental-features = [
     "nix-command"
@@ -99,6 +98,7 @@
     polarity = "dark";
 
     autoEnable = true;
+    targets.console.enable = false; # Don't theme bootloader
 
     homeManagerIntegration = {
       autoImport = true; # Create home-manager.users.<user>.stylix options
