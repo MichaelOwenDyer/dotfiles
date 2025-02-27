@@ -1,6 +1,9 @@
 # Common configuration for macOS machines.
 
-{ self, ... }:
+{
+  self,
+  ...
+}:
 
 {
 

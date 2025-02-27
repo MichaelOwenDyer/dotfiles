@@ -1,10 +1,6 @@
-{ ... }:
+_:
 
 {
-  imports = [
-    ./default.nix
-  ];
-
   config.profiles.michael = {
     development.ide.jetbrains = {
       plugins = [ "com.github.copilot" ];

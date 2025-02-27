@@ -1,9 +1,11 @@
-{ ... }:
+_:
 
 {
+  imports = [
+    ../common
+  ];
+
   config.profiles.michael = {
-    fullName = "Michael Dyer";
-    email = "michaelowendyer@gmail.com";
     home-manager.stateVersion = "25.05";
     development = {
       lang.nix.enable = true;
@@ -11,5 +13,6 @@
         enable = true;
       };
     };
+    caffeine.enable = false;
   };
 }

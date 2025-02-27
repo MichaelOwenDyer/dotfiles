@@ -7,7 +7,7 @@ _:
     # Common macOS machine configuration
     ./default.nix
     # Add michael as a user
-    ../../../user/profiles/michael/macaroni.nix
+    ../../../user/profiles/michael/macaroni
   ];
 
   # Let Determinate Nix handle the nix installation

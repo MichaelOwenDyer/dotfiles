@@ -16,9 +16,9 @@
     # Common machine configuration
     ./default.nix
     # Add michael as a user
-    ../../../user/profiles/michael/claptrap.nix
+    ../../../user/profiles/michael/rustbucket
   ];
-  
+
   networking.hostName = "rustbucket";
   system.stateVersion = "24.11";
   time.timeZone = "Europe/Berlin";

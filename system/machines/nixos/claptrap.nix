@@ -10,7 +10,7 @@
     # Common machine configuration
     ./default.nix
     # Add michael as a user
-    ../../../user/profiles/michael/claptrap.nix
+    ../../../user/profiles/michael/claptrap
   ];
 
   networking.hostName = "claptrap";
