@@ -35,17 +35,22 @@
   # Set cpu governor to powersave
   powerManagement.cpuFreqGovernor = "powersave";
 
-  # Sleep for 30 minutes then hibernate when lid is closed
-  systemd.sleep.extraConfig = ''
-    HibernateDelaySec=1800
-  '';
-  services.logind.lidSwitch = "suspend-then-hibernate";
   # Hibernate when power button is short-pressed, power off when long-pressed
   services.logind.powerKey = "hibernate";
   services.logind.powerKeyLongPress = "poweroff";
-  # TODO: Test without this
+
+  # Sleep for 20 minutes then hybrid sleep when lid is closed
+  services.logind.lidSwitch = "hybrid-sleep";
+
+  # Go into hybrid sleep after 10 minutes of idle time
   services.logind.extraConfig = ''
-    HandlePowerKey=hibernate
+    IdleAction=hybrid-sleep
+    IdleActionSec=10min
+  '';
+
+  # Hibernate after 20 minutes of sleep
+  systemd.sleep.extraConfig = ''
+    HibernateDelaySec=1200
   '';
 
   # Enable touchpad support (enabled default in most desktopManager).
