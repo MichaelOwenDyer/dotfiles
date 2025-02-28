@@ -23,7 +23,6 @@
           # Allow the modules listed below to import any of these inputs
           # in addition to the default "pkgs", "lib", "config", and "options"
           specialArgs = {
-            pkgs-stable = import inputs.nixpkgs-stable { inherit system; config.allowUnfree = true; };
             nix-jetbrains-plugins = inputs.nix-jetbrains-plugins.lib.${system};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system};
             inherit (inputs) home-manager nixos-hardware nur stylix;
@@ -31,7 +30,13 @@
           };
           modules = [
             # pkgs configuration
-            { nixpkgs.hostPlatform = system; nixpkgs.config.allowUnfree = true; }
+            {
+              nixpkgs = {
+                hostPlatform = system;
+                config.allowUnfree = true;
+                overlays = import ./overlays inputs;
+              };
+            }
             # System modules
             ./system/modules/nixos
             # User modules
@@ -50,12 +55,17 @@
           # Allow the modules listed below to import any of these inputs
           # in addition to the default "pkgs", "lib", "config", and "options"
           specialArgs = {
-            pkgs-stable = import inputs.nixpkgs-stable { inherit system; config.allowUnfree = true; };
             nix-jetbrains-plugins = inputs.nix-jetbrains-plugins.lib.${system};
           };
           modules = [
             # pkgs configuration
-            { nixpkgs.hostPlatform = system; nixpkgs.config.allowUnfree = true; }
+            {
+              nixpkgs = {
+                hostPlatform = system;
+                config.allowUnfree = true;
+                overlays = import ./overlays inputs;
+              };
+            }
             # System modules
             ./system/modules/darwin
             # User modules

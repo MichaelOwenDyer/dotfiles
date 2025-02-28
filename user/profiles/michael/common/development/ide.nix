@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  pkgs-stable,
   ...
 }:
 
@@ -29,7 +28,7 @@
         ++ lib.optionals lang.rust.enable [
           tamasfe.even-better-toml # TOML lang support
 					# TODO: Bring back to unstable
-          pkgs-stable.vscode-extensions.rust-lang.rust-analyzer # Rust lang support
+          pkgs.stable.vscode-extensions.rust-lang.rust-analyzer # Rust lang support
         ]
         ++ lib.optionals lang.java.enable [
           vscjava.vscode-java-pack # Java bundle (Red Hat language support, Maven/Gradle, debugger, test runner, IntelliCode)
