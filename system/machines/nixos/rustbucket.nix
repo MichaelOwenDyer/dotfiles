@@ -14,7 +14,7 @@
 
   imports = [
     # Common machine configuration
-    ./default.nix
+    ./.
     # Add michael as a user
     ../../../user/profiles/michael/rustbucket
   ];

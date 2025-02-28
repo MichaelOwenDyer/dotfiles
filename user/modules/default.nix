@@ -5,7 +5,6 @@
   config,
   lib,
   util,
-  home-manager,
   ...
 }:
 

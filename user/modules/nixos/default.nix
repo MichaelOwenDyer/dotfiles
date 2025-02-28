@@ -4,17 +4,12 @@
   config,
   lib,
   util,
-  home-manager,
   ...
 }:
 
 {
   imports = [
-    # Use Home Manager as a NixOS module
-    home-manager.nixosModules.home-manager
-    # Import the default options and config
-    ../default.nix
-    # Import the rest of the modules
+    ../.
     ./browser
     ./chat
     ./wm

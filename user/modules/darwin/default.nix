@@ -4,17 +4,12 @@
 {
   config,
   lib,
-  home-manager,
   ...
 }:
 
 {
   imports = [
-    # Use Home Manager as a Darwin module
-    home-manager.darwinModules.home-manager
-    # Import the default options and config
-    ../default.nix
-    # TODO: Add Darwin user modules
+    ../.
   ];
 
   # Use config.profiles to define MacOS user profiles and configure home-manager

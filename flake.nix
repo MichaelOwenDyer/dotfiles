@@ -25,7 +25,7 @@
           specialArgs = {
             nix-jetbrains-plugins = inputs.nix-jetbrains-plugins.lib.${system};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system};
-            inherit (inputs) home-manager nixos-hardware nur stylix;
+            inherit (inputs) nixos-hardware nur;
             inherit util;
           };
           modules = [
@@ -37,10 +37,16 @@
                 overlays = import ./overlays inputs;
               };
             }
+
+            # Import Stylix as a NixOS module
+            inputs.stylix.nixosModules.stylix
             # System modules
             ./system/modules/nixos
-            # User modules
+
+            # User modules with NixOS home-manager
+            inputs.home-manager.nixosModules.home-manager
             ./user/modules/nixos
+
             # Machine configuration
             ./system/machines/nixos/${name}.nix
           ];
@@ -66,10 +72,16 @@
                 overlays = import ./overlays inputs;
               };
             }
+
+            # TODO: Stylix Darwin
             # System modules
             ./system/modules/darwin
+
+            # Use Home Manager as a Darwin module
+            inputs.home-manager.darwinModules.home-manager
             # User modules
             ./user/modules/darwin
+
             # Machine configuration
             ./system/machines/darwin/${name}.nix
           ];
@@ -77,6 +89,7 @@
       ) darwinMachines;
 
       # TODO: Investigate how to make home-manager independently rebuildable
+      # TODO: Use stylix.homeManagerModules.stylix
       homeConfigurations = listToAttrs (flatten (
         mapAttrsToList (
           host: machine:

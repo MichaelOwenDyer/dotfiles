@@ -8,7 +8,7 @@
     # XPS 13 9360 hardware configuration
     nixos-hardware.nixosModules.dell-xps-13-9360
     # Common machine configuration
-    ./default.nix
+    ./.
     # Add michael as a user
     ../../../user/profiles/michael/claptrap
   ];
