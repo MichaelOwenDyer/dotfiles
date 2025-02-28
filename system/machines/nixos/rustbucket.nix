@@ -54,6 +54,9 @@
     nvidiaSettings = true; # Nvidia settings menu
     package = config.boot.kernelPackages.nvidiaPackages.latest;
   };
+  
+  # Passwordless sudo
+  security.sudo.wheelNeedsPassword = false;
 
   # Allow 15 seconds to choose OS in the bootloader
   boot.loader.timeout = 15;
