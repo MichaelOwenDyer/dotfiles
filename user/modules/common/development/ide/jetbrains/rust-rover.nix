@@ -3,7 +3,7 @@
   lib,
   util,
   pkgs,
-  nix-jetbrains-plugins,
+  jetbrains-plugins,
   ...
 }:
 
@@ -12,8 +12,6 @@
   options = with lib.types; util.mkProfileOption lib {
     development.ide.jetbrains.rust-rover = {
       enable = lib.mkEnableOption "RustRover IDE";
-      # See all available plugins at
-      # https://raw.githubusercontent.com/theCapypara/nix-jetbrains-plugins/refs/heads/main/generated/all_plugins.json
       plugins = lib.mkOption {
         type = listOf str;
         default = [];
@@ -32,7 +30,7 @@
         # Combine the user's default Jetbrains plugins with the user's RustRover plugins
         plugins = profile.development.ide.jetbrains.plugins ++ cfg.plugins;
         # Construct the RustRover package with all plugins
-        rust-rover = nix-jetbrains-plugins.buildIdeWithPlugins pkgs.jetbrains "rust-rover" plugins;
+        rust-rover = jetbrains-plugins.buildIdeWithPlugins pkgs.jetbrains "rust-rover" plugins;
       in
       lib.mkIf cfg.enable {
         # Add RustRover to the user's home packages

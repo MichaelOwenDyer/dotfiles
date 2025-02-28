@@ -3,7 +3,7 @@
   lib,
   util,
   pkgs,
-  nix-jetbrains-plugins,
+  jetbrains-plugins,
   ...
 }:
 
@@ -12,8 +12,6 @@
   options = with lib.types; util.mkProfileOption lib {
     development.ide.jetbrains.intellij-idea = {
       enable = lib.mkEnableOption "IntelliJ IDEA";
-      # See all available plugins at
-      # https://raw.githubusercontent.com/theCapypara/nix-jetbrains-plugins/refs/heads/main/generated/all_plugins.json
       plugins = lib.mkOption {
         type = listOf str;
         default = [];
@@ -32,7 +30,7 @@
         # Combine the user's default Jetbrains plugins with the user's IntelliJ IDEA plugins
         plugins = profile.development.ide.jetbrains.plugins ++ cfg.plugins;
         # Construct the IntelliJ IDEA package with all plugins
-        idea-ultimate = nix-jetbrains-plugins.buildIdeWithPlugins pkgs.jetbrains "idea-ultimate" plugins;
+        idea-ultimate = jetbrains-plugins.buildIdeWithPlugins pkgs.jetbrains "idea-ultimate" plugins;
       in
       lib.mkIf cfg.enable {
         # Add IntelliJ IDEA to the user's home packages

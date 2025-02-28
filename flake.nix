@@ -23,7 +23,7 @@
           # Allow the modules listed below to import any of these inputs
           # in addition to the default "pkgs", "lib", "config", and "options"
           specialArgs = {
-            nix-jetbrains-plugins = inputs.nix-jetbrains-plugins.lib.${system};
+            jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system};
             inherit (inputs) hardware nur;
             inherit util;
@@ -61,7 +61,7 @@
           # Allow the modules listed below to import any of these inputs
           # in addition to the default "pkgs", "lib", "config", and "options"
           specialArgs = {
-            nix-jetbrains-plugins = inputs.nix-jetbrains-plugins.lib.${system};
+            jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
           };
           modules = [
             # pkgs configuration
@@ -205,7 +205,7 @@
     # JetBrains IDE plugins (more up-to-date than nixpkgs)
     # https://github.com/theCapypara/nix-jetbrains-plugins
     # All plugins: https://raw.githubusercontent.com/theCapypara/nix-jetbrains-plugins/refs/heads/main/generated/all_plugins.json
-    nix-jetbrains-plugins = {
+    jetbrains-plugins = {
       url = "github:theCapypara/nix-jetbrains-plugins";
       inputs = {
         nixpkgs.follows = "nixpkgs";

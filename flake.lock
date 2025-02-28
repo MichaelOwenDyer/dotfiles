@@ -256,6 +256,32 @@
         "type": "github"
       }
     },
+    "jetbrains-plugins": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ]
+      },
+      "locked": {
+        "lastModified": 1740340479,
+        "narHash": "sha256-ZqgzhKcZYMaD+8DryXp0GMAhkbt83G1mg//BdbV67bI=",
+        "owner": "theCapypara",
+        "repo": "nix-jetbrains-plugins",
+        "rev": "34198082861defb18fd624a793c477fbea21fd7e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "theCapypara",
+        "repo": "nix-jetbrains-plugins",
+        "type": "github"
+      }
+    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
@@ -273,32 +299,6 @@
       "original": {
         "owner": "LnL7",
         "repo": "nix-darwin",
-        "type": "github"
-      }
-    },
-    "nix-jetbrains-plugins": {
-      "inputs": {
-        "flake-utils": [
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "systems": [
-          "systems"
-        ]
-      },
-      "locked": {
-        "lastModified": 1739649226,
-        "narHash": "sha256-6Wvl9ak/LnnUbS+GnaTjhn7BMw1FmiMTOcF74y8SUc8=",
-        "owner": "theCapypara",
-        "repo": "nix-jetbrains-plugins",
-        "rev": "ffc0a1d3d99739a3283aedc79d6863e830de6758",
-        "type": "github"
-      },
-      "original": {
-        "owner": "theCapypara",
-        "repo": "nix-jetbrains-plugins",
         "type": "github"
       }
     },
@@ -390,8 +390,8 @@
         "gitignore": "gitignore",
         "hardware": "hardware",
         "home-manager": "home-manager",
+        "jetbrains-plugins": "jetbrains-plugins",
         "nix-darwin": "nix-darwin",
-        "nix-jetbrains-plugins": "nix-jetbrains-plugins",
         "nix-wallpaper": "nix-wallpaper",
         "nixpkgs": "nixpkgs",
         "nixpkgs-stable": "nixpkgs-stable",
