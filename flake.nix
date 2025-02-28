@@ -25,7 +25,7 @@
           specialArgs = {
             nix-jetbrains-plugins = inputs.nix-jetbrains-plugins.lib.${system};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system};
-            inherit (inputs) nixos-hardware nur;
+            inherit (inputs) hardware nur;
             inherit util;
           };
           modules = [
@@ -130,7 +130,7 @@
 
     # Pre-built NixOS hardware configurations
     # https://github.com/NixOS/nixos-hardware
-    nixos-hardware = {
+    hardware = {
       url = "github:NixOS/nixos-hardware/master";
     };
 

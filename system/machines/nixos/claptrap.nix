@@ -1,12 +1,12 @@
 # Configuration for my old Dell XPS 13 9360 laptop
 
-{ nixos-hardware, ... }:
+{ hardware, ... }:
 
 {
 
   imports = [
     # XPS 13 9360 hardware configuration
-    nixos-hardware.nixosModules.dell-xps-13-9360
+    hardware.nixosModules.dell-xps-13-9360
     # Common machine configuration
     ./.
     # Add michael as a user
