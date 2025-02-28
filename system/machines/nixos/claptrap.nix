@@ -39,18 +39,17 @@
   services.logind.powerKey = "hibernate";
   services.logind.powerKeyLongPress = "poweroff";
 
-  # Sleep for 20 minutes then hybrid sleep when lid is closed
-  services.logind.lidSwitch = "hybrid-sleep";
-
-  # Go into hybrid sleep after 10 minutes of idle time
+  # Sleep when lid is closed
+  services.logind.lidSwitch = "suspend-then-hibernate";
+  # Sleep after 10 minutes of idle time
   services.logind.extraConfig = ''
-    IdleAction=hybrid-sleep
+    IdleAction=suspend-then-hibernate
     IdleActionSec=10min
   '';
 
   # Hibernate after 20 minutes of sleep
   systemd.sleep.extraConfig = ''
-    HibernateDelaySec=1200
+    HibernateDelaySec=20min
   '';
 
   # Enable touchpad support (enabled default in most desktopManager).
