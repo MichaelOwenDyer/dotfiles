@@ -3,7 +3,11 @@ _:
 {
   imports = [
     ../common
-    ./development
-    ./stylix
   ];
+
+  config.profiles.michael = {
+    development.ide.cursor = {
+      enable = true;
+    };
+  };
 }

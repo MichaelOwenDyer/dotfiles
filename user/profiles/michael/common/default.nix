@@ -3,7 +3,6 @@ _:
 {
   imports = [
     ./browser.nix
-    ./caffeine.nix
     ./development
   ];
 
@@ -18,5 +17,6 @@ _:
       "input"
       "networkmanager"
     ];
+    caffeine.enable = true;
   };
 }
