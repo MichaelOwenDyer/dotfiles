@@ -8,7 +8,7 @@ _:
       imageScalingMode = "stretch";
       base16Scheme = {
         slug = "google-dark-catppuccin-macchiato";
-        name = "Google Dark Catppuccino Macchiato";
+        name = "Google Dark Catppuccin Macchiato";
         author = "Michael Dyer";
         variant = "dark";
         palette = {

@@ -23,18 +23,24 @@
     warn-dirty = false
   '';
 
-  # Bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  # Limit the number of generations to keep
-  boot.loader.systemd-boot.configurationLimit = 7;
-
-  # Do not allow editing the kernel command-line before boot, which is a security risk (you could add init=/bin/sh and get a root shell)
-  boot.loader.systemd-boot.editor = false;
-
-  # Use latest kernel
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot = {
+    # Use latest kernel
+    kernelPackages = pkgs.linuxPackages_latest;
+    # Use systemd-boot
+    loader = {
+      systemd-boot.enable = true;
+      systemd-boot.configurationLimit = 7;
+      # Do not allow editing the kernel command-line before boot, which is a security risk (you could add init=/bin/sh and get a root shell)
+      systemd-boot.editor = false;
+      efi.canTouchEfiVariables = true;
+    };
+    # Quiet boot
+    consoleLogLevel = 0;
+    initrd.verbose = false;
+    kernelParams = [ "quiet" "splash" ];
+    # Add a boot animation
+    plymouth.enable = true;
+  };
 
   # Setting correct application settings if we're running wayland
   environment.sessionVariables = lib.mkIf config.os.wayland {
