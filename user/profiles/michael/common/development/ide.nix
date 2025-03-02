@@ -49,6 +49,7 @@
         "editor.minimap.enabled" = false;
         "editor.suggestSelection" = "first";
         "vsintellicode.modify.editor.suggestSelection" = "automaticallyOverrodeDefaultValue";
+        "gitlens.hovers.enabled" = false;
         "github.copilot.enable" = {
           "*" = true;
           "plaintext" = true;
