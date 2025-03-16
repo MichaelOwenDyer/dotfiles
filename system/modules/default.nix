@@ -4,11 +4,6 @@
 }:
 
 {
-  # Common modules should always be available
-  imports = [
-    ./common
-  ];
-
   # Declare basic system configuration options
   options = with lib.types; {
     # TODO: Move to user configuration

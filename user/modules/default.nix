@@ -24,6 +24,15 @@
       type = str;
       description = "Email address of the user";
     };
+    hashedPassword = lib.mkOption {
+      type = str;
+      description = "Hashed password of the user (NixOS systems only)";
+    };
+    extraGroups = lib.mkOption {
+      type = listOf str;
+      default = [];
+      description = "Extra groups to add the user to (NixOS systems only)";
+    };
     extraPackages = lib.mkOption {
       type = listOf package;
       default = [];
@@ -39,7 +48,7 @@
   };
 
   config = {
-    # Give an empty value for when no profiles are configured
+    # Default to an empty set of profiles (in case of a system with no users for some reason)
     profiles = {};
     # By default, home manager wants to use a separate nixpkgs instance for each user, but this tells it to use the system nixpkgs
     home-manager.useGlobalPkgs = true;

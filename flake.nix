@@ -73,10 +73,6 @@
               };
             }
 
-            # TODO: Stylix Darwin
-            # System modules
-            ./system/modules/darwin
-
             # Use Home Manager as a Darwin module
             inputs.home-manager.darwinModules.home-manager
             # User modules
