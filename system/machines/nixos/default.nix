@@ -17,6 +17,9 @@
 
   # Optimize storage after each build
   nix.settings.auto-optimise-store = true;
+  # Run garbage collection weekly
+  nix.gc.automatic = true;
+  nix.gc.dates = "weekly";
 
   # Don't warn about building uncommitted git changes
   nix.extraOptions = ''
