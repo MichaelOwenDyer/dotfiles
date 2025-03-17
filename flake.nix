@@ -5,7 +5,6 @@
     inputs:
     let
       inherit (inputs.nixpkgs.lib) mapAttrs listToAttrs flatten mapAttrsToList nameValuePair;
-      util = import ./util.nix;
       nixosMachines = {
         claptrap = "x86_64-linux";
         rustbucket = "x86_64-linux";
@@ -25,8 +24,8 @@
           specialArgs = {
             jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system};
-            inherit (inputs) hardware nur;
-            inherit util;
+            inherit (inputs) stylix hardware nur;
+            util = import ./util.nix;
           };
           modules = [
             # pkgs configuration
@@ -38,13 +37,14 @@
               };
             }
 
-            # Import Stylix as a NixOS module
-            inputs.stylix.nixosModules.stylix
             # System modules
             ./system/modules/nixos
 
-            # User modules with NixOS home-manager
+            # Import Home Manager
             inputs.home-manager.nixosModules.home-manager
+            # Import Stylix as a NixOS module (because home-manager is as well)
+            inputs.stylix.nixosModules.stylix
+            # User modules using Home Manager options
             ./user/modules/nixos
 
             # Machine configuration

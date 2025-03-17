@@ -3,6 +3,7 @@ _:
 {
   imports = [
     ./browser.nix
+    ./stylix.nix
     ./development
   ];
 
