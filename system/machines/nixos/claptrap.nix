@@ -19,7 +19,6 @@
   wifi.enable = true;
 
   stylix = {
-    cursor.size = 28;
     fonts.sizes =
       let
         fontSize = 14;

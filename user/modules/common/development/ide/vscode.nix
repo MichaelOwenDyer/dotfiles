@@ -37,11 +37,13 @@
       lib.mkIf cfg.enable {
         programs.vscode = {
           enable = true;
-          enableUpdateCheck = false;
-          enableExtensionUpdateCheck = false;
           mutableExtensionsDir = false;
-          extensions = cfg.extensions;
-          userSettings = cfg.userSettings;
+          profiles.default = {
+            extensions = cfg.extensions;
+            userSettings = cfg.userSettings;
+            enableUpdateCheck = false;
+            enableExtensionUpdateCheck = false;
+          };
         };
       }
     ) config.profiles;

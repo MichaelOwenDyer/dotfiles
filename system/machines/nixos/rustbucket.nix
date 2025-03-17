@@ -26,7 +26,6 @@
   gaming.enable = true;
 
   stylix = {
-    cursor.size = 24;
     fonts.sizes = let fontSize = 11; in {
       applications = fontSize;
       desktop = fontSize;

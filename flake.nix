@@ -180,6 +180,7 @@
       inputs = {
         nixpkgs.follows = "nixpkgs";
         home-manager.follows = "home-manager";
+        nur.follows = "nur";
         systems.follows = "systems";
         flake-compat.follows = "flake-compat";
         flake-utils.follows = "flake-utils";
