@@ -5,6 +5,14 @@ _:
     stylix = {
       enable = true;
 
+      # TODO: Figure out where these need to go to get rid of warnings
+      # targets = {
+      #   vscode.profileNames = [ "michael" ];
+      #   firefox.profileNames = [ "michael" ];
+      #   qt.platform = "qctc";
+      #   qt.platformTheme.name = "adwaita";
+      # };
+
       base16Scheme = {
         slug = "google-dark-catppuccin-macchiato";
         name = "Google Dark Catppuccin Macchiato";
