@@ -1,4 +1,8 @@
-_:
+{
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -7,10 +11,10 @@ _:
     ./development
   ];
 
-  config.profiles.michael = rec {
+  config.profiles.michael = {
     fullName = "Michael Dyer";
     email = "michaelowendyer@gmail.com";
-    hashedPassword = "$y$j9T$pSkVWxgO/9dyqt8MMHzaM0$RO5g8OOpFb4pdgMuDIVraPvsLMSvMTU2/y8JQWfmrs1";
+    hashedPassword = lib.mkDefault "$y$j9T$pSkVWxgO/9dyqt8MMHzaM0$RO5g8OOpFb4pdgMuDIVraPvsLMSvMTU2/y8JQWfmrs1";
     extraGroups = [
       "wheel"
       "video"
