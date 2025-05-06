@@ -38,6 +38,11 @@
       default = [];
       description = "Packages to install for the user";
     };
+    programs = lib.mkOption {
+      type = attrsOf anything;
+      default = {};
+      description = "Enable or disable specific programs for the user";
+    };
     home-manager.stateVersion = lib.mkOption {
       type = str;
       # Use system state version by default
@@ -57,7 +62,9 @@
 
     # Configure home manager for each profile
     home-manager.users = lib.mapAttrs (username: profile: {
-      programs.home-manager.enable = true; # Let home manager install and manage itself
+      programs = profile.programs // {
+        home-manager.enable = true; # Let home manager install and manage itself
+      };
       home = {
         inherit username; # Set username to the profile name (the key in config.profiles)
         packages = profile.extraPackages; # Add extra packages in profile to home.packages

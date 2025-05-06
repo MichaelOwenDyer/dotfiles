@@ -6,5 +6,6 @@ _:
     ./ide.nix
     ./lang.nix
     ./shell.nix
+    ./direnv.nix
   ];
 }
