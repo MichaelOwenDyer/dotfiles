@@ -16,22 +16,17 @@
         in
         with pkgs.vscode-extensions;
         [
-          k--kato.intellij-idea-keybindings # IntelliJ keybindings
-          dracula-theme.theme-dracula # Dark theme
-          github.copilot # Copilot AI
-          github.copilot-chat # Copilot chat
-          eamodio.gitlens # GitLens
-        ]
-        ++ lib.optionals lang.nix.enable [
-          jnoortheen.nix-ide
-        ]
-        ++ lib.optionals lang.rust.enable [
-          tamasfe.even-better-toml # TOML lang support
-					# TODO: Bring back to unstable
-          pkgs.stable.vscode-extensions.rust-lang.rust-analyzer # Rust lang support
-        ]
-        ++ lib.optionals lang.java.enable [
+          k--kato.intellij-idea-keybindings
+          dracula-theme.theme-dracula
+          github.copilot
+          github.copilot-chat
+          eamodio.gitlens
+          ocamllabs.ocaml-platform
+          tamasfe.even-better-toml
           vscjava.vscode-java-pack # Java bundle (Red Hat language support, Maven/Gradle, debugger, test runner, IntelliCode)
+					# TODO: Bring back to unstable
+          pkgs.stable.vscode-extensions.rust-lang.rust-analyzer
+          jnoortheen.nix-ide
         ];
       userSettings = {
         "security.workspace.trust.untrustedFiles" = "open";
