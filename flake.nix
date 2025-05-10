@@ -24,6 +24,7 @@
           specialArgs = {
             jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system};
+            zen-browser = inputs.zen-browser.packages.${system};
             inherit (inputs) stylix hardware nur;
             util = import ./util.nix;
           };
@@ -223,6 +224,13 @@
         nixpkgs.follows = "nixpkgs";
         systems.follows = "systems";
         flake-utils.follows = "flake-utils";
+      };
+    };
+
+    zen-browser = {
+      url = "github:MarceColl/zen-browser-flake";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
       };
     };
   };

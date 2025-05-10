@@ -11,5 +11,6 @@
 				ublock-origin
 			];
 		};
+    browser.zen.enable = true;
   };
 }
