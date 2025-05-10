@@ -96,22 +96,7 @@
           ) machine.config.home-manager.users
         ) nixosConfigurations
       ));
-    } // inputs.flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = inputs.nixpkgs.legacyPackages.${system};
-      in {
-        devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            # add any needed packages here for working in this repo
-          ];
-
-          shellHook = ''
-            echo "Nix development shell ready."
-          '';
-        };
-      }
-    );
+    };
 
   inputs = {
     # Unstable nixpkgs (used by default)
