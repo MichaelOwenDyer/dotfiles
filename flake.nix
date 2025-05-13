@@ -212,8 +212,10 @@
       };
     };
 
+    # Zen Browser
+    # https://github.com/MichaelOwenDyer/zen-browser-flake
     zen-browser = {
-      url = "github:MarceColl/zen-browser-flake";
+      url = "github:MichaelOwenDyer/zen-browser-flake";
       inputs = {
         nixpkgs.follows = "nixpkgs";
       };

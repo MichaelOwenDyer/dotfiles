@@ -575,15 +575,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1727721329,
-        "narHash": "sha256-QYlWZwUSwrM7BuO+dXclZIwoPvBIuJr6GpFKv9XKFPI=",
-        "owner": "MarceColl",
+        "lastModified": 1747055525,
+        "narHash": "sha256-ryZhJXk1Z/+dPqvIiKNA1UyS+IzJJGp5tNyTW+2LS/I=",
+        "owner": "MichaelOwenDyer",
         "repo": "zen-browser-flake",
-        "rev": "e6ab73f405e9a2896cce5956c549a9cc359e5fcc",
+        "rev": "5374446499db352c5619b2b1cdafd2f15ee7b881",
         "type": "github"
       },
       "original": {
-        "owner": "MarceColl",
+        "owner": "MichaelOwenDyer",
         "repo": "zen-browser-flake",
         "type": "github"
       }

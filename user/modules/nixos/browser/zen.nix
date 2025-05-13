@@ -12,10 +12,6 @@
   options = with lib.types; util.mkProfileOption lib {
     browser.zen = {
       enable = lib.mkEnableOption "Zen browser";
-      extensions = lib.mkOption {
-        type = listOf package;
-        default = [];
-      };
     };
   };
 
@@ -28,8 +24,8 @@
       in
       lib.mkIf cfg.enable {
         # Add the Zen package
-        home.packages = lib.trace "zen" [
-          zen-browser.specific
+        home.packages = [
+          zen-browser
         ];
       }
     ) config.profiles;
