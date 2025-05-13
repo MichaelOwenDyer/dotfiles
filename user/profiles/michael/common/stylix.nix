@@ -19,6 +19,7 @@ _:
         author = "Michael Dyer";
         variant = "dark";
         palette = {
+          # 00-07: Google Dark
           base00 = "1d1f21"; #1d1f21
           base01 = "282a2e"; #282a2e
           base02 = "373b41"; #373b41
@@ -27,6 +28,7 @@ _:
           base05 = "c5c8c6"; #c5c8c6
           base06 = "e0e0e0"; #e0e0e0
           base07 = "ffffff"; #ffffff
+          # 08-0F: Catppuccin Macchiato
           base08 = "ed8796"; #ed8796
           base09 = "f5a97f"; #f5a97f
           base0A = "eed49f"; #eed49f
