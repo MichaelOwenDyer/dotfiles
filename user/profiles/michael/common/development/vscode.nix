@@ -27,6 +27,7 @@
 					# TODO: Bring back to unstable
           pkgs.stable.vscode-extensions.rust-lang.rust-analyzer
           jnoortheen.nix-ide
+          mkhl.direnv
         ];
       userSettings = {
         "security.workspace.trust.untrustedFiles" = "open";
