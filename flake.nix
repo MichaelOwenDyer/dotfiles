@@ -34,7 +34,7 @@
               nixpkgs = {
                 hostPlatform = system;
                 config.allowUnfree = true;
-                overlays = import ./overlays inputs;
+                overlays = import ./overlays.nix inputs;
               };
             }
 
@@ -49,7 +49,7 @@
             ./user/modules/nixos
 
             # Machine configuration
-            ./system/machines/nixos/${name}.nix
+            ./system/machines/${name}.nix
           ];
         }
       ) nixosMachines;
@@ -70,7 +70,7 @@
               nixpkgs = {
                 hostPlatform = system;
                 config.allowUnfree = true;
-                overlays = import ./overlays inputs;
+                overlays = import ./overlays.nix inputs;
               };
             }
 
@@ -80,7 +80,7 @@
             ./user/modules/darwin
 
             # Machine configuration
-            ./system/machines/darwin/${name}.nix
+            ./system/machines/${name}.nix
           ];
         }
       ) darwinMachines;
