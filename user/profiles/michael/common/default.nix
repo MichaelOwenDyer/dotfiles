@@ -23,5 +23,15 @@
       "networkmanager"
     ];
     caffeine.enable = true;
+    # I LOVE U; assert iloveyoutoo == true;
+    programs.gnome-shell = {
+      enable = true;
+      extensions = with pkgs.gnomeExtensions; [
+        { package = coverflow-alt-tab; }
+      ];
+    };
+    packages = with pkgs; [
+      gnome-tweaks
+    ];
   };
 }

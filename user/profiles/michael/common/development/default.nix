@@ -42,8 +42,6 @@
             "sudo"
             "git"
             "git-prompt"
-          ]
-          ++ lib.optionals config.profiles.michael.development.lang.rust.enable [
             "rust"
           ];
       };
@@ -54,23 +52,10 @@
       silent = true;
       nix-direnv.enable = true;
     };
-    # TODO: Replace global installs with development shells
-    development.lang = {
-			nix.enable = true;
-			rust.enable = true;
-			java = {
-				enable = lib.mkDefault true;
-				mainPackage = pkgs.zulu17;
-			};
-		};
-    programs.gnome-shell = {
-      enable = true;
-      extensions = with pkgs.gnomeExtensions; [
-        { package = coverflow-alt-tab; }
-      ];
-    };
     packages = with pkgs; [
-      gnome-tweaks
+      nixd # Nix LSP
+      nixfmt-rfc-style # Nix formatting
+      rustup
     ];
   };
 }
