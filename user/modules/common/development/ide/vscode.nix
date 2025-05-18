@@ -28,6 +28,7 @@
   # environment.variables.XDG_RUNTIME_DIR = "/run/user/$UID";
 
   # Configure Visual Studio Code for each user profile
+  # TODO: Use vscode-fhs package?
   config = {
     home-manager.users = lib.mapAttrs (
       username: profile:

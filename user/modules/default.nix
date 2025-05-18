@@ -33,7 +33,7 @@
       default = [];
       description = "Extra groups to add the user to (NixOS systems only)";
     };
-    extraPackages = lib.mkOption {
+    packages = lib.mkOption {
       type = listOf package;
       default = [];
       description = "Packages to install for the user";
@@ -59,6 +59,8 @@
     home-manager.useGlobalPkgs = true;
     # By default, home manager will install packages in /home/<username>/.nix-profile, but this puts them in /etc/profiles
     home-manager.useUserPackages = true;
+    # If a reload would cause files to be overwritten, back them up as .backup files
+    home-manager.backupFileExtension = "backup";
 
     # Configure home manager for each profile
     home-manager.users = lib.mapAttrs (username: profile: {
@@ -67,7 +69,7 @@
       };
       home = {
         inherit username; # Set username to the profile name (the key in config.profiles)
-        packages = profile.extraPackages; # Add extra packages in profile to home.packages
+        packages = profile.packages; # Add extra packages in profile to home.packages
         stateVersion = profile.home-manager.stateVersion; # Set state version for home-manager as the system state version
       };
     }) config.profiles;

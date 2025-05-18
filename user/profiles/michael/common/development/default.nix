@@ -63,5 +63,14 @@
 				mainPackage = pkgs.zulu17;
 			};
 		};
+    programs.gnome-shell = {
+      enable = true;
+      extensions = with pkgs.gnomeExtensions; [
+        { package = coverflow-alt-tab; }
+      ];
+    };
+    packages = with pkgs; [
+      gnome-tweaks
+    ];
   };
 }
