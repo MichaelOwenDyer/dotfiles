@@ -27,7 +27,8 @@
 					# TODO: Bring back to unstable
           pkgs.stable.vscode-extensions.rust-lang.rust-analyzer
           jnoortheen.nix-ide
-          mkhl.direnv
+          mkhl.direnv 
+          myriad-dreamin.tinymist # Typst
         ];
       userSettings = {
         "security.workspace.trust.untrustedFiles" = "open";
