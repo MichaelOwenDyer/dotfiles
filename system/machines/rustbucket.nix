@@ -16,7 +16,7 @@
     # Common machine configuration
     ./nixos_default.nix
     # Add michael as a user
-    ../../../user/profiles/michael/rustbucket
+    ../../user/profiles/michael/rustbucket
   ];
 
   networking.hostName = "rustbucket";
