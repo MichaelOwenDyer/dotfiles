@@ -145,34 +145,6 @@
       url = "github:nix-systems/x86_64-linux";
     };
 
-    # https://github.com/hercules-ci/gitignore.nix
-    gitignore = {
-      url = "github:hercules-ci/gitignore.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # https://github.com/edolstra/flake-compat
-    flake-compat = {
-      url = "github:edolstra/flake-compat";
-      flake = false;
-    };
-
-    # https://github.com/numtide/flake-utils
-    flake-utils = {
-      url = "github:numtide/flake-utils";
-      inputs.systems.follows = "systems";
-    };
-
-    # https://github.com/cachix/git-hooks.nix
-    git-hooks = {
-      url = "github:cachix/git-hooks.nix";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        gitignore.follows = "gitignore";
-        flake-compat.follows = "flake-compat";
-      };
-    };
-
     # Theming for NixOS
     # https://github.com/danth/stylix
 		# Themes: https://tinted-theming.github.io/tinted-gallery/
@@ -182,10 +154,6 @@
         nixpkgs.follows = "nixpkgs";
         home-manager.follows = "home-manager";
         nur.follows = "nur";
-        systems.follows = "systems";
-        flake-compat.follows = "flake-compat";
-        flake-utils.follows = "flake-utils";
-        git-hooks.follows = "git-hooks";
       };
     };
 
@@ -195,8 +163,6 @@
       url = "github:lunik1/nix-wallpaper";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-        pre-commit-hooks.follows = "git-hooks";
       };
     };
 
@@ -207,8 +173,6 @@
       url = "github:theCapypara/nix-jetbrains-plugins";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        systems.follows = "systems";
-        flake-utils.follows = "flake-utils";
       };
     };
 
