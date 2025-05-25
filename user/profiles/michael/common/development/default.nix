@@ -52,6 +52,10 @@
       silent = true;
       nix-direnv.enable = true;
     };
+    programs.neovim = {
+      enable = true;
+      defaultEditor = true;
+    };
     packages = with pkgs; [
       nixd # Nix LSP
       nixfmt-rfc-style # Nix formatting
