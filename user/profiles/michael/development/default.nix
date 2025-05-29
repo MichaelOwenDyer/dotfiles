@@ -40,7 +40,6 @@
         theme = "robbyrussell";
         plugins =
           [
-            "zsh-autosuggestions" # suggests commands as you type
             "sudo" # press esc twice to prefix last command with sudo
             "git" # git aliases and functions
             "gitfast" # faster git commands
@@ -60,6 +59,10 @@
       nix-direnv.enable = true;
     };
     programs.neovim.enable = true;
+    programs.zoxide = {
+      enable = true;
+      enableZshIntegration = true;
+    };
     packages = with pkgs; [
       nixd # Nix LSP
       nixfmt-rfc-style # Nix formatting
