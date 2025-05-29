@@ -2,7 +2,7 @@ _:
 
 {
   imports = [
-    ../common
+    ../default.nix
   ];
 
   config.profiles.michael = {

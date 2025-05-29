@@ -25,7 +25,7 @@
           tamasfe.even-better-toml
           vscjava.vscode-java-pack # Java bundle (Red Hat language support, Maven/Gradle, debugger, test runner, IntelliCode)
 					# TODO: Bring back to unstable
-          pkgs.stable.vscode-extensions.rust-lang.rust-analyzer
+          vscode-extensions.rust-lang.rust-analyzer
           jnoortheen.nix-ide
           mkhl.direnv 
           myriad-dreamin.tinymist # Typst
