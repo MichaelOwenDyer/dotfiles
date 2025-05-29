@@ -20,7 +20,7 @@
         cfg = profile.chat.slack;
         # Choose the correct Slack package for the window system
         slack =
-          if (!config.os.wayland) then
+          if (!profile.wayland.enable) then
             pkgs.slack
           else
             pkgs.slack.overrideAttrs (old: {

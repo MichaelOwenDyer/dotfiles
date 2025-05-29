@@ -32,14 +32,14 @@
       in
       lib.mkIf cfg.enable {
         # Set the proper session variables for wayland
-        home.sessionVariables = lib.mkIf config.os.wayland {
+        home.sessionVariables = lib.mkIf profile.wayland.enable {
           MOZ_ENABLE_WAYLAND = "1";
         };
 
         # Enable firefox
         programs.firefox = {
           enable = true;
-          package = if config.os.wayland then pkgs.firefox-wayland else pkgs.firefox;
+          package = if profile.wayland.enable then pkgs.firefox-wayland else pkgs.firefox;
 
           # Set the language packs # TODO: Configure via options
           languagePacks = [

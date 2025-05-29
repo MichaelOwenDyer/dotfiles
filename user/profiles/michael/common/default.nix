@@ -22,6 +22,7 @@
       "input"
       "networkmanager"
     ];
+    wayland.enable = true;
     caffeine.enable = true;
     # I LOVE U; assert iloveyoutoo == true;
     programs.gnome-shell = {

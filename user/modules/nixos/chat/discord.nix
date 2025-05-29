@@ -21,7 +21,7 @@
         cfg = profile.chat.discord;
         ## Choosing the correct package in regards to the window system # TODO: Per-user window manager config
         discord =
-          if (!config.os.wayland) then
+          if (!profile.wayland.enable) then
             pkgs.discord
           else
             pkgs.discord.overrideAttrs (old: {

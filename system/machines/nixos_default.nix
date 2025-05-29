@@ -47,12 +47,6 @@
     plymouth.enable = true;
   };
 
-  # Setting correct application settings if we're running wayland
-  environment.sessionVariables = lib.mkIf config.os.wayland {
-    NIXOS_OZONE_WL = "1";
-    GTK_USE_PORTAL = "1";
-  };
-
   # List packages installed by default
   environment.systemPackages = with pkgs; [
     git # version control

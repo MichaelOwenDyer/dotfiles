@@ -50,6 +50,11 @@
       default = config.system.stateVersion;
       description = "Value of home-manager.users.<username>.home.stateVersion";
     };
+    wayland.enable = lib.mkOption {
+      type = bool;
+      default = true;
+      description = "Enable Wayland-specific configurations for the user";
+    };
   };
 
   config = {
@@ -71,6 +76,10 @@
         inherit username; # Set username to the profile name (the key in config.profiles)
         packages = profile.packages; # Add extra packages in profile to home.packages
         stateVersion = profile.home-manager.stateVersion; # Set state version for home-manager as the system state version
+        sessionVariables = lib.mkIf profile.wayland.enable { # Set session variables for Wayland
+          NIXOS_OZONE_WL = "1";
+          GTK_USE_PORTAL = "1";
+        };
       };
     }) config.profiles;
   };
