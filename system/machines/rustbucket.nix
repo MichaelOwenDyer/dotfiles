@@ -34,6 +34,14 @@
     };
   };
 
+  # Use the GNOME display manager for the login screen
+  services.xserver.displayManager.gdm.enable = true;
+  # TODO: Remove this and configure desktop environments with user profile
+  # Enable GNOME desktop manager
+  services.xserver.desktopManager.gnome.enable = true;
+  # Enable GNOME keyring
+  services.gnome.gnome-keyring.enable = true;
+
   # Enable automatic login for the user
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "michael";

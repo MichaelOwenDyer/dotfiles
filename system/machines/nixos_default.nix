@@ -44,7 +44,9 @@
     initrd.verbose = false;
     kernelParams = [ "quiet" "splash" ];
     # Add a boot animation
-    plymouth.enable = true;
+    plymouth = {
+      enable = true;
+    };
   };
 
   # List packages installed by default
@@ -66,14 +68,6 @@
 
   # Enable the X11 windowing system (and implicitly Wayland).
   services.xserver.enable = true;
-
-  # Use the GNOME display manager for the login screen
-  services.xserver.displayManager.gdm.enable = true;
-  # TODO: Remove this and configure desktop environments with user profile
-  # Enable GNOME desktop manager
-  services.xserver.desktopManager.gnome.enable = true;
-  # Enable GNOME keyring
-  services.gnome.gnome-keyring.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {

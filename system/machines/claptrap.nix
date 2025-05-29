@@ -1,6 +1,6 @@
 # Configuration for my old Dell XPS 13 9360 laptop
 
-{ hardware, ... }:
+{ pkgs, hardware, ... }:
 
 {
 
@@ -18,18 +18,30 @@
   time.timeZone = "Europe/Berlin";
   wifi.enable = true;
 
-  stylix = {
-    fonts.sizes =
-      let
-        fontSize = 14;
-      in
-      {
-        applications = fontSize;
-        desktop = fontSize;
-        popups = fontSize;
-        terminal = fontSize;
-      };
+  # Use Ly for the login screen
+  services.displayManager.ly = {
+    enable = true;
   };
+
+  stylix = {
+    fonts.sizes = let fontSize = 14; in {
+      applications = fontSize;
+      desktop = fontSize;
+      popups = fontSize;
+      terminal = fontSize;
+    };
+    targets.plymouth.enable = false;
+  };
+
+  boot.plymouth = rec {
+    theme = "owl";
+    themePackages = [
+      (pkgs.adi1090x-plymouth-themes.override {
+        selected_themes = [ theme ];
+      })
+    ];
+  };
+  boot.loader.timeout = 0;
 
   # Set cpu governor to powersave
   powerManagement.cpuFreqGovernor = "powersave";
@@ -60,9 +72,6 @@
     clickMethod = "clickfinger";
   };
   services.xserver.synaptics.palmDetect = true;
-
-  ## Setting keymap to `us' for this machine.
-  # os.keyboard.layout = "us"; TODO: Introduce option
 
   console = {
     font = "Lat2-Terminus16";

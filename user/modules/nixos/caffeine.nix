@@ -31,7 +31,7 @@
             [
               caffeine-ng
             ]
-            ++ lib.optionals (profile.wm == "gnome") [
+            ++ lib.optionals (profile.windowManager == "gnome") [
               # Gnome needs some extra packages for caffeine to show up in the system tray
               gnomeExtensions.appindicator
               gnomeExtensions.caffeine
