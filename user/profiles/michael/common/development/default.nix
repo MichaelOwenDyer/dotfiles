@@ -8,6 +8,7 @@
 {
   imports = [
     ./vscode.nix
+    ./helix.nix
   ];
 
   config.profiles.michael = {
@@ -39,10 +40,16 @@
         theme = "robbyrussell";
         plugins =
           [
-            "sudo"
-            "git"
-            "git-prompt"
-            "rust"
+            "zsh-autosuggestions" # suggests commands as you type
+            "sudo" # press esc twice to prefix last command with sudo
+            "git" # git aliases and functions
+            "gitfast" # faster git commands
+            "git-prompt" # displays information about the current git branch
+            "git-auto-fetch" # automatically fetches changes from the remote repository
+            "rust" # completion for rustup and cargo
+            "zoxide" # smarter cd
+            "copypath" # copy the path of the current directory or file
+            "copyfile" # copy the contents of a file to the clipboard
           ];
       };
     };
@@ -52,10 +59,7 @@
       silent = true;
       nix-direnv.enable = true;
     };
-    programs.neovim = {
-      enable = true;
-      defaultEditor = true;
-    };
+    programs.neovim.enable = true;
     packages = with pkgs; [
       nixd # Nix LSP
       nixfmt-rfc-style # Nix formatting
