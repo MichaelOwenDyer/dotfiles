@@ -39,7 +39,7 @@
             }
 
             # System modules
-            ./system/modules/nixos
+            ./system/modules
 
             # Import Home Manager
             inputs.home-manager.nixosModules.home-manager
