@@ -22,10 +22,10 @@
           # Allow the modules listed below to import any of these inputs
           # in addition to the default "pkgs", "lib", "config", and "options"
           specialArgs = {
+            inherit (inputs) home-manager stylix hardware nur;
             jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system};
             zen-browser = inputs.zen-browser.packages.${system};
-            inherit (inputs) stylix hardware nur;
             util = import ./util.nix;
           };
           modules = [
@@ -37,17 +37,6 @@
                 overlays = import ./overlays.nix inputs;
               };
             }
-
-            # System modules
-            ./system/modules
-
-            # Import Home Manager
-            inputs.home-manager.nixosModules.home-manager
-            # Import Stylix as a NixOS module (because home-manager is as well)
-            inputs.stylix.nixosModules.stylix
-            # User modules using Home Manager options
-            ./user/modules/nixos
-
             # Machine configuration
             ./system/machines/${name}.nix
           ];
@@ -62,6 +51,7 @@
           # Allow the modules listed below to import any of these inputs
           # in addition to the default "pkgs", "lib", "config", and "options"
           specialArgs = {
+            inherit (inputs) home-manager;
             jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
           };
           modules = [
@@ -73,12 +63,6 @@
                 overlays = import ./overlays.nix inputs;
               };
             }
-
-            # Use Home Manager as a Darwin module
-            inputs.home-manager.darwinModules.home-manager
-            # User modules
-            ./user/modules/darwin
-
             # Machine configuration
             ./system/machines/${name}.nix
           ];

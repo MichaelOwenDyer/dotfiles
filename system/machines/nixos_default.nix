@@ -5,12 +5,20 @@
   lib,
   pkgs,
   util,
+  home-manager,
   stylix,
   nix-wallpaper,
   ...
 }:
 
 {
+  imports = [
+    home-manager.nixosModules.home-manager
+    stylix.nixosModules.stylix
+    ../modules
+    ../../user/modules/nixos
+  ];
+
   # Enable the nix command and flakes
   nix.settings.experimental-features = [
     "nix-command"
@@ -31,10 +39,10 @@
   boot = {
     # Use latest kernel
     kernelPackages = pkgs.linuxPackages_latest;
-    # Use systemd-boot
     loader = {
+      timeout = lib.mkDefault 0;
       systemd-boot.enable = true;
-      systemd-boot.configurationLimit = 7;
+      systemd-boot.configurationLimit = lib.mkDefault 7;
       # Do not allow editing the kernel command-line before boot, which is a security risk (you could add init=/bin/sh and get a root shell)
       systemd-boot.editor = false;
       efi.canTouchEfiVariables = true;
@@ -44,20 +52,17 @@
     initrd.verbose = false;
     kernelParams = [ "quiet" "splash" ];
     # Add a boot animation
-    plymouth = {
-      enable = true;
-    };
+    plymouth.enable = true;
   };
 
   # List packages installed by default
   environment.systemPackages = with pkgs; [
-    git # version control
-    vim # text editor
-    curl # download files
-    wget # download files
-    lshw # list hardware
-    gnugrep # grep
-    gparted # partition manager
+    git
+    vim
+    curl
+    wget
+    gnugrep
+    gparted
   ];
 
   # OpenGL support

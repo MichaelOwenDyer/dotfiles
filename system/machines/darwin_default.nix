@@ -2,10 +2,15 @@
 
 {
   self,
+  home-manager,
   ...
 }:
 
 {
+  imports = [
+    home-manager.darwinModules.home-manager
+    ../../user/modules/darwin
+  ];
 
   # Create /etc/zshrc that loads the nix-darwin environment.
   programs.zsh.enable = true;

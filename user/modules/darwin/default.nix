@@ -9,7 +9,7 @@
 
 {
   imports = [
-    ../.
+    ../default.nix
   ];
 
   # Use config.profiles to define MacOS user profiles and configure home-manager

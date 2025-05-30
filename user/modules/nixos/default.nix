@@ -9,7 +9,7 @@
 
 {
   imports = [
-    ../.
+    ../default.nix
     ./browser
     ./chat
     ./wm

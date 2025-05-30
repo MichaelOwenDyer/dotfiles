@@ -34,14 +34,13 @@
   };
 
   boot.plymouth = rec {
-    theme = "owl";
+    theme = "colorful_sliced";
     themePackages = [
       (pkgs.adi1090x-plymouth-themes.override {
         selected_themes = [ theme ];
       })
     ];
   };
-  boot.loader.timeout = 0;
 
   # Set cpu governor to powersave
   powerManagement.cpuFreqGovernor = "powersave";
@@ -75,7 +74,7 @@
 
   console = {
     font = "Lat2-Terminus16";
-    keyMap = "us"; # TODO: Use os.keyboard.layout
+    keyMap = "us";
   };
 
   ## Hardware configuration
