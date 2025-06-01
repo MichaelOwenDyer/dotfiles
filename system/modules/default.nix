@@ -7,5 +7,6 @@ _:
     ./audio.nix
     ./gaming.nix
     ./wifi.nix
+    ./gnome-keyring.nix
   ];
 }

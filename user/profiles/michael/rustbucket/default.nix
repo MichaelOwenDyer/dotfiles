@@ -3,6 +3,8 @@ _:
 {
   imports = [
     ../default.nix
+    ../wm/gnome.nix
+    ../wm/hyprland.nix
   ];
 
   config.profiles.michael = {

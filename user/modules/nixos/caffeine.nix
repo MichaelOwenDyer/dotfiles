@@ -18,28 +18,22 @@
   config = {
     home-manager.users = lib.mapAttrs (
       username: profile:
-      (
-        let
-          cfg = profile.caffeine;
-        in
-        lib.mkIf cfg.enable {
-          # Enable the caffeine service
-          services.caffeine.enable = true;
-          # Add caffeine-ng to the user's home packages
-          home.packages =
-            with pkgs;
-            [
-              caffeine-ng
-            ]
-            ++ lib.optionals (profile.windowManager == "gnome") [
-              # Gnome needs some extra packages for caffeine to show up in the system tray
-              gnomeExtensions.appindicator
-              gnomeExtensions.caffeine
-              gnomeExtensions.custom-osd
-              libappindicator-gtk3
-            ];
-        }
-      )
+      lib.mkIf profile.caffeine.enable {
+        # Enable the caffeine service
+        services.caffeine.enable = true;
+        # Add caffeine-ng to the user's home packages
+        home.packages = with pkgs; [
+          caffeine-ng
+        ]
+        ++ lib.optionals (config.services.xserver.desktopManager.gnome.enable) [
+          # Gnome needs some extra packages for caffeine to show up in the system tray
+          # TODO: Still not working
+          gnomeExtensions.appindicator
+          gnomeExtensions.caffeine
+          gnomeExtensions.custom-osd
+          libappindicator-gtk3
+        ];
+      }
     ) config.profiles;
   };
 }

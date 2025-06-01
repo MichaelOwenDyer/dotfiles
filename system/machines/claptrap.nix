@@ -17,11 +17,7 @@
   system.stateVersion = "24.11";
   time.timeZone = "Europe/Berlin";
   wifi.enable = true;
-
-  # Use Ly for the login screen
-  services.displayManager.ly = {
-    enable = true;
-  };
+  gnome-keyring.enable = true;
 
   stylix = {
     fonts.sizes = let fontSize = 14; in {
@@ -71,6 +67,10 @@
     clickMethod = "clickfinger";
   };
   services.xserver.synaptics.palmDetect = true;
+
+  security.polkit.enable = true;
+  programs.dconf.enable = true;
+  services.dbus.implementation = "broker";
 
   console = {
     font = "Lat2-Terminus16";

@@ -12,7 +12,6 @@
     ../default.nix
     ./browser
     ./chat
-    ./wm
     ./caffeine.nix
     ./stylix.nix
   ];
