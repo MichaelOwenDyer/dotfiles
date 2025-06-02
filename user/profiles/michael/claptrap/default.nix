@@ -8,6 +8,7 @@
     ../default.nix
     ../wm/gnome.nix
     ../wm/hyprland.nix
+    ./hyprland-claptrap.nix
   ];
 
   config.profiles.michael = {

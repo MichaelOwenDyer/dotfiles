@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   ...
 }:
 
@@ -107,8 +108,6 @@
           ", XF86AudioPlay, exec, ${pkgs.playerctl}/bin/playerctl play-pause"
           ", XF86AudioNext, exec, ${pkgs.playerctl}/bin/playerctl next"
           ", XF86Search, exec, ${pkgs.wofi}/bin/wofi --show run"
-          ", XF86MonBrightnessDown, exec, ${pkgs.xbacklight}/bin/xbacklight -dec 10"
-          ", XF86MonBrightnessUp, exec, ${pkgs.xbacklight}/bin/xbacklight -inc 10"
         ];
 
         # Environment variables are usually better handled by home.sessionVariables
@@ -149,19 +148,20 @@
       size = 24;
       package = pkgs.adwaita-icon-theme;
       gtk.enable = true;
-      xsettings.enable = true;
     };
 
     programs.alacritty.enable = true;
     programs.wlogout.enable = true;
     programs.wofi.enable = true;
-    services.playerctl.enable = true; # enables playerctl daemon which scans for background media players
 
     home.packages = with pkgs; [
       grimblast
       swaybg
       pamixer
-      xbacklight
     ];
+  };
+  config = {
+    programs.light.enable = config.system.isLaptop; # Brightness / backlight control on laptops
+    services.playerctld.enable = true; # enable playerctl daemon which scans for background media players
   };
 }

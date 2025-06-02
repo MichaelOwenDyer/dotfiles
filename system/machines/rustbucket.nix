@@ -8,7 +8,7 @@
 # - GPU: Nvidia 1660 Ti
 # - Storage: 1TB Samsung 970 Pro SSD, 2TB Western Digital HDD, various other tiny drives
 
-{ config, ... }:
+{ config, pkgs, ... }:
 
 {
 
@@ -22,8 +22,8 @@
   networking.hostName = "rustbucket";
   system.stateVersion = "24.11";
   time.timeZone = "Europe/Berlin";
-
   gaming.enable = true;
+  gnome-keyring.enable = true;
 
   stylix = {
     fonts.sizes = let fontSize = 11; in {
@@ -32,22 +32,40 @@
       popups = fontSize;
       terminal = fontSize;
     };
+    targets.plymouth.enable = false;
+  };
+
+  boot.plymouth = rec {
+    theme = "colorful_sliced";
+    themePackages = [
+      (pkgs.adi1090x-plymouth-themes.override {
+        selected_themes = [ theme ];
+      })
+    ];
   };
 
   # Use the GNOME display manager for the login screen
   services.xserver.displayManager.gdm.enable = true;
-  # TODO: Remove this and configure desktop environments with user profile
   # Enable GNOME desktop manager
   services.xserver.desktopManager.gnome.enable = true;
   # Enable GNOME keyring
   services.gnome.gnome-keyring.enable = true;
-
-  # Enable automatic login for the user
-  services.displayManager.autoLogin.enable = true;
-  services.displayManager.autoLogin.user = "michael";
+  
+  # services.displayManager.autoLogin.enable = true;
+  # services.displayManager.autoLogin.user = "michael";
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
+
+  services.openssh = {
+    enable = true;
+    ports = [ 22 ];
+    settings = {
+      PasswordAuthentication = true;
+      UseDns = true;
+    };
+  };
+  networking.firewall.allowedTCPPorts = config.services.openssh.ports;
 
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = [ "nvidia" ];

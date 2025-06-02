@@ -1,6 +1,9 @@
 # NixOS system modules
 
-_:
+{
+  lib,
+  ...
+}:
 
 {
   imports = [
@@ -9,4 +12,6 @@ _:
     ./wifi.nix
     ./gnome-keyring.nix
   ];
+
+  options.system.isLaptop = lib.mkEnableOption "laptop-specific functionality, such as brightness control";
 }

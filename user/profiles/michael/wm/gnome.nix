@@ -26,7 +26,7 @@
       # Enable GNOME keyring
       enable = true;
       # Possible values: "pkcs11", "secrets", "ssh"
-      components = ["pkcs11" "secrets" "ssh"];
+      components = [];
     };
   };
 }

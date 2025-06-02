@@ -18,6 +18,12 @@
   time.timeZone = "Europe/Berlin";
   wifi.enable = true;
   gnome-keyring.enable = true;
+  system.isLaptop = true;
+
+  # Use Ly for the login screen
+  services.displayManager.ly = {
+    enable = true;
+  };
 
   stylix = {
     fonts.sizes = let fontSize = 14; in {

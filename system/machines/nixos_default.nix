@@ -36,11 +36,6 @@
     warn-dirty = false
   '';
 
-  # Use Ly for the login screen
-  services.displayManager.ly = {
-    enable = true;
-  };
-
   boot = {
     # Use latest kernel
     kernelPackages = pkgs.linuxPackages_latest;
