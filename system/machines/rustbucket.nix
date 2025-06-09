@@ -13,17 +13,14 @@
 {
 
   imports = [
-    # Common machine configuration
     ./nixos_default.nix
-    # Add michael as a user
-    ../../user/profiles/michael/rustbucket
+    ../modules/gaming.nix
   ];
 
   networking.hostName = "rustbucket";
   system.stateVersion = "24.11";
   time.timeZone = "Europe/Berlin";
   gaming.enable = true;
-  gnome-keyring.enable = true;
 
   stylix = {
     fonts.sizes = let fontSize = 11; in {
@@ -46,8 +43,6 @@
 
   # Use the GNOME display manager for the login screen
   services.xserver.displayManager.gdm.enable = true;
-  # Enable GNOME keyring
-  services.gnome.gnome-keyring.enable = true;
   
   # services.displayManager.autoLogin.enable = true;
   # services.displayManager.autoLogin.user = "michael";

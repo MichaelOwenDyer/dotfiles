@@ -13,14 +13,12 @@
   imports = [
     hardware.nixosModules.dell-xps-13-9360
     ./nixos_default.nix
+    ../modules/wifi.nix
   ];
 
   networking.hostName = "claptrap";
   system.stateVersion = "24.11";
   time.timeZone = "Europe/Berlin";
-  wifi.enable = true;
-  gnome-keyring.enable = true;
-  system.isLaptop = true;
 
   # Use Ly for the login screen
   services.displayManager.ly.enable = true;

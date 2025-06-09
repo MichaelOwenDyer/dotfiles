@@ -15,7 +15,8 @@
   imports = [
     home-manager.nixosModules.home-manager
     stylix.nixosModules.stylix
-    ../modules
+    ../modules/audio.nix
+    ../modules/gnome-keyring.nix
   ];
 
   services.xserver.desktopManager.gnome.enable = true;
@@ -104,9 +105,6 @@
 
   # Enable printing via CUPS
   services.printing.enable = true;
-
-  # Enable sound
-  audio.enable = true;
 
   stylix = rec {
     enable = true;
