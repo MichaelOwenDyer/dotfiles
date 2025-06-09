@@ -1,23 +1,24 @@
-# Common configuration for macOS machines.
-
-{
-  self,
-  home-manager,
-  ...
-}:
+inputs:
 
 {
   imports = [
     home-manager.darwinModules.home-manager
   ];
 
-  # Register a MacOS system user account for each profile
-  # users.users = lib.mapAttrs (username: user: {
-  #   packages = [];
-  #   description = user.custom.fullName;
-  #   createHome = false;
-  #   home = /Users/${username};
-  # }) config.home-manager.users;
+  # Let Determinate Nix handle the nix installation
+  nix.enable = false;
+
+  # Used for backwards compatibility, please read the changelog before changing.
+  # $ darwin-rebuild changelog
+  system.stateVersion = 4;
+
+  home-manager.users.michael = import ../../user/michael/home.nix inputs;
+  users.users.michael = {
+    packages = [];
+    description = "Michael Dyer";
+    createHome = false;
+    home = /Users/michael;
+  };
 
   # Create /etc/zshrc that loads the nix-darwin environment.
   programs.zsh.enable = true;

@@ -15,8 +15,8 @@
   imports = [
     home-manager.nixosModules.home-manager
     stylix.nixosModules.stylix
-    ../modules/audio.nix
-    ../modules/gnome-keyring.nix
+    ./modules/audio.nix
+    ./modules/gnome-keyring.nix
   ];
 
   services.xserver.desktopManager.gnome.enable = true;
@@ -38,7 +38,6 @@
     warn-dirty = false
   '';
 
-  home-manager.users.michael = import ../../user/michael/claptrap/home.nix inputs;
   users.users.michael = {
     isNormalUser = true;
     description = "Michael Dyer";

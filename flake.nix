@@ -5,16 +5,25 @@
     inputs:
     let
       nixosMachines = {
-        claptrap = "x86_64-linux";
-        rustbucket = "x86_64-linux";
+        claptrap = {
+          configuration = ./system/claptrap/configuration.nix;
+          system = "x86_64-linux";
+        };
+        rustbucket = {
+          configuration = ./system/rustbucket/configuration.nix;
+          system = "x86_64-linux";
+        };
       };
       darwinMachines = {
-        macaroni = "x86_64-darwin";
+        mac = {
+          configuration = ./system/mac/darwin-configuration.nix;
+          system = "x86_64-darwin";
+        };
       };
     in
     rec {
       nixosConfigurations = let lib = inputs.nixpkgs.lib; in lib.mapAttrs (
-        name: system:
+        _: { configuration, system }:
         lib.nixosSystem {
           # Define the system platform
           inherit system;
@@ -28,6 +37,7 @@
             util = import ./util.nix;
           };
           modules = [
+            configuration
             {
               nixpkgs = {
                 hostPlatform = system;
@@ -43,14 +53,12 @@
                 # home-manager.backupFileExtension = "backup";
               };
             }
-            # Machine configuration
-            ./system/machines/${name}.nix
           ];
         }
       ) nixosMachines;
 
       darwinConfigurations = let lib = inputs.nix-darwin.lib; in lib.mapAttrs (
-        name: system:
+        _: { configuration, system }:
         lib.darwinSystem {
           # Define the system platform
           inherit system;
@@ -61,7 +69,7 @@
             jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
           };
           modules = [
-            # pkgs configuration
+            configuration
             {
               nixpkgs = {
                 hostPlatform = system;
@@ -69,8 +77,6 @@
                 overlays = import ./overlays.nix inputs;
               };
             }
-            # Machine configuration
-            ./system/machines/${name}.nix
           ];
         }
       ) darwinMachines;
