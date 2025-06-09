@@ -9,8 +9,15 @@
 {
   imports = [
     home-manager.darwinModules.home-manager
-    ../../user/modules/darwin
   ];
+
+  # Register a MacOS system user account for each profile
+  # users.users = lib.mapAttrs (username: user: {
+  #   packages = [];
+  #   description = user.custom.fullName;
+  #   createHome = false;
+  #   home = /Users/${username};
+  # }) config.home-manager.users;
 
   # Create /etc/zshrc that loads the nix-darwin environment.
   programs.zsh.enable = true;

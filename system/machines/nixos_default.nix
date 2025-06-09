@@ -9,15 +9,16 @@
   stylix,
   nix-wallpaper,
   ...
-}:
+} @ inputs:
 
 {
   imports = [
     home-manager.nixosModules.home-manager
     stylix.nixosModules.stylix
     ../modules
-    ../../user/modules/nixos
   ];
+
+  services.xserver.desktopManager.gnome.enable = true;
 
   # Enable the nix command and flakes
   nix.settings.experimental-features = [
@@ -35,6 +36,24 @@
   nix.extraOptions = ''
     warn-dirty = false
   '';
+
+  home-manager.users.michael = import ../../user/michael/claptrap/home.nix inputs;
+  users.users.michael = {
+    isNormalUser = true;
+    description = "Michael Dyer";
+    hashedPassword = "$y$j9T$pSkVWxgO/9dyqt8MMHzaM0$RO5g8OOpFb4pdgMuDIVraPvsLMSvMTU2/y8JQWfmrs1";
+    shell = pkgs.fish;
+    extraGroups = [
+      "wheel"
+      "video"
+      "audio"
+      "input"
+      "networkmanager"
+    ];
+  };
+
+  programs.zsh.enable = true;
+  programs.fish.enable = true;
 
   boot = {
     # Use latest kernel

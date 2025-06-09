@@ -4,7 +4,6 @@
   outputs =
     inputs:
     let
-      inherit (inputs.nixpkgs.lib) mapAttrs listToAttrs flatten mapAttrsToList nameValuePair;
       nixosMachines = {
         claptrap = "x86_64-linux";
         rustbucket = "x86_64-linux";
@@ -14,9 +13,9 @@
       };
     in
     rec {
-      nixosConfigurations = mapAttrs (
+      nixosConfigurations = let lib = inputs.nixpkgs.lib; in lib.mapAttrs (
         name: system:
-        inputs.nixpkgs.lib.nixosSystem {
+        lib.nixosSystem {
           # Define the system platform
           inherit system;
           # Allow the modules listed below to import any of these inputs
@@ -29,12 +28,19 @@
             util = import ./util.nix;
           };
           modules = [
-            # pkgs configuration
             {
               nixpkgs = {
                 hostPlatform = system;
                 config.allowUnfree = true;
                 overlays = import ./overlays.nix inputs;
+              };
+              home-manager = {
+                # By default, home manager wants to use a separate nixpkgs instance for each user, but this tells it to use the system nixpkgs
+                useGlobalPkgs = true;
+                # By default, home manager will install packages in /home/<username>/.nix-profile, but this puts them in /etc/profiles
+                useUserPackages = true;
+                # If a reload would cause files to be overwritten, back them up as .backup files
+                # home-manager.backupFileExtension = "backup";
               };
             }
             # Machine configuration
@@ -43,9 +49,9 @@
         }
       ) nixosMachines;
 
-      darwinConfigurations = mapAttrs (
+      darwinConfigurations = let lib = inputs.nix-darwin.lib; in lib.mapAttrs (
         name: system:
-        inputs.nix-darwin.lib.darwinSystem {
+        lib.darwinSystem {
           # Define the system platform
           inherit system;
           # Allow the modules listed below to import any of these inputs
@@ -71,15 +77,9 @@
 
       # TODO: Investigate how to make home-manager independently rebuildable
       # TODO: Use stylix.homeManagerModules.stylix
-      homeConfigurations = listToAttrs (flatten (
-        mapAttrsToList (
-          host: machine:
-          mapAttrsToList (
-            user: home:
-            nameValuePair "${user}@${host}" home
-          ) machine.config.home-manager.users
-        ) nixosConfigurations
-      ));
+      homeConfigurations = {
+        michael = ./user/michael/home.nix;
+      };
     };
 
   inputs = {

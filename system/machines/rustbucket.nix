@@ -46,8 +46,6 @@
 
   # Use the GNOME display manager for the login screen
   services.xserver.displayManager.gdm.enable = true;
-  # Enable GNOME desktop manager
-  services.xserver.desktopManager.gnome.enable = true;
   # Enable GNOME keyring
   services.gnome.gnome-keyring.enable = true;
   

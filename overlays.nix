@@ -8,4 +8,6 @@ inputs:
       config.allowUnfree = final.config.allowUnfree;
     };
   })
+  # NUR overlay makes packages accessible under 'pkgs.nur'
+  inputs.nur.overlays.default
 ]

@@ -1,16 +1,18 @@
 # Configuration for my old Dell XPS 13 9360 laptop
 
-{ pkgs, hardware, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  hardware,
+  ...
+}:
 
 {
 
   imports = [
-    # XPS 13 9360 hardware configuration
     hardware.nixosModules.dell-xps-13-9360
-    # Common machine configuration
     ./nixos_default.nix
-    # Add michael as a user
-    ../../user/profiles/michael/claptrap
   ];
 
   networking.hostName = "claptrap";
@@ -21,9 +23,7 @@
   system.isLaptop = true;
 
   # Use Ly for the login screen
-  services.displayManager.ly = {
-    enable = true;
-  };
+  services.displayManager.ly.enable = true;
 
   stylix = {
     fonts.sizes = let fontSize = 14; in {
