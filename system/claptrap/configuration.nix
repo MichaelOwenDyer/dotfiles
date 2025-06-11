@@ -26,11 +26,11 @@
   services.displayManager.ly.enable = true;
 
   stylix = {
-    fonts.sizes = let fontSize = 14; in {
+    fonts.sizes = let fontSize = 12; in {
       applications = fontSize;
       desktop = fontSize;
       popups = fontSize;
-      terminal = fontSize;
+      terminal = fontSize + 2;
     };
     targets.plymouth.enable = false;
   };
