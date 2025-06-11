@@ -111,6 +111,6 @@
       console.enable = false;
     };
     base16Scheme = "${pkgs.base16-schemes}/share/themes/equilibrium-dark.yaml";
-    image = util.generateDefaultWallpaper { inherit pkgs stylix nix-wallpaper; } base16Scheme;
+    image = util.generateDefaultWallpaper base16Scheme;
   };
 }

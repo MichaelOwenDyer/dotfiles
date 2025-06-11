@@ -20,6 +20,10 @@
           system = "x86_64-darwin";
         };
       };
+      mkUtil = system: import ./util.nix {
+        mkSchemeAttrs = (inputs.nixpkgs.legacyPackages.${system}.callPackage inputs.stylix.inputs.base16.lib {}).mkSchemeAttrs;
+        nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
+      };
     in
     rec {
       nixosConfigurations = let lib = inputs.nixpkgs.lib; in lib.mapAttrs (
@@ -32,9 +36,8 @@
           specialArgs = {
             inherit (inputs) home-manager stylix hardware nur;
             jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
-            nix-wallpaper = inputs.nix-wallpaper.packages.${system};
             zen-browser = inputs.zen-browser.packages.${system};
-            util = import ./util.nix;
+            util = mkUtil system;
           };
           modules = [
             configuration
@@ -67,6 +70,7 @@
           specialArgs = {
             inherit (inputs) home-manager;
             jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
+            util = mkUtil system;
           };
           modules = [
             configuration

@@ -1,25 +1,15 @@
-# This module adds some utilities under config.lib for other modules to use.
+{
+  mkSchemeAttrs,
+  nix-wallpaper,
+}:
 
 {
-  # This function creates an option in the form profiles.<username>.<option>,
-  # e.g. an option which can be configured independently for each user profile.
-  mkProfileOption =
-    lib: option:
-    {
-      profiles = with lib.types; lib.mkOption {
-        type = attrsOf (submodule {
-          options = option;
-        });
-      };
-    };
-
   # This function uses nix-wallpaper and base16 (borrowed from stylix) to generate
   # a default NixOS wallpaper based on a base 16 scheme.
-  generateDefaultWallpaper =
-    { pkgs, stylix, nix-wallpaper }: base16Scheme:
+  generateDefaultWallpaper = base16Scheme:
     let
-      palette = ((pkgs.callPackage stylix.inputs.base16.lib {}).mkSchemeAttrs base16Scheme).withHashtag;
-      out = nix-wallpaper.default.override {
+      palette = (mkSchemeAttrs base16Scheme).withHashtag;
+      out = nix-wallpaper.override {
         backgroundColor = palette.base01;
         logoColors = with palette; {
           color0 = base08;
