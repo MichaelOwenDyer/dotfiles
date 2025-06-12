@@ -25,6 +25,11 @@
   # Use Ly for the login screen
   services.displayManager.ly.enable = true;
 
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "us";
+  };
+
   stylix = {
     fonts.sizes = let fontSize = 12; in {
       applications = fontSize;
@@ -48,39 +53,35 @@
   powerManagement.cpuFreqGovernor = "powersave";
 
   # Hibernate when power button is short-pressed, power off when long-pressed
-  services.logind.powerKey = "hibernate";
-  services.logind.powerKeyLongPress = "poweroff";
-
-  # Sleep when lid is closed
-  services.logind.lidSwitch = "suspend-then-hibernate";
-  # Sleep after 10 minutes of idle time
-  services.logind.extraConfig = ''
-    IdleAction=suspend-then-hibernate
-    IdleActionSec=10min
-  '';
-
+  services.logind = {
+    powerKey = "hibernate";
+    powerKeyLongPress = "poweroff";
+    # Sleep when lid is closed
+    lidSwitch = "suspend-then-hibernate";
+    # Sleep after 10 minutes of idle time
+    extraConfig = ''
+      IdleAction=suspend-then-hibernate
+      IdleActionSec=10min
+    '';
+  };
   # Hibernate after 20 minutes of sleep
   systemd.sleep.extraConfig = ''
     HibernateDelaySec=20min
   '';
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.libinput.enable = true;
-  services.libinput.touchpad = {
-    tapping = true;
-    tappingButtonMap = "lrm";
-    disableWhileTyping = true;
-    clickMethod = "clickfinger";
+  services.libinput = {
+    enable = true;
+    touchpad = {
+      tapping = true;
+      tappingButtonMap = "lrm";
+      disableWhileTyping = true;
+      clickMethod = "clickfinger";
+    };
   };
   services.xserver.synaptics.palmDetect = true;
 
   security.polkit.enable = true;
   programs.dconf.enable = true;
   services.dbus.implementation = "broker";
-
-  console = {
-    font = "Lat2-Terminus16";
-    keyMap = "us";
-  };
 
 }

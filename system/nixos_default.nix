@@ -19,7 +19,7 @@
     ./modules/gnome-keyring.nix
   ];
 
-  services.xserver.desktopManager.gnome.enable = true;
+  services.desktopManager.gnome.enable = true;
 
   # Enable the nix command and flakes
   nix.settings.experimental-features = [

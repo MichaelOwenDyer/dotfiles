@@ -53,7 +53,7 @@
                 # By default, home manager will install packages in /home/<username>/.nix-profile, but this puts them in /etc/profiles
                 useUserPackages = true;
                 # If a reload would cause files to be overwritten, back them up as .backup files
-                # home-manager.backupFileExtension = "backup";
+                # backupFileExtension = "backup";
               };
             }
           ];
@@ -100,9 +100,9 @@
     };
 
     # Stable nixpkgs for the occasional fallback
-    # https://github.com/NixOS/nixpkgs/tree/nixos-24.11
+    # https://github.com/NixOS/nixpkgs/tree/nixos-25.05
     nixpkgs-stable = {
-      url = "github:NixOS/nixpkgs/nixos-24.11";
+      url = "github:NixOS/nixpkgs/nixos-25.05";
     };
 
     # Nix on macOS

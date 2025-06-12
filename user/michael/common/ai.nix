@@ -3,9 +3,11 @@
 }:
 
 {
+  # https://github.com/ollama/ollama
   services.ollama = {
     enable = true;
   };
+  # https://github.com/sigoden/aichat
   programs.aichat = {
     enable = true;
     settings = {

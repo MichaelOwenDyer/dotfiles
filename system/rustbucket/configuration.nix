@@ -49,7 +49,7 @@
   };
 
   # Use the GNOME display manager for the login screen
-  services.xserver.displayManager.gdm.enable = true;
+  services.displayManager.gdm.enable = true;
   
   # services.displayManager.autoLogin.enable = true;
   # services.displayManager.autoLogin.user = "michael";
