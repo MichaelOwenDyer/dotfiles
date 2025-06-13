@@ -30,7 +30,7 @@
         "eDP-1,1920x1080@60,0x0,1"
       ];
       # Autostart applications
-      exec-once = let wallpaper = ./background.jpg; in [
+      exec-once = let wallpaper = ../background.jpg; in [
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP" # Essential
         "${pkgs.waybar}/bin/waybar"
         "${pkgs.swaybg}/bin/swaybg -i ${wallpaper} -f" # Ensure background.jpg is in the same dir
