@@ -35,5 +35,6 @@
       terminal = 0.5;
       popups = 0.5;
     };
+    targets.firefox.profileNames = [ "michael" ];
   };
 }

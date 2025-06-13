@@ -38,7 +38,10 @@
       terminal = fontSize + 2;
     };
     targets.plymouth.enable = false;
+    targets.qt.platform = lib.mkForce "qtct"; # Get rid of the warning
   };
+
+  qt.platformTheme = lib.mkForce "gnome";
 
   boot.plymouth = rec {
     theme = "colorful_sliced";
