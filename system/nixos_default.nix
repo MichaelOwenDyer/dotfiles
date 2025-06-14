@@ -17,9 +17,8 @@
     stylix.nixosModules.stylix
     ./modules/audio.nix
     ./modules/gnome-keyring.nix
+    ./modules/gnome.nix
   ];
-
-  services.desktopManager.gnome.enable = true;
 
   # Enable the nix command and flakes
   nix.settings.experimental-features = [
@@ -80,8 +79,13 @@
     vim
     curl
     wget
-    gnugrep
+    ripgrep
     gparted
+    zip
+    unzip
+    tree
+    openssh
+    gnupg1
   ];
 
   # OpenGL support
