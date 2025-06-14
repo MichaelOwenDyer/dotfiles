@@ -4,6 +4,7 @@
 
 {
   stylix = rec {
+    image = ./background.jpg;
     base16Scheme = {
       slug = "google-dark-catppuccin-macchiato";
       name = "Google Dark Catppuccin Macchiato";
@@ -30,10 +31,9 @@
         base0F = "f0c6c6"; #f0c6c6
       };
     };
-    image = ./background.jpg;
     opacity = {
-      terminal = 0.5;
-      popups = 0.5;
+      terminal = 0.8;
+      popups = 0.8;
     };
     targets.firefox.profileNames = [ "michael" ];
   };

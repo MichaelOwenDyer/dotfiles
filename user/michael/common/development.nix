@@ -27,6 +27,8 @@
       };
     };
   };
+  # Terminal
+  programs.ghostty.enable = true;
   programs.neovim.enable = true;
   # Run commands when entering a directory
   programs.direnv = {
@@ -71,6 +73,5 @@
   home.shellAliases = {
     cd = "z";
     ls = "eza";
-    rebuild = "(cd ~/.dotfiles && git add --all && sudo nixos-rebuild switch --flake . --show-trace)";
   };
 }

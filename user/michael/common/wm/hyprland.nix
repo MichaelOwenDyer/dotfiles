@@ -39,7 +39,7 @@
 
       # Use the $mod variable defined above
       bind = [
-        "$mod, RETURN, exec, ${pkgs.alacritty}/bin/alacritty"
+        "$mod, RETURN, exec, ${pkgs.ghostty}/bin/ghostty"
         "$mod, Q, killactive,"
         "$mod, M, exec, ${pkgs.wlogout}/bin/wlogout"
         "$mod, S, exec, ${pkgs.grimblast}/bin/grimblast copy area"
@@ -142,7 +142,6 @@
     gtk.enable = true;
   };
 
-  programs.alacritty.enable = true;
   programs.wlogout.enable = true;
   programs.wofi.enable = true;
 
