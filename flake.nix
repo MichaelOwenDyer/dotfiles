@@ -4,20 +4,25 @@
   outputs =
     inputs:
     let
-      nixosMachines = {
-        claptrap = {
-          configuration = ./system/claptrap/configuration.nix;
-          system = "x86_64-linux";
+      machines = {
+        nixos = {
+          claptrap = {
+            system = "x86_64-linux";
+            hostConfiguration = ./system/claptrap/configuration.nix;
+            users.michael = ./user/michael/claptrap/home.nix;
+          };
+          rustbucket = {
+            system = "x86_64-linux";
+            hostConfiguration = ./system/rustbucket/configuration.nix;
+            users.michael = ./user/michael/rustbucket/home.nix;
+          };
         };
-        rustbucket = {
-          configuration = ./system/rustbucket/configuration.nix;
-          system = "x86_64-linux";
-        };
-      };
-      darwinMachines = {
-        mac = {
-          configuration = ./system/mac/darwin-configuration.nix;
-          system = "x86_64-darwin";
+        darwin = {
+          mac = {
+            system = "x86_64-darwin";
+            hostConfiguration = ./system/mac/configuration.nix;
+            users.michael = ./user/michael/common/home.nix;
+          };
         };
       };
       mkUtil = system: import ./util.nix {
@@ -27,21 +32,25 @@
     in
     rec {
       nixosConfigurations = let lib = inputs.nixpkgs.lib; in lib.mapAttrs (
-        _: { configuration, system }:
+        hostName: { system, hostConfiguration, users }:
         lib.nixosSystem {
           # Define the system platform
           inherit system;
           # Allow the modules listed below to import any of these inputs
           # in addition to the default "pkgs", "lib", "config", and "options"
           specialArgs = {
-            inherit (inputs) home-manager stylix hardware nur;
+            inherit users;
+            inherit (inputs) hardware nur;
             jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
             zen-browser = inputs.zen-browser.packages.${system};
             util = mkUtil system;
           };
           modules = [
-            configuration
+            hostConfiguration
+            inputs.home-manager.nixosModules.home-manager
+            inputs.stylix.nixosModules.stylix
             {
+              networking.hostName = hostName;
               nixpkgs = {
                 hostPlatform = system;
                 config.allowUnfree = true;
@@ -52,44 +61,93 @@
                 useGlobalPkgs = true;
                 # By default, home manager will install packages in /home/<username>/.nix-profile, but this puts them in /etc/profiles
                 useUserPackages = true;
-                # If a reload would cause files to be overwritten, back them up as .backup files
-                # backupFileExtension = "backup";
               };
             }
           ];
         }
-      ) nixosMachines;
+      ) machines.nixos;
 
       darwinConfigurations = let lib = inputs.nix-darwin.lib; in lib.mapAttrs (
-        _: { configuration, system }:
+        hostName: { system, hostConfiguration, users }:
         lib.darwinSystem {
           # Define the system platform
           inherit system;
           # Allow the modules listed below to import any of these inputs
           # in addition to the default "pkgs", "lib", "config", and "options"
           specialArgs = {
-            inherit (inputs) home-manager;
+            inherit users;
             jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
             util = mkUtil system;
           };
           modules = [
-            configuration
+            hostConfiguration
+            inputs.home-manager.darwinModules.home-manager
             {
+              networking.hostName = hostName;
               nixpkgs = {
                 hostPlatform = system;
                 config.allowUnfree = true;
                 overlays = import ./overlays.nix inputs;
               };
+              home-manager = {
+                # By default, home manager wants to use a separate nixpkgs instance for each user, but this tells it to use the system nixpkgs
+                useGlobalPkgs = true;
+                # By default, home manager will install packages in /home/<username>/.nix-profile, but this puts them in /etc/profiles
+                useUserPackages = true;
+              };
             }
           ];
         }
-      ) darwinMachines;
+      ) machines.darwin;
 
-      # TODO: Investigate how to make home-manager independently rebuildable
-      # TODO: Use stylix.homeManagerModules.stylix
-      homeConfigurations = {
-        michael = ./user/michael/home.nix;
-      };
+      # homeConfigurations = listToAttrs (flatten (
+      #   mapAttrsToList (
+      #     host: machine:
+      #     mapAttrsToList (
+      #       user: home:
+      #       nameValuePair "${user}@${host}" home
+      #     ) machine.config.home-manager.users
+      #   ) nixosConfigurations
+      # ));
+      homeConfigurations = let lib = inputs.home-manager.lib; in lib.mapAttrs (
+        hostName: { system, _, users }:
+        lib.homeManagerConfiguration {
+          # Define the system platform
+          inherit system;
+          # Allow the modules listed below to import any of these inputs
+          # in addition to the default "pkgs", "lib", "config", and "options"
+          extraSpecialArgs = {
+            inherit (inputs) stylix nur;
+            jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
+            zen-browser = inputs.zen-browser.packages.${system};
+            util = mkUtil system;
+          };
+          modules = [
+            inputs.stylix.homeManagerModules.stylix
+            { home-manager.users = users; }
+          ];
+        }
+      )
+      (
+        lib.mapAttrs
+        ()
+        (lib.mkMerge [ machines.nixos machines.darwin ])
+      );
+      
+
+      # If you're not using NixOS and only want to load your home
+      # configuration when `nix` is installed on your system and
+      # flakes are enabled.
+      #
+      # Enable a `nix develop` shell with home-manager and git to
+      # only load your home configuration.
+      # devShell = pkgs.mkShell {
+      #   buildInputs = with pkgs; [
+      #     git
+      #     home-manager
+      #   ];
+      #   NIX_CONFIG = "experimental-features = nix-command flakes";
+      # };
     };
 
   inputs = {
@@ -118,6 +176,11 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # agenix = {
+    #   url = "github:ryantm/agenix";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     # Pre-built NixOS hardware configurations
     # https://github.com/NixOS/nixos-hardware

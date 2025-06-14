@@ -1,24 +1,21 @@
 # Common configuration for Linux machines.
 
 {
-  config,
   lib,
   pkgs,
   util,
-  home-manager,
-  stylix,
-  nix-wallpaper,
+  users,
   ...
 } @ inputs:
 
 {
   imports = [
-    home-manager.nixosModules.home-manager
-    stylix.nixosModules.stylix
     ./modules/audio.nix
     ./modules/gnome-keyring.nix
     ./modules/gnome.nix
   ];
+
+  home-manager.users = lib.mapAttrs (username: home: import home inputs) users;
 
   # Enable the nix command and flakes
   nix.settings.experimental-features = [

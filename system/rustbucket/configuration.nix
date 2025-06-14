@@ -22,9 +22,6 @@
     ../modules/gaming.nix
   ];
 
-  home-manager.users.michael = import ../../user/michael/rustbucket/home.nix inputs;
-
-  networking.hostName = "rustbucket";
   system.stateVersion = "24.11";
   time.timeZone = "Europe/Berlin";
   gaming.enable = true;

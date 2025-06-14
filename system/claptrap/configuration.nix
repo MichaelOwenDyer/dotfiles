@@ -3,10 +3,9 @@
 {
   lib,
   pkgs,
-  config,
   hardware,
   ...
-} @ inputs:
+}:
 
 {
   imports = [
@@ -16,9 +15,6 @@
     ../modules/wifi.nix
   ];
   
-  home-manager.users.michael = import ../../user/michael/claptrap/home.nix inputs;
-
-  networking.hostName = "claptrap";
   system.stateVersion = "24.11";
   time.timeZone = "Europe/Berlin";
 

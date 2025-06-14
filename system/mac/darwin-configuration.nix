@@ -1,10 +1,10 @@
-inputs:
+{
+  lib,
+  users,
+  ...
+}:
 
 {
-  imports = [
-    home-manager.darwinModules.home-manager
-  ];
-
   # Let Determinate Nix handle the nix installation
   nix.enable = false;
 
@@ -12,7 +12,7 @@ inputs:
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
 
-  home-manager.users.michael = import ../../user/michael/home.nix inputs;
+  home-manager.users = lib.mapAttrs (username: home: import home inputs) users;
   users.users.michael = {
     packages = [];
     description = "Michael Dyer";
