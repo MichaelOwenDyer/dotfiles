@@ -18,13 +18,13 @@
 
   imports = [
     ./hardware-configuration.nix
-    ./nixos_default.nix
+    ../nixos_default.nix
     ../modules/gaming.nix
+    ../modules/wifi.nix
   ];
 
   system.stateVersion = "24.11";
   time.timeZone = "Europe/Berlin";
-  gaming.enable = true;
 
   stylix = {
     fonts.sizes = let fontSize = 11; in {
@@ -46,7 +46,14 @@
   };
 
   # Use the GNOME display manager for the login screen
-  services.displayManager.gdm.enable = true;
+  services.displayManager.gdm = {
+    enable = true;
+    autoSuspend = false;
+  };
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = "michael";
+  };
   
   # services.displayManager.autoLogin.enable = true;
   # services.displayManager.autoLogin.user = "michael";

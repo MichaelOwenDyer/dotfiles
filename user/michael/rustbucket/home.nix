@@ -9,6 +9,7 @@ let inputs = baseInputs // {
 };
 
 in lib.mkMerge [
+  { home.stateVersion = "24.11"; }
   (import ../common/home.nix inputs)
   (import ../common/wm/gnome.nix inputs)
   (import ../common/wm/hyprland.nix inputs)
