@@ -32,7 +32,7 @@
     in
     {
       nixosConfigurations = let lib = inputs.nixpkgs.lib; in lib.mapAttrs (
-        hostName: { system, hostConfiguration, users }:
+        hostname: { system, hostConfiguration, users }:
         lib.nixosSystem {
           # Define the system platform
           inherit system;
@@ -50,7 +50,7 @@
             inputs.home-manager.nixosModules.home-manager
             inputs.stylix.nixosModules.stylix
             {
-              networking.hostName = hostName;
+              networking.hostName = hostname;
               nixpkgs = {
                 hostPlatform = system;
                 config.allowUnfree = true;
@@ -68,7 +68,7 @@
       ) machines.nixos;
 
       darwinConfigurations = let lib = inputs.nix-darwin.lib; in lib.mapAttrs (
-        hostName: { system, hostConfiguration, users }:
+        hostname: { system, hostConfiguration, users }:
         lib.darwinSystem {
           # Define the system platform
           inherit system;
@@ -81,9 +81,10 @@
           };
           modules = [
             hostConfiguration
+            inputs.stylix.darwinModules.stylix # Declare no-op options for compatibility even though the theme won't be applied
             inputs.home-manager.darwinModules.home-manager
             {
-              networking.hostName = hostName;
+              networking.hostName = hostname;
               nixpkgs = {
                 hostPlatform = system;
                 config.allowUnfree = true;
@@ -110,7 +111,16 @@
             "${username}@${hostname}"
             (inputs.home-manager.lib.homeManagerConfiguration {
               pkgs = inputs.nixpkgs.legacyPackages.${system};
-              modules = [ home ]; 
+              modules = [
+                home
+                inputs.stylix.homeModules.stylix
+                {
+                  nixpkgs = {
+                    config.allowUnfree = true;
+                    overlays = import ./overlays.nix inputs;
+                  };
+                }
+              ]; 
               extraSpecialArgs = {
                 inherit (inputs) stylix nur;
                 jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
