@@ -20,6 +20,7 @@
 
   # Use Ly for the login screen
   services.displayManager.ly.enable = true;
+  programs.hyprland.enable = true;
 
   console = {
     font = "Lat2-Terminus16";
