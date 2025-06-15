@@ -30,7 +30,7 @@
         nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
       };
     in
-    rec {
+    {
       nixosConfigurations = let lib = inputs.nixpkgs.lib; in lib.mapAttrs (
         hostName: { system, hostConfiguration, users }:
         lib.nixosSystem {
@@ -100,54 +100,46 @@
         }
       ) machines.darwin;
 
-      # homeConfigurations = listToAttrs (flatten (
-      #   mapAttrsToList (
-      #     host: machine:
-      #     mapAttrsToList (
-      #       user: home:
-      #       nameValuePair "${user}@${host}" home
-      #     ) machine.config.home-manager.users
-      #   ) nixosConfigurations
-      # ));
-      homeConfigurations = let lib = inputs.home-manager.lib; in lib.mapAttrs (
-        hostName: { system, _, users }:
-        lib.homeManagerConfiguration {
-          # Define the system platform
-          inherit system;
-          # Allow the modules listed below to import any of these inputs
-          # in addition to the default "pkgs", "lib", "config", and "options"
-          extraSpecialArgs = {
-            inherit (inputs) stylix nur;
-            jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
-            zen-browser = inputs.zen-browser.packages.${system};
-            util = mkUtil system;
-          };
-          modules = [
-            inputs.stylix.homeManagerModules.stylix
-            { home-manager.users = users; }
-          ];
+      homeConfigurations = let lib = inputs.nixpkgs.lib; in lib.listToAttrs (lib.flatten (
+        lib.mapAttrsToList
+        (
+          hostname: { system, users, ... }:
+          lib.mapAttrsToList (
+            username: home:
+            lib.nameValuePair
+            "${username}@${hostname}"
+            (inputs.home-manager.lib.homeManagerConfiguration {
+              pkgs = inputs.nixpkgs.legacyPackages.${system};
+              modules = [ home ]; 
+              extraSpecialArgs = {
+                inherit (inputs) stylix nur;
+                jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
+                zen-browser = inputs.zen-browser.packages.${system};
+                util = mkUtil system;
+              };
+            })
+          ) users
+        )
+        {
+          inherit (machines.nixos) claptrap rustbucket;
+          inherit (machines.darwin) mac;
         }
-      )
-      (
-        lib.mapAttrs
-        ()
-        (lib.mkMerge [ machines.nixos machines.darwin ])
-      );
-      
+      ));
 
-      # If you're not using NixOS and only want to load your home
-      # configuration when `nix` is installed on your system and
-      # flakes are enabled.
-      #
-      # Enable a `nix develop` shell with home-manager and git to
-      # only load your home configuration.
-      # devShell = pkgs.mkShell {
-      #   buildInputs = with pkgs; [
-      #     git
-      #     home-manager
-      #   ];
-      #   NIX_CONFIG = "experimental-features = nix-command flakes";
-      # };
+      devShells = let
+        supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+        forEachSupportedSystem = f: inputs.nixpkgs.lib.genAttrs supportedSystems (system: f {
+          pkgs = import inputs.nixpkgs { inherit system; };
+        });
+      in forEachSupportedSystem ({ pkgs }: {
+        default = pkgs.mkShell {
+          buildInputs = with pkgs; [
+            git
+            home-manager
+          ];
+          NIX_CONFIG = "experimental-features = nix-command flakes";
+        };
+      });
     };
 
   inputs = {
