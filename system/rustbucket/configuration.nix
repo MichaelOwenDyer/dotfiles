@@ -13,7 +13,7 @@
   lib,
   pkgs,
   ...
-} @ inputs:
+}:
 
 {
 
@@ -39,7 +39,6 @@
   };
 
   qt.platformTheme = lib.mkForce "gnome";
-
 
   boot.plymouth = rec {
     theme = "colorful_sliced";
@@ -67,13 +66,11 @@
         }
     });
   '';
+
   services.displayManager.autoLogin = {
     enable = true;
     user = "michael";
   };
-  
-  # services.displayManager.autoLogin.enable = true;
-  # services.displayManager.autoLogin.user = "michael";
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
@@ -87,6 +84,12 @@
     };
   };
   networking.firewall.allowedTCPPorts = config.services.openssh.ports;
+
+  services.xrdp = {
+    enable = true;
+    defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
+    openFirewall = true;
+  };
 
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = [ "nvidia" ];
