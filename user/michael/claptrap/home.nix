@@ -23,4 +23,6 @@ in lib.mkMerge [
   (import ../common/slack.nix inputs)
   (import ../common/discord.nix inputs)
   (import ../common/ai.nix inputs)
+  (import ../common/ide/cursor.nix inputs)
+  (import ../common/browser/chrome.nix inputs)
 ]
