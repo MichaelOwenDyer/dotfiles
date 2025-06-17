@@ -4,6 +4,10 @@
   outputs =
     inputs:
     let
+      supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+      forEachSupportedSystem = fn: inputs.nixpkgs.lib.genAttrs supportedSystems (system: fn {
+        pkgs = inputs.nixpkgs.legacyPackages.${system};
+      });
       machines = {
         nixos = {
           claptrap = {
@@ -25,10 +29,6 @@
           };
         };
       };
-      mkUtil = system: import ./util.nix {
-        mkSchemeAttrs = (inputs.nixpkgs.legacyPackages.${system}.callPackage inputs.stylix.inputs.base16.lib {}).mkSchemeAttrs;
-        nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
-      };
     in
     {
       nixosConfigurations = let lib = inputs.nixpkgs.lib; in lib.mapAttrs (
@@ -43,7 +43,8 @@
             inherit (inputs) hardware nur;
             jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
             zen-browser = inputs.zen-browser.packages.${system};
-            util = mkUtil system;
+            base16-lib = inputs.nixpkgs.legacyPackages.${system}.callPackage inputs.stylix.inputs.base16.lib {};
+            nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
           };
           modules = [
             hostConfiguration
@@ -77,7 +78,8 @@
           specialArgs = {
             inherit users;
             jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
-            util = mkUtil system;
+            base16-lib = inputs.nixpkgs.legacyPackages.${system}.callPackage inputs.stylix.inputs.base16.lib {};
+            nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
           };
           modules = [
             hostConfiguration
@@ -120,12 +122,11 @@
                     overlays = import ./overlays.nix inputs;
                   };
                 }
-              ]; 
+              ];
               extraSpecialArgs = {
                 inherit (inputs) stylix nur;
                 jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
                 zen-browser = inputs.zen-browser.packages.${system};
-                util = mkUtil system;
               };
             })
           ) users
@@ -136,12 +137,7 @@
         }
       ));
 
-      devShells = let
-        supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-        forEachSupportedSystem = f: inputs.nixpkgs.lib.genAttrs supportedSystems (system: f {
-          pkgs = import inputs.nixpkgs { inherit system; };
-        });
-      in forEachSupportedSystem ({ pkgs }: {
+      devShells = forEachSupportedSystem ({ pkgs }: {
         default = pkgs.mkShell {
           buildInputs = with pkgs; [
             git
