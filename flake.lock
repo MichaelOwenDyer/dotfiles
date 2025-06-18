@@ -701,11 +701,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1747055525,
-        "narHash": "sha256-ryZhJXk1Z/+dPqvIiKNA1UyS+IzJJGp5tNyTW+2LS/I=",
+        "lastModified": 1750247657,
+        "narHash": "sha256-fEKNMpwhDuEcTsM6gw47PmegPi8e5zhl7YKMCnmpn4Y=",
         "owner": "MichaelOwenDyer",
         "repo": "zen-browser-flake",
-        "rev": "5374446499db352c5619b2b1cdafd2f15ee7b881",
+        "rev": "d1bf2f308442f07cfd73eff0ffcc8649295a2b76",
         "type": "github"
       },
       "original": {
