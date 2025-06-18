@@ -1,12 +1,14 @@
 # Common configuration for Linux machines.
 
 {
-  users
+  hostname,
+  users,
 }:
 
 {
   lib,
   pkgs,
+  config,
   base16-lib,
   nix-wallpaper,
   ...
@@ -19,14 +21,26 @@
     ./modules/gnome.nix
   ];
 
-  home-manager.users = lib.mapAttrs (username: home: import home inputs) users;
-
-  # Enable the nix command and flakes
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-    "pipe-operators"
-  ];
+  networking.hostName = hostname;
+  
+  home-manager.users = users |> lib.mapAttrs (username: home: import home inputs);
+  users.users = config.home-manager.users |> lib.mapAttrs (
+    username: home:
+    {
+      isNormalUser = true;
+      description = home.systemIntegration.description;
+      hashedPassword = home.systemIntegration.hashedPassword;
+      shell = home.systemIntegration.shell;
+      extraGroups = [
+        # TODO: need better system for assigning groups
+        "wheel"
+        "video"
+        "audio"
+        "input"
+        "networkmanager"
+      ];
+    }
+  );
 
   # Optimize storage after each build
   nix.settings.auto-optimise-store = true;
@@ -38,20 +52,6 @@
   nix.extraOptions = ''
     warn-dirty = false
   '';
-
-  users.users.michael = {
-    isNormalUser = true;
-    description = "Michael Dyer";
-    hashedPassword = "$y$j9T$pSkVWxgO/9dyqt8MMHzaM0$RO5g8OOpFb4pdgMuDIVraPvsLMSvMTU2/y8JQWfmrs1";
-    shell = pkgs.fish;
-    extraGroups = [
-      "wheel"
-      "video"
-      "audio"
-      "input"
-      "networkmanager"
-    ];
-  };
 
   programs.zsh.enable = true;
   programs.fish.enable = true;

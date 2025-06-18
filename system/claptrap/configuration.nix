@@ -1,7 +1,8 @@
 # Configuration for my old Dell XPS 13 9360 laptop
 
 {
-  users
+  hostname,
+  users,
 }:
 
 {
@@ -14,7 +15,7 @@
 {
   imports = [
     hardware.nixosModules.dell-xps-13-9360
-    (import ../nixos_default.nix { inherit users; })
+    (import ../nixos_default.nix { inherit hostname users; })
     ./hardware-configuration.nix
     ../modules/wifi.nix
   ];

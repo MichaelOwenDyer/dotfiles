@@ -8,6 +8,7 @@
       forEachSupportedSystem = fn: inputs.nixpkgs.lib.genAttrs supportedSystems (system: fn {
         pkgs = inputs.nixpkgs.legacyPackages.${system};
       });
+      userSystemIntegrationOptions = ./user/system-integration-options.nix;
       machines = {
         nixos = {
           claptrap = {
@@ -34,30 +35,30 @@
       nixosConfigurations = let lib = inputs.nixpkgs.lib; in lib.mapAttrs (
         hostname: { system, hostConfiguration, users }:
         lib.nixosSystem {
-          # Define the system platform
           inherit system;
-          # Allow the modules listed below to import any of these inputs
-          # in addition to the default "pkgs", "lib", "config", and "options"
           specialArgs = {
             inherit (inputs) hardware;
             base16-lib = inputs.nixpkgs.legacyPackages.${system}.callPackage inputs.stylix.inputs.base16.lib {};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
           };
           modules = [
-            (import hostConfiguration { inherit users; })
+            userSystemIntegrationOptions
+            (import hostConfiguration { inherit hostname users; })
             inputs.home-manager.nixosModules.home-manager
             inputs.stylix.nixosModules.stylix
             {
-              networking.hostName = hostname;
+              nix.settings.experimental-features = [
+                "flakes"
+                "nix-command"
+                "pipe-operators"
+              ];
               nixpkgs = {
                 hostPlatform = system;
                 config.allowUnfree = true;
                 overlays = import ./overlays.nix inputs;
               };
               home-manager = {
-                # By default, home manager wants to use a separate nixpkgs instance for each user, but this tells it to use the system nixpkgs
                 useGlobalPkgs = true;
-                # By default, home manager will install packages in /home/<username>/.nix-profile, but this puts them in /etc/profiles
                 useUserPackages = true;
               };
             }
@@ -68,30 +69,25 @@
       darwinConfigurations = let lib = inputs.nix-darwin.lib; in lib.mapAttrs (
         hostname: { system, hostConfiguration, users }:
         lib.darwinSystem {
-          # Define the system platform
           inherit system;
-          # Allow the modules listed below to import any of these inputs
-          # in addition to the default "pkgs", "lib", "config", and "options"
           specialArgs = {
             inherit users;
             base16-lib = inputs.nixpkgs.legacyPackages.${system}.callPackage inputs.stylix.inputs.base16.lib {};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
           };
           modules = [
-            (import hostConfiguration { inherit users; })
+            userSystemIntegrationOptions
+            (import hostConfiguration { inherit hostname users; })
             inputs.stylix.darwinModules.stylix # Declare no-op options for compatibility even though the theme won't be applied
             inputs.home-manager.darwinModules.home-manager
             {
-              networking.hostName = hostname;
               nixpkgs = {
                 hostPlatform = system;
                 config.allowUnfree = true;
                 overlays = import ./overlays.nix inputs;
               };
               home-manager = {
-                # By default, home manager wants to use a separate nixpkgs instance for each user, but this tells it to use the system nixpkgs
                 useGlobalPkgs = true;
-                # By default, home manager will install packages in /home/<username>/.nix-profile, but this puts them in /etc/profiles
                 useUserPackages = true;
               };
             }
@@ -103,7 +99,8 @@
         lib.mapAttrsToList
         (
           hostname: { system, users, ... }:
-          lib.mapAttrsToList (
+          lib.mapAttrsToList
+          (
             username: home:
             lib.nameValuePair
             "${username}@${hostname}"
@@ -111,6 +108,7 @@
               pkgs = inputs.nixpkgs.legacyPackages.${system};
               modules = [
                 home
+                userSystemIntegrationOptions
                 inputs.stylix.homeModules.stylix
                 {
                   nixpkgs = {
@@ -120,7 +118,8 @@
                 }
               ];
             })
-          ) users
+          )
+          users
         )
         {
           inherit (machines.nixos) claptrap rustbucket;
@@ -134,7 +133,7 @@
             git
             home-manager
           ];
-          NIX_CONFIG = "experimental-features = nix-command flakes";
+          NIX_CONFIG = "experimental-features = flakes nix-command pipe-operators";
         };
       });
     };

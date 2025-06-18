@@ -1,6 +1,11 @@
 {
-  lib,
+  hostname,
   users,
+}:
+
+{
+  lib,
+  config,
   ...
 }:
 
@@ -12,13 +17,21 @@
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
 
+  networking.hostName = hostname;
+
   home-manager.users = lib.mapAttrs (username: home: import home inputs) users;
-  users.users.michael = {
-    packages = [];
-    description = "Michael Dyer";
-    createHome = false;
-    home = /Users/michael;
-  };
+
+  users.users =
+    lib.mapAttrs
+    (
+      username: home:
+      {
+        description = home.systemIntegration.description;
+        home = /Users/${home.systemIntegration.username};
+        createHome = false;
+      }
+    )
+    config.home-manager.users;
 
   # Create /etc/zshrc that loads the nix-darwin environment.
   programs.zsh.enable = true;
