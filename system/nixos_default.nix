@@ -60,7 +60,7 @@
     # Use latest kernel
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
-      timeout = lib.mkDefault 0;
+      timeout = lib.mkDefault 0; # Will still show previous generations if you press a key during startup
       systemd-boot.enable = true;
       systemd-boot.configurationLimit = lib.mkDefault 7;
       # Do not allow editing the kernel command-line before boot, which is a security risk (you could add init=/bin/sh and get a root shell)
