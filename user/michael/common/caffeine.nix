@@ -1,7 +1,10 @@
 {
+  enableGnomeIntegration ? false,
+}:
+
+{
   lib,
   pkgs,
-  enableGnomeIntegration ? false,
   ...
 }:
 

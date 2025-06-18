@@ -1,7 +1,10 @@
 {
-  pkgs,
   name,
   email,
+}:
+
+{
+  pkgs,
   ...
 }:
 

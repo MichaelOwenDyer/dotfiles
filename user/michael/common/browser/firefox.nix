@@ -1,10 +1,13 @@
 {
-  lib,
-  pkgs,
   username,
   wayland,
   languagePacks ? [ "en-US" ],
   extensions ? [ ],
+}:
+
+{
+  lib,
+  pkgs,
   ...
 }:
 

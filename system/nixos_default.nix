@@ -1,9 +1,12 @@
 # Common configuration for Linux machines.
 
 {
+  users
+}:
+
+{
   lib,
   pkgs,
-  users,
   base16-lib,
   nix-wallpaper,
   ...

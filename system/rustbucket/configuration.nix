@@ -9,6 +9,10 @@
 # - Storage: 1TB Samsung 970 Pro SSD, 2TB Western Digital HDD, various other tiny drives
 
 {
+  users,
+}:
+
+{
   config,
   lib,
   pkgs,
@@ -18,8 +22,8 @@
 {
 
   imports = [
+    (import ../nixos_default.nix { inherit users; })
     ./hardware-configuration.nix
-    ../nixos_default.nix
     ../modules/gaming.nix
     ../modules/wifi.nix
   ];

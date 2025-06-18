@@ -1,7 +1,10 @@
 {
+  wayland
+}:
+
+{
   lib,
   pkgs,
-  wayland,
   ...
 }:
 

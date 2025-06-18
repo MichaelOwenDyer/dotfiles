@@ -1,6 +1,10 @@
 # Configuration for my old Dell XPS 13 9360 laptop
 
 {
+  users
+}:
+
+{
   lib,
   pkgs,
   hardware,
@@ -10,8 +14,8 @@
 {
   imports = [
     hardware.nixosModules.dell-xps-13-9360
+    (import ../nixos_default.nix { inherit users; })
     ./hardware-configuration.nix
-    ../nixos_default.nix
     ../modules/wifi.nix
   ];
   

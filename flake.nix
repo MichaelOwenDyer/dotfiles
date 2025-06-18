@@ -39,15 +39,12 @@
           # Allow the modules listed below to import any of these inputs
           # in addition to the default "pkgs", "lib", "config", and "options"
           specialArgs = {
-            inherit users;
-            inherit (inputs) hardware nur;
-            jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
-            zen-browser = inputs.zen-browser.packages.${system};
+            inherit (inputs) hardware;
             base16-lib = inputs.nixpkgs.legacyPackages.${system}.callPackage inputs.stylix.inputs.base16.lib {};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
           };
           modules = [
-            hostConfiguration
+            (import hostConfiguration { inherit users; })
             inputs.home-manager.nixosModules.home-manager
             inputs.stylix.nixosModules.stylix
             {
@@ -77,12 +74,11 @@
           # in addition to the default "pkgs", "lib", "config", and "options"
           specialArgs = {
             inherit users;
-            jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
             base16-lib = inputs.nixpkgs.legacyPackages.${system}.callPackage inputs.stylix.inputs.base16.lib {};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
           };
           modules = [
-            hostConfiguration
+            (import hostConfiguration { inherit users; })
             inputs.stylix.darwinModules.stylix # Declare no-op options for compatibility even though the theme won't be applied
             inputs.home-manager.darwinModules.home-manager
             {
@@ -123,11 +119,6 @@
                   };
                 }
               ];
-              extraSpecialArgs = {
-                inherit (inputs) stylix nur;
-                jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
-                zen-browser = inputs.zen-browser.packages.${system};
-              };
             })
           ) users
         )

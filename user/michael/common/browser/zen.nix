@@ -1,10 +1,10 @@
 {
-  zen-browser,
+  pkgs,
   ...
 }:
 
 {
-  home.packages = [
+  home.packages = with pkgs; [
     zen-browser
   ];
 }

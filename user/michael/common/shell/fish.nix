@@ -1,6 +1,9 @@
 {
-  pkgs,
   shellAliases ? {},
+}:
+
+{
+  pkgs,
   ...
 }:
 
