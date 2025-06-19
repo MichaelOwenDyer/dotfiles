@@ -17,8 +17,6 @@
     ./stylix.nix
     ./ide/vscode.nix
     ./ide/helix.nix
-    ./wm/gnome.nix
-    ./wm/hyprland.nix
     (import ./caffeine.nix { enableGnomeIntegration = true; })
     (import ./development.nix { inherit name email; })
     (import ./shell/fish.nix { })

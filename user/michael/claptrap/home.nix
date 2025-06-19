@@ -11,12 +11,13 @@ in {
   home.stateVersion = "24.11";
 
   imports = [
-    (import ../common/home.nix { inherit wayland; })
-    (import ../common/slack.nix { inherit wayland; })
-    (import ../common/discord.nix { inherit wayland; })
+    ../common/wm/gnome.nix
     ../common/ai.nix
     ../common/ide/cursor.nix
     ../common/browser/chrome.nix
+    (import ../common/home.nix { inherit wayland; })
+    (import ../common/slack.nix { inherit wayland; })
+    (import ../common/discord.nix { inherit wayland; })
   ];
 
   wayland.windowManager.hyprland.settings.bind = [

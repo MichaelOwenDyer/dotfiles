@@ -18,6 +18,7 @@
     (import ../nixos_default.nix { inherit hostname users; })
     ./hardware-configuration.nix
     ../modules/wifi.nix
+    ../modules/gnome.nix
   ];
   
   system.stateVersion = "24.11";
@@ -25,7 +26,18 @@
 
   # Use Ly for the login screen
   services.displayManager.ly.enable = true;
-  programs.hyprland.enable = true;
+
+  # Enable XDG desktop portal for Wayland
+  xdg.portal = {
+    enable = true;
+    config = {
+      common = {
+        default = [
+          "gtk"
+        ];
+      };
+    };
+  };
 
   console = {
     font = "Lat2-Terminus16";

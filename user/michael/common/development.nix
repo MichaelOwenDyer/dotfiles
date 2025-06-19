@@ -72,7 +72,7 @@
     delta # Git differ https://github.com/dandavison/delta
     wiki-tui # Wikipedia terminal viewer https://github.com/Builditluc/wiki-tui
     mprocs # Run multiple commands in parallel https://github.com/pvolok/mprocs
-    wl-clipboard # Wayland clipboard lib https://github.com/bugaevc/wl-clipboard/
+    # wl-clipboard # Wayland clipboard lib https://github.com/bugaevc/wl-clipboard/
     # wl-clipboard-rs # Wayland clipboard lib (wlroots-based window managers only) https://github.com/YaLTeR/wl-clipboard-rs
   ];
   home.shellAliases = {

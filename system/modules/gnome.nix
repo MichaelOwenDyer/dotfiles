@@ -48,4 +48,16 @@
     # orca # screen reader that keeps the desktop functional, only disable if needed
     # xdg-user-dirs # update user directories, don't disable unless you know what you're doing
   ];
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gnome
+    ];
+    config.gnome = {
+      default = [
+        "gnome"
+        "gtk"
+      ];
+    };
+  };
 }

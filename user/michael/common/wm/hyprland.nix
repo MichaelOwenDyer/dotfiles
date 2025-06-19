@@ -1,6 +1,5 @@
 {
   pkgs,
-  lib,
   ...
 }:
 
@@ -10,6 +9,15 @@
     systemd.enable = true;
     package = null; # Set this to null because we are using the NixOS module to install Hyprland
     settings = {
+      # Environment variables for Wayland
+      env = [
+        "XDG_CURRENT_DESKTOP,Hyprland"
+        "XDG_SESSION_TYPE,wayland"
+        "XDG_SESSION_DESKTOP,Hyprland"
+        "XCURSOR_SIZE,24"
+        "QT_QPA_PLATFORM,wayland"
+        "GDK_BACKEND,wayland,x11"
+      ];
       "$mod" = "SUPER";
       debug.disable_logs = false;
       input = {
@@ -31,7 +39,10 @@
       ];
       # Autostart applications
       exec-once = let wallpaper = ../background.jpg; in [
-        "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP" # Essential
+        # Essential environment setup for Wayland
+        "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+        "systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+        # Start user services
         "${pkgs.waybar}/bin/waybar"
         "${pkgs.swaybg}/bin/swaybg -i ${wallpaper} -f" # Ensure background.jpg is in the same dir
         "${pkgs.pamixer}/bin/pamixer --set-volume 50" # Set default sink volume
@@ -43,7 +54,7 @@
         "$mod, Q, killactive,"
         "$mod, M, exec, ${pkgs.wlogout}/bin/wlogout"
         "$mod, S, exec, ${pkgs.grimblast}/bin/grimblast copy area"
-        "$mod, D, exec, ${pkgs.wofi}/bin/wofi --show drun"
+        "$mod, SPACE, exec, ${pkgs.wofi}/bin/wofi --show drun"
 
         # Workspace navigation
         "$mod, 1, workspace, 1"
@@ -149,5 +160,14 @@
     grimblast
     swaybg
     pamixer
+    wl-clipboard-rs
+    xdg-utils
   ];
+
+  # Ensure proper session variables are set
+  home.sessionVariables = {
+    XDG_CURRENT_DESKTOP = "Hyprland";
+    XDG_SESSION_TYPE = "wayland";
+    XDG_SESSION_DESKTOP = "Hyprland";
+  };
 }

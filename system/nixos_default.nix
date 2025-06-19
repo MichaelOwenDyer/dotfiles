@@ -18,7 +18,6 @@
   imports = [
     ./modules/audio.nix
     ./modules/gnome-keyring.nix
-    ./modules/gnome.nix
   ];
 
   networking.hostName = hostname;
