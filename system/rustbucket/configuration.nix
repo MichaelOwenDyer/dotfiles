@@ -27,6 +27,7 @@
     ./hardware-configuration.nix
     ../modules/gaming.nix
     ../modules/wifi.nix
+    ../modules/local-streaming-network.nix
   ];
 
   system.stateVersion = "24.11";

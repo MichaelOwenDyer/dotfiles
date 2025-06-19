@@ -8,7 +8,7 @@ in {
   home.stateVersion = "24.11";
 
   imports = [
-    (imports ../common/home.nix {
+    (import ../common/home.nix {
       inherit wayland;
       hashedPassword = "$y$j9T$toiC/s1uug/kKiuVcZxRB.$GXHVFF1L1wyOfdDMk647N7YkUxbaSFwnc4aSMSVa.88";
     })
