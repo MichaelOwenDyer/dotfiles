@@ -27,6 +27,13 @@
   # Use Ly for the login screen
   services.displayManager.ly.enable = true;
 
+  networking.interfaces.wlan0 = {
+    ipv4.addresses = [{
+      address = "192.168.0.3";
+      prefixLength = 24;
+    }];
+  };
+
   # Enable XDG desktop portal for Wayland
   xdg.portal = {
     enable = true;
@@ -43,6 +50,8 @@
     font = "Lat2-Terminus16";
     keyMap = "us";
   };
+
+  networking.wireless.scanOnLowSignal = false;
 
   stylix = {
     fonts.sizes = let fontSize = 12; in {

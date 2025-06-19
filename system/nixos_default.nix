@@ -55,6 +55,8 @@
   programs.zsh.enable = true;
   programs.fish.enable = true;
 
+  networking.nftables.enable = true;
+
   boot = {
     # Use latest kernel
     kernelPackages = pkgs.linuxPackages_latest;

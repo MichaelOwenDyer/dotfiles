@@ -27,11 +27,24 @@
     ./hardware-configuration.nix
     ../modules/gaming.nix
     ../modules/wifi.nix
-    ../modules/local-streaming-network.nix
+    (import ../modules/local-streaming-network.nix {
+      wifiInterface = "wlan0";
+      wifiDefaultGateway = "192.168.0.1";
+      streamingInterface = "enp4s0";
+      streamingIpv4Addr = "192.168.50.1";
+      upstreamDnsServers = [ "192.168.0.100" ];
+    })
   ];
 
   system.stateVersion = "24.11";
   time.timeZone = "Europe/Berlin";
+
+  networking.interfaces.wlan0 = {
+    ipv4.addresses = [{
+      address = "192.168.0.2";
+      prefixLength = 24;
+    }];
+  };
 
   stylix = {
     fonts.sizes = let fontSize = 11; in {
