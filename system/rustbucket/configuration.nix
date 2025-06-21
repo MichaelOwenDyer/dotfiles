@@ -27,6 +27,7 @@
     ./hardware-configuration.nix
     ../modules/gaming.nix
     ../modules/wifi.nix
+    ../modules/gnome.nix
     (import ../modules/local-streaming-network.nix {
       wifiInterface = "wlan0";
       wifiDefaultGateway = "192.168.0.1";
@@ -34,6 +35,7 @@
       streamingIpv4Addr = "192.168.50.1";
       upstreamDnsServers = [ "192.168.0.100" ];
     })
+    ../modules/system-monitor.nix
   ];
 
   system.stateVersion = "24.11";
@@ -109,6 +111,9 @@
     defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
     openFirewall = true;
   };
+
+  # Enable CUDA hardware acceleration by default in apps that support it
+  nixpkgs.config.cudaSupport = true;
 
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = [ "nvidia" ];

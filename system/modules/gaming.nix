@@ -10,7 +10,7 @@
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
-    gamescopeSession.enable = true; # Play games in a separate optimized session
+    # gamescopeSession.enable = true; # Play games in a separate optimized session
   };
   hardware.xone.enable = true; # support for the xbox controller USB dongle
   # https://search.nixos.org/options?channel=unstable&show=programs.gamemode.enable

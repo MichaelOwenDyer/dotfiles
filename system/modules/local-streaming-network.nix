@@ -65,4 +65,10 @@
     after = [ "sys-subsystem-net-devices-${streamingInterface}.device" ];
     wantedBy = [ "network-online.target" ];
   };
+
+  # services.sunshine = {
+  #   enable = true;
+  #   autoStart = true;
+  #   openFirewall = true;
+  # };
 }
