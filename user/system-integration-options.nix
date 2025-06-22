@@ -33,6 +33,11 @@
               description = "Preferred shell of the user";
               default = pkgs.bash;
             };
+            trustedSshKeys = lib.mkOption {
+              type = listOf str;
+              description = "List of SSH public keys which can log in as the user via SSH";
+              default = [ ];
+            };
           };
         }];
       });

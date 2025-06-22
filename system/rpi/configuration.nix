@@ -76,9 +76,7 @@
         "input"
         "networkmanager"
       ];
-      openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINtKFTvyCJo4u7KstzHIZ/ZdBCfS5ukmItX75tC0aM5O michael@claptrap"
-      ];
+      openssh.authorizedKeys.keys = home.systemIntegration.trustedSshKeys;
     }
   ) config.home-manager.users;
 
@@ -89,12 +87,11 @@
     ports = [ 22 ];
     openFirewall = true;
     settings = {
-      # PermitRootLogin = "no";
-      # PasswordAuthentication = false;
+      PermitRootLogin = "no";
+      PasswordAuthentication = false;
     };
   };
 
-  nix.settings.auto-optimise-store = true;
   nix.gc.automatic = true;
   nix.gc.dates = "weekly";
 
