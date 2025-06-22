@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   ...
 }:
 
@@ -15,11 +16,11 @@
     vnstat # Network traffic monitor
     sysstat # Collection of performance monitoring tools
     dool # Versatile resource monitoring tool
-    prometheus-nvidia-gpu-exporter # Export NVIDIA GPU metrics for Prometheus
   ];
 
   services.prometheus = {
-    enable = true; # Enable Prometheus for system monitoring
+    enable = true;
+    port = 9090;
     exporters = {
       node.enable = true; # Enable Node Exporter for system metrics
       nvidia-gpu.enable = true; # Enable NVIDIA GPU exporter
@@ -27,13 +28,18 @@
   };
 
   services.grafana = {
-    enable = true; # Enable Grafana for visualizing metrics
+    enable = true;
     settings = {
       server = {
         enable_gzip = true;
+        http_port = 3000; # Default port
       };
     };
   };
+
+  networking.firewall.allowedTCPPorts = [
+    config.services.grafana.settings.server.http_port
+  ];
   
   systemd.services.system-monitor = {
     description = "System Monitoring Service";

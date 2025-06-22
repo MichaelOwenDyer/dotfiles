@@ -30,10 +30,10 @@
     ../modules/gnome.nix
     (import ../modules/local-streaming-network.nix {
       wifiInterface = "wlan0";
-      wifiDefaultGateway = "192.168.0.1";
+      wifiDefaultGateway = "192.168.0.254";
       streamingInterface = "enp4s0";
       streamingIpv4Addr = "192.168.50.1";
-      upstreamDnsServers = [ "192.168.0.100" ];
+      upstreamDnsServers = [ "8.8.8.8" "4.4.4.4" ];
     })
     ../modules/system-monitor.nix
   ];
@@ -43,7 +43,7 @@
 
   networking.interfaces.wlan0 = {
     ipv4.addresses = [{
-      address = "192.168.0.2";
+      address = "192.168.0.1";
       prefixLength = 24;
     }];
   };
@@ -70,11 +70,14 @@
     ];
   };
 
+  # Use Ly for the login screen
+  services.displayManager.ly.enable = true;
+
   # Use the GNOME display manager for the login screen
-  services.displayManager.gdm = {
-    enable = true;
-    autoSuspend = false;
-  };
+  # services.displayManager.gdm = {
+  #   enable = true;
+  #   autoSuspend = false;
+  # };
   # Prevent GNOME from automatically suspending https://github.com/NixOS/nixpkgs/issues/100390
   security.polkit.extraConfig = ''
     polkit.addRule(function(action, subject) {
@@ -88,13 +91,13 @@
     });
   '';
 
-  services.displayManager.autoLogin = {
-    enable = true;
-    user = "michael";
-  };
-  # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
-  systemd.services."getty@tty1".enable = false;
-  systemd.services."autovt@tty1".enable = false;
+  # services.displayManager.autoLogin = {
+  #   enable = true;
+  #   user = "michael";
+  # };
+  # # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
+  # systemd.services."getty@tty1".enable = false;
+  # systemd.services."autovt@tty1".enable = false;
 
   services.openssh = {
     enable = true;
