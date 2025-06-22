@@ -14,20 +14,9 @@
 
 {
   imports = [
-    ./stylix.nix
-    ./ide/vscode.nix
     ./ide/helix.nix
-    (import ./caffeine.nix { enableGnomeIntegration = true; })
     (import ./development.nix { inherit name email; })
     (import ./shell/fish.nix { })
-    ./browser/zen.nix
-    (import ./browser/firefox.nix {
-      inherit username wayland;
-      languagePacks = [ "en-US" "de-DE" ];
-      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-        ublock-origin
-      ];
-    })
   ];
 
   config = {

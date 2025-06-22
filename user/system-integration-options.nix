@@ -19,11 +19,13 @@
               description = "Username of the user";
             };
             description = lib.mkOption {
-              type = str;
+              type = nullOr str;
+              default = null;
               description = "Description of the user";
             };
             hashedPassword = lib.mkOption {
               type = nullOr str;
+              default = null;
               description = "Hashed password of the user";
             };
             shell = lib.mkOption {

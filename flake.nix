@@ -21,6 +21,11 @@
             hostConfiguration = ./system/rustbucket/configuration.nix;
             users.michael = ./user/michael/rustbucket/home.nix;
           };
+          rpi-3b = {
+            system = "aarch64-linux";
+            hostConfiguration = ./system/rpi/configuration.nix;
+            users.michael = ./user/michael/rpi/home.nix;
+          };
         };
         darwin = {
           mac = {
@@ -37,7 +42,7 @@
         lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit (inputs) hardware;
+            hardware = inputs.hardware.nixosModules;
             base16-lib = inputs.nixpkgs.legacyPackages.${system}.callPackage inputs.stylix.inputs.base16.lib {};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
           };
