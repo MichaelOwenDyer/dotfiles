@@ -13,11 +13,12 @@
 
 {
   imports = [
+    ../nixos_default.nix
     ./hardware-configuration.nix
     hardware.raspberry-pi-3
   ];
 
-  system.stateVersion = "25.11";
+  console.font = "Lat2-Terminus16";
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   boot.loader.grub.enable = false;
@@ -25,13 +26,12 @@
   boot.loader.generic-extlinux-compatible.enable = true;
 
   networking = {
-    hostName = hostname;
     networkmanager.enable = true;
     defaultGateway = {
       interface = "enu1u1";
       address = "192.168.0.254";
     };
-    nameservers = [ "1.1.1.1" "8.8.8.8" ]; # Upstream DNS for the Pi itself, not what Pi-hole will use.
+    nameservers = [ "1.1.1.1" "8.8.8.8" ];
     interfaces.enu1u1 = {
       ipv4.addresses = [{
         address = "192.168.0.253";
@@ -39,67 +39,6 @@
       }];
     };
   };
-  
-  time.timeZone = "Europe/Berlin";
-
-  i18n.defaultLocale = "en_US.UTF-8";
-  console = {
-    font = "Lat2-Terminus16";
-    # keyMap = "us";
-    useXkbConfig = true; # use xkb.options in tty.
-  };
-
-  environment.systemPackages = with pkgs; [
-    git
-    vim
-    curl
-    wget
-    ripgrep
-    gparted
-    tree
-    openssh
-    gnupg1
-  ];
-
-  
-  home-manager.users = lib.mapAttrs (username: home: import home inputs) users;
-  users.users = lib.mapAttrs (
-    username: home:
-    {
-      isNormalUser = true;
-      description = home.systemIntegration.description;
-      hashedPassword = home.systemIntegration.hashedPassword;
-      shell = home.systemIntegration.shell;
-      extraGroups = [
-        # TODO: need better system for assigning groups
-        "wheel"
-        "input"
-        "networkmanager"
-      ];
-      openssh.authorizedKeys.keys = home.systemIntegration.trustedSshKeys;
-    }
-  ) config.home-manager.users;
-
-  programs.fish.enable = true;
-
-  services.openssh = {
-    enable = true;
-    ports = [ 22 ];
-    openFirewall = true;
-    settings = {
-      PermitRootLogin = "no";
-      PasswordAuthentication = false;
-    };
-  };
-
-  nix.gc.automatic = true;
-  nix.gc.dates = "weekly";
-
-  nix.extraOptions = ''
-    warn-dirty = false
-  '';
-
-  networking.nftables.enable = true;
 
   # Enable the Pi-hole service
   # services.pi-hole = {
@@ -188,4 +127,5 @@
   # but NixOS usually handles this via the user declaration.
   # You can verify with `cat /etc/subuid` and `cat /etc/subgid` after build.
 
+  system.stateVersion = "25.11";
 }

@@ -32,8 +32,8 @@
       };
     };
     opacity = {
-      terminal = 0.85;
-      popups = 0.85;
+      terminal = 0.90;
+      popups = 0.90;
     };
     targets.firefox.profileNames = [ "michael" ];
   };

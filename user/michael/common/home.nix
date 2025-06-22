@@ -42,10 +42,7 @@
     home = {
       inherit username;
       homeDirectory = "/home/${username}";
-      sessionVariables = lib.mkMerge [
-        { NIXPKGS_ALLOW_UNFREE = "1"; }
-        (lib.mkIf wayland { NIXOS_OZONE_WL = "1"; GTK_USE_PORTAL = "1"; })
-      ];
+      sessionVariables.NIXPKGS_ALLOW_UNFREE = "1";
     };
   };
 }

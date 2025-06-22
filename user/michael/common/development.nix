@@ -32,7 +32,6 @@
   };
   # Terminal
   programs.ghostty.enable = true;
-  programs.neovim.enable = true;
   # Run commands when entering a directory
   programs.direnv = {
     enable = true;
@@ -59,19 +58,19 @@
   home.packages = with pkgs; [
     nixd # https://github.com/nix-community/nixd
     nixfmt-rfc-style # https://github.com/NixOS/nixfmt
-    rustup # https://github.com/rust-lang/rustup
+    # rustup # https://github.com/rust-lang/rustup
     ripgrep # rg: Rust grep https://github.com/BurntSushi/ripgrep
     ripgrep-all # rga: Rust grep with deep search https://github.com/phiresky/ripgrep-all
     fd # Find files https://github.com/sharkdp/fd
     eza # Replace ls https://github.com/eza-community/eza
     xh # Send HTTP requests https://github.com/ducaale/xh
     dust # Disk space analyzer https://github.com/bootandy/dust
-    hyperfine # Benchmark terminal commands https://github.com/sharkdp/hyperfine
-    fselect # Query files like SQL https://github.com/jhspetersson/fselect
-    rusty-man # Rustdoc terminal viewer https://crates.io/crates/rusty-man
-    delta # Git differ https://github.com/dandavison/delta
-    wiki-tui # Wikipedia terminal viewer https://github.com/Builditluc/wiki-tui
-    mprocs # Run multiple commands in parallel https://github.com/pvolok/mprocs
+    # hyperfine # Benchmark terminal commands https://github.com/sharkdp/hyperfine
+    # fselect # Query files like SQL https://github.com/jhspetersson/fselect
+    # rusty-man # Rustdoc terminal viewer https://crates.io/crates/rusty-man
+    # delta # Git differ https://github.com/dandavison/delta
+    # wiki-tui # Wikipedia terminal viewer https://github.com/Builditluc/wiki-tui
+    # mprocs # Run multiple commands in parallel https://github.com/pvolok/mprocs
     # wl-clipboard # Wayland clipboard lib https://github.com/bugaevc/wl-clipboard/
     # wl-clipboard-rs # Wayland clipboard lib (wlroots-based window managers only) https://github.com/YaLTeR/wl-clipboard-rs
   ];

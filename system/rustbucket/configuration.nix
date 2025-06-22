@@ -21,13 +21,14 @@
 }:
 
 {
-
   imports = [
     (import ../nixos_default.nix { inherit hostname users; })
     ./hardware-configuration.nix
     ../modules/gaming.nix
     ../modules/wifi.nix
+    ../modules/audio.nix
     ../modules/gnome.nix
+    ../modules/gnome-keyring.nix
     (import ../modules/local-streaming-network.nix {
       wifiInterface = "wlan0";
       wifiDefaultGateway = "192.168.0.254";
@@ -36,10 +37,24 @@
       upstreamDnsServers = [ "8.8.8.8" "4.4.4.4" ];
     })
     ../modules/system-monitor.nix
+    (import ../modules/plymouth.nix { theme = "colorful_sliced"; })
+    ../modules/stylix.nix
   ];
 
-  system.stateVersion = "24.11";
-  time.timeZone = "Europe/Berlin";
+  powerManagement.cpuFreqGovernor = "performance";
+
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "us";
+  };
+
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "";
+  };
+
+  # Optimize storage after each build
+  nix.settings.auto-optimise-store = true;
 
   networking.interfaces.wlan0 = {
     ipv4.addresses = [{
@@ -47,6 +62,9 @@
       prefixLength = 24;
     }];
   };
+  
+  # Passwordless sudo
+  security.sudo.wheelNeedsPassword = false;
 
   stylix = {
     fonts.sizes = let fontSize = 11; in {
@@ -55,65 +73,31 @@
       popups = fontSize;
       terminal = fontSize;
     };
-    targets.plymouth.enable = false;
-    targets.qt.platform = lib.mkForce "qtct"; # Get rid of the warning
   };
-
   qt.platformTheme = lib.mkForce "gnome";
-
-  boot.plymouth = rec {
-    theme = "colorful_sliced";
-    themePackages = [
-      (pkgs.adi1090x-plymouth-themes.override {
-        selected_themes = [ theme ];
-      })
-    ];
-  };
 
   # Use Ly for the login screen
   services.displayManager.ly.enable = true;
 
-  # Use the GNOME display manager for the login screen
-  # services.displayManager.gdm = {
-  #   enable = true;
-  #   autoSuspend = false;
-  # };
   # Prevent GNOME from automatically suspending https://github.com/NixOS/nixpkgs/issues/100390
-  security.polkit.extraConfig = ''
-    polkit.addRule(function(action, subject) {
-        if (action.id == "org.freedesktop.login1.suspend" ||
-            action.id == "org.freedesktop.login1.suspend-multiple-sessions" ||
-            action.id == "org.freedesktop.login1.hibernate" ||
-            action.id == "org.freedesktop.login1.hibernate-multiple-sessions")
-        {
-            return polkit.Result.NO;
+  security.polkit = {
+    enable = true;
+    extraConfig = ''
+      polkit.addRule(
+        function(action, subject) {
+          if (action.id == "org.freedesktop.login1.suspend" ||
+              action.id == "org.freedesktop.login1.suspend-multiple-sessions" ||
+              action.id == "org.freedesktop.login1.hibernate" ||
+              action.id == "org.freedesktop.login1.hibernate-multiple-sessions")
+          {
+              return polkit.Result.NO;
+          }
         }
-    });
-  '';
-
-  # services.displayManager.autoLogin = {
-  #   enable = true;
-  #   user = "michael";
-  # };
-  # # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
-  # systemd.services."getty@tty1".enable = false;
-  # systemd.services."autovt@tty1".enable = false;
-
-  services.openssh = {
-    enable = true;
-    ports = [ 22 ];
-    settings = {
-      PasswordAuthentication = true;
-      UseDns = true;
-    };
+      );
+    '';
   };
-  networking.firewall.allowedTCPPorts = config.services.openssh.ports;
 
-  services.xrdp = {
-    enable = true;
-    defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
-    openFirewall = true;
-  };
+  programs.dconf.enable = true;
 
   # Enable CUDA hardware acceleration by default in apps that support it
   nixpkgs.config.cudaSupport = true;
@@ -130,10 +114,17 @@
     nvidiaSettings = true; # Nvidia settings menu
     package = config.boot.kernelPackages.nvidiaPackages.latest;
   };
-  
-  # Passwordless sudo
-  security.sudo.wheelNeedsPassword = false;
 
-  # Allow 15 seconds to choose OS in the bootloader
-  boot.loader.timeout = 15;
+  boot = {
+    kernelPackages = pkgs.linuxPackages_latest;
+    loader = {
+      timeout = 15;
+      systemd-boot.enable = true;
+      systemd-boot.configurationLimit = 7;
+      systemd-boot.editor = false;
+      efi.canTouchEfiVariables = true;
+    };
+  };
+  
+  system.stateVersion = "24.11";
 }

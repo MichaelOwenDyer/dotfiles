@@ -14,25 +14,24 @@
 
 {
   imports = [
-    hardware.nixosModules.dell-xps-13-9360
+    hardware.dell-xps-13-9360
     (import ../nixos_default.nix { inherit hostname users; })
     ./hardware-configuration.nix
     ../modules/wifi.nix
+    ../modules/audio.nix
     ../modules/gnome.nix
+    ../modules/gnome-keyring.nix
+    (import ../modules/plymouth.nix { theme = "colorful_sliced"; })
+    ../modules/stylix.nix
   ];
   
-  system.stateVersion = "24.11";
-  time.timeZone = "Europe/Berlin";
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "";
+  };
 
   # Use Ly for the login screen
   services.displayManager.ly.enable = true;
-
-  networking.interfaces.wlan0 = {
-    ipv4.addresses = [{
-      address = "192.168.0.3";
-      prefixLength = 24;
-    }];
-  };
 
   # Enable XDG desktop portal for Wayland
   xdg.portal = {
@@ -60,22 +59,9 @@
       popups = fontSize;
       terminal = fontSize + 2;
     };
-    targets.plymouth.enable = false;
-    targets.qt.platform = lib.mkForce "qtct"; # Get rid of the warning
   };
-
   qt.platformTheme = lib.mkForce "gnome";
 
-  boot.plymouth = rec {
-    theme = "colorful_sliced";
-    themePackages = [
-      (pkgs.adi1090x-plymouth-themes.override {
-        selected_themes = [ theme ];
-      })
-    ];
-  };
-
-  # Set cpu governor to powersave
   powerManagement.cpuFreqGovernor = "powersave";
 
   # Hibernate when power button is short-pressed, power off when long-pressed
@@ -106,8 +92,21 @@
   };
   services.xserver.synaptics.palmDetect = true;
 
-  security.polkit.enable = true;
   programs.dconf.enable = true;
-  services.dbus.implementation = "broker";
+  security.polkit.enable = true;
 
+  boot = {
+    # Use latest kernel
+    kernelPackages = pkgs.linuxPackages_latest;
+    loader = {
+      timeout = lib.mkDefault 0; # Will still show previous generations if you press a key during startup
+      systemd-boot.enable = true;
+      systemd-boot.configurationLimit = lib.mkDefault 7;
+      # Do not allow editing the kernel command-line before boot, which is a security risk (you could add init=/bin/sh and get a root shell)
+      systemd-boot.editor = false;
+      efi.canTouchEfiVariables = true;
+    };
+  };
+
+  system.stateVersion = "24.11";
 }
