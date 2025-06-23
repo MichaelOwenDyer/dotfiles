@@ -4,16 +4,13 @@
 }:
 
 {
-  config,
-  lib,
-  pkgs,
   hardware,
   ...
-} @ inputs:
+}:
 
 {
   imports = [
-    ../nixos_default.nix
+    (import ../nixos_default.nix { inherit hostname users; })
     ./hardware-configuration.nix
     hardware.raspberry-pi-3
   ];
