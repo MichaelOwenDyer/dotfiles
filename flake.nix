@@ -43,6 +43,7 @@
           inherit system;
           specialArgs = {
             hardware = inputs.hardware.nixosModules;
+            jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
             base16-lib = inputs.nixpkgs.legacyPackages.${system}.callPackage inputs.stylix.inputs.base16.lib {};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
           };
@@ -76,7 +77,7 @@
         lib.darwinSystem {
           inherit system;
           specialArgs = {
-            inherit users;
+            jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
             base16-lib = inputs.nixpkgs.legacyPackages.${system}.callPackage inputs.stylix.inputs.base16.lib {};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
           };

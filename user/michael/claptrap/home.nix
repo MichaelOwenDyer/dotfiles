@@ -3,7 +3,7 @@
 {
   pkgs,
   ...
-}:
+} @ inputs:
 
 let wayland = true;
 
@@ -22,5 +22,11 @@ in {
     ../common/ai.nix
     ../common/ide/cursor.nix
     ../common/browser/chrome.nix
+    (import ../common/ide/jetbrains.nix
+      (let plugins = [ "com.github.copilot" ]; in [
+        { name = "webstorm"; inherit plugins; }
+      ])
+      inputs # TODO: why do I have to pass this here?
+    )
   ];
 }

@@ -11,6 +11,7 @@
   config,
   base16-lib,
   nix-wallpaper,
+  jetbrains-plugins,
   ...
 } @ inputs:
 
