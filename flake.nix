@@ -189,13 +189,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # List of systems for use in flake inputs
-    # TODO: Include darwin in list
-    # https://github.com/nix-systems/nix-systems
-    systems = {
-      url = "github:nix-systems/x86_64-linux";
-    };
-
     # Theming for NixOS
     # https://github.com/danth/stylix
 		# Themes: https://tinted-theming.github.io/tinted-gallery/
@@ -231,6 +224,13 @@
     # https://github.com/MichaelOwenDyer/zen-browser-flake
     zen-browser = {
       url = "github:MichaelOwenDyer/zen-browser-flake";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+
+    nh = {
+      url = "github:nix-community/nh";
       inputs = {
         nixpkgs.follows = "nixpkgs";
       };

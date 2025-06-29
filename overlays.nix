@@ -12,4 +12,6 @@ inputs:
   })
   # NUR overlay makes packages accessible under 'pkgs.nur'
   inputs.nur.overlays.default
+  # nh overlay makes nh accessible under 'pkgs.nh'
+  inputs.nh.overlays.default
 ]

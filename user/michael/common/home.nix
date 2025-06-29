@@ -4,6 +4,7 @@
   name ? "Michael Dyer",
   email ? "michaelowendyer@gmail.com",
   hashedPassword ? "$y$j9T$pSkVWxgO/9dyqt8MMHzaM0$RO5g8OOpFb4pdgMuDIVraPvsLMSvMTU2/y8JQWfmrs1",
+  homeDirectory ? "/home/${username}",
 }:
 
 {
@@ -33,16 +34,18 @@
 
     # I LOVE U; assert iloveyoutoo == true;
     programs.home-manager.enable = true;
-    services.home-manager.autoExpire = {
-      enable = true;
-      frequency = "monthly";
-      timestamp = "-30 days";
-      store.cleanup = true;
-    };
     home = {
-      inherit username;
-      homeDirectory = "/home/${username}";
+      inherit username homeDirectory;
       sessionVariables.NIXPKGS_ALLOW_UNFREE = "1";
+    };
+    programs.nh = {
+      enable = true;
+      flake = "${homeDirectory}/.dotfiles";
+      clean = {
+        enable = true;
+        dates = "weekly";
+        extraArgs = "--keep-since 7d --keep 7";
+      };
     };
   };
 }
