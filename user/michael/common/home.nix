@@ -38,6 +38,7 @@
     home = {
       inherit username homeDirectory;
       sessionVariables.NIXPKGS_ALLOW_UNFREE = "1";
+      sessionVariables.NH_FLAKE = "${homeDirectory}/.dotfiles";
     };
   };
 }
