@@ -58,7 +58,7 @@
   home.packages = with pkgs; [
     nixd # https://github.com/nix-community/nixd
     nixfmt-rfc-style # https://github.com/NixOS/nixfmt
-    # rustup # https://github.com/rust-lang/rustup
+    rustup # https://github.com/rust-lang/rustup
     ripgrep # rg: Rust grep https://github.com/BurntSushi/ripgrep
     ripgrep-all # rga: Rust grep with deep search https://github.com/phiresky/ripgrep-all
     fd # Find files https://github.com/sharkdp/fd
