@@ -77,7 +77,12 @@
   qt.platformTheme = lib.mkForce "gnome";
 
   # Use Ly for the login screen
-  services.displayManager.ly.enable = true;
+  # services.displayManager.ly.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = "michael";
+  };
 
   # Prevent GNOME from automatically suspending https://github.com/NixOS/nixpkgs/issues/100390
   security.polkit = {
