@@ -43,7 +43,6 @@
           inherit system;
           specialArgs = {
             hardware = inputs.hardware.nixosModules;
-            jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
             base16-lib = inputs.nixpkgs.legacyPackages.${system}.callPackage inputs.stylix.inputs.base16.lib {};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
           };
@@ -77,7 +76,6 @@
         lib.darwinSystem {
           inherit system;
           specialArgs = {
-            jetbrains-plugins = inputs.jetbrains-plugins.lib.${system};
             base16-lib = inputs.nixpkgs.legacyPackages.${system}.callPackage inputs.stylix.inputs.base16.lib {};
             nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
           };
@@ -205,16 +203,6 @@
     # https://github.com/lunik1/nix-wallpaper
     nix-wallpaper = {
       url = "github:lunik1/nix-wallpaper";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-      };
-    };
-
-    # JetBrains IDE plugins (more up-to-date than nixpkgs)
-    # https://github.com/theCapypara/nix-jetbrains-plugins
-    # All plugins: https://raw.githubusercontent.com/theCapypara/nix-jetbrains-plugins/refs/heads/main/generated/all_plugins.json
-    jetbrains-plugins = {
-      url = "github:theCapypara/nix-jetbrains-plugins";
       inputs = {
         nixpkgs.follows = "nixpkgs";
       };

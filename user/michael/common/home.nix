@@ -15,6 +15,7 @@
 
 {
   imports = [
+    (import ./nh.nix { inherit homeDirectory; })
     ./ide/helix.nix
     (import ./development.nix { inherit name email; })
     (import ./shell/fish.nix { })
@@ -37,15 +38,6 @@
     home = {
       inherit username homeDirectory;
       sessionVariables.NIXPKGS_ALLOW_UNFREE = "1";
-    };
-    programs.nh = {
-      enable = true;
-      flake = "${homeDirectory}/.dotfiles";
-      clean = {
-        enable = true;
-        dates = "weekly";
-        extraArgs = "--keep-since 7d --keep 7";
-      };
     };
   };
 }
