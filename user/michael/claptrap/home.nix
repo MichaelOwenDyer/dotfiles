@@ -22,7 +22,6 @@ in {
     ../common/ai.nix
     ../common/ide/cursor.nix
     ../common/browser/chrome.nix
-    (import ../common/ide/jetbrains.nix [ "webstorm" "rust-rover" ])
-    { home.packages = with pkgs; [ moonlight-qt ]; }
+    { home.packages = with pkgs; [ moonlight-qt jetbrains.rust-rover jetbrains.webstorm ]; }
   ];
 }
