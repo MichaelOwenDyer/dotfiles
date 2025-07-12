@@ -17,9 +17,10 @@
   i18n.defaultLocale = "en_US.UTF-8";
   time.timeZone = "Europe/Berlin";
   console.font = "Lat2-Terminus16";
-  
+ 
   environment.systemPackages = with pkgs; [
     git
+    vim
     curl
     wget
     ripgrep
@@ -27,7 +28,6 @@
     tree
     openssh
     gnupg1
-    evil-helix
   ];
   
   home-manager.users = lib.mapAttrs (username: home: import home inputs) users;
@@ -77,6 +77,9 @@
       UsePAM = true;
     };
   };
+
+  # enables unpatched dynamic binaries to run and find the libs they need in the expected locations
+  programs.nix-ld.enable = true;
 
   # nftables is the modern packet filtering framework
   networking.nftables.enable = true;
