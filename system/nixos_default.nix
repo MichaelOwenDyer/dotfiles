@@ -47,6 +47,7 @@
           "audio"
           "input"
           "networkmanager"
+          "podman"
         ];
         openssh.authorizedKeys.keys = home.systemIntegration.trustedSshKeys;
       }

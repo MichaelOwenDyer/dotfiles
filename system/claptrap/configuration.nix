@@ -50,8 +50,15 @@
     keyMap = "us";
   };
 
+  programs.zoom-us.enable = true;
+
   networking.wireless.scanOnLowSignal = false;
 
+  virtualisation.podman = {
+    enable = true;
+    dockerSocket.enable = true;
+  };
+  
   stylix = {
     fonts.sizes = let fontSize = 12; in {
       applications = fontSize;
