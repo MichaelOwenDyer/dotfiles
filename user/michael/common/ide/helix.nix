@@ -29,4 +29,5 @@
       w = ":w"
     '';
   };
+  home.sessionVariables.EDITOR = "hx";
 }
