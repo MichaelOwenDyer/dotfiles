@@ -82,6 +82,7 @@
     eza # Replace ls https://github.com/eza-community/eza
     xh # Send HTTP requests https://github.com/ducaale/xh
     dust # Disk space analyzer https://github.com/bootandy/dust
+    dysk # Disk space overview https://github.com/Canop/dysk
     # hyperfine # Benchmark terminal commands https://github.com/sharkdp/hyperfine
     # fselect # Query files like SQL https://github.com/jhspetersson/fselect
     # rusty-man # Rustdoc terminal viewer https://crates.io/crates/rusty-man
@@ -91,7 +92,7 @@
     wl-clipboard # Wayland clipboard lib https://github.com/bugaevc/wl-clipboard/
     # wl-clipboard-rs # Wayland clipboard lib (wlroots-based window managers only) https://github.com/YaLTeR/wl-clipboard-rs
     lazyjj # Terminal UI for Jujutsu https://github.com/Cretezy/lazyjj
-    alacritty # GPU-accelerated terminal emulator written in Rust https://github.com/alacritty/alacritty
+    # alacritty # GPU-accelerated terminal emulator written in Rust https://github.com/alacritty/alacritty
     zellij # Terminal multiplexer written in Rust https://github.com/zellij-org/zellij
   ];
   home.shellAliases = {
