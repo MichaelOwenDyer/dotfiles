@@ -7,6 +7,10 @@ inputs:
       system = final.system;
       config.allowUnfree = final.config.allowUnfree;
     };
+    master = import inputs.nixpkgs-master {
+      system = final.system;
+      config.allowUnfree = final.config.allowUnfree;
+    };
     zen-browser = inputs.zen-browser.packages.${final.system};
   })
   # NUR overlay makes packages accessible under 'pkgs.nur'

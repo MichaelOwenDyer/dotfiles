@@ -149,6 +149,12 @@
       url = "github:NixOS/nixpkgs/nixos-unstable";
     };
 
+    # Master nixpkgs for early access
+    # https://github.com/NixOS/nixpkgs
+    nixpkgs-master = {
+      url = "github:NixOS/nixpkgs/master";
+    };
+
     # Stable nixpkgs for the occasional fallback
     # https://github.com/NixOS/nixpkgs/tree/nixos-25.05
     nixpkgs-stable = {
