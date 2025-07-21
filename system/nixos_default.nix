@@ -48,6 +48,7 @@
           "input"
           "networkmanager"
           "podman"
+          "docker"
         ];
         openssh.authorizedKeys.keys = home.systemIntegration.trustedSshKeys;
       }
