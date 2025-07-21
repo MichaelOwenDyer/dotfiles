@@ -200,7 +200,6 @@
       url = "github:danth/stylix";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        home-manager.follows = "home-manager";
         nur.follows = "nur";
       };
     };
@@ -223,6 +222,8 @@
       };
     };
 
+    # Nix build tool
+    # https://github.com/nix-community/nh
     nh = {
       url = "github:nix-community/nh";
       inputs = {
