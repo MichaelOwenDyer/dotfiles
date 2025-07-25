@@ -3,7 +3,7 @@
 {
   pkgs,
   ...
-} @ inputs:
+}:
 
 let wayland = true;
 
@@ -22,6 +22,10 @@ in {
     ../common/ai.nix
     ../common/ide/cursor.nix
     ../common/browser/chrome.nix
-    { home.packages = with pkgs; [ moonlight-qt jetbrains.rust-rover jetbrains.webstorm ]; }
+    {
+      home.packages = with pkgs; [
+        moonlight-qt
+      ];
+    }
   ];
 }
