@@ -8,7 +8,6 @@
 }:
 
 {
-  lib,
   pkgs,
   ...
 }:
@@ -18,7 +17,7 @@
     (import ./nh.nix { inherit homeDirectory; })
     ./ide/helix.nix
     (import ./development.nix { inherit name email; })
-    (import ./shell/fish.nix { })
+    (import ./shell/fish.nix { shellAliases = {}; })
   ];
 
   config = {

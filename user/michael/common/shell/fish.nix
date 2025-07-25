@@ -1,5 +1,5 @@
 {
-  shellAliases ? {},
+  shellAliases,
 }:
 
 {
