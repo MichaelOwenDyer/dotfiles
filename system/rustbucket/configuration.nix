@@ -34,9 +34,10 @@
       wifiDefaultGateway = "192.168.0.254";
       streamingInterface = "enp4s0";
       streamingIpv4Addr = "192.168.50.1";
+      streamingIpv6Addr = "fdc9:1a4b:53e1:50::1";
       upstreamDnsServers = [ "8.8.8.8" "4.4.4.4" ];
     })
-    ../modules/system-monitor.nix
+    # ../modules/system-monitor.nix
     (import ../modules/plymouth.nix { theme = "colorful_sliced"; })
     ../modules/stylix.nix
   ];
@@ -78,11 +79,17 @@
 
   # Use Ly for the login screen
   # services.displayManager.ly.enable = true;
-  services.displayManager.gdm.enable = true;
+  services.displayManager.gdm = {
+    enable = true;
+    autoSuspend = false;
+  };
   services.displayManager.autoLogin = {
     enable = true;
     user = "michael";
   };
+
+  systemd.services."getty@tty1".enable = false;
+  systemd.services."autovt@tty1".enable = false;
 
   # Prevent GNOME from automatically suspending https://github.com/NixOS/nixpkgs/issues/100390
   security.polkit = {
