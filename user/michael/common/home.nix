@@ -17,7 +17,7 @@
     (import ./nh.nix { inherit homeDirectory; })
     ./ide/helix.nix
     (import ./development.nix { inherit name email; })
-    (import ./shell/fish.nix { shellAliases = {}; })
+    (import ./shell/fish.nix { shellAliases = { }; })
   ];
 
   config = {
@@ -38,6 +38,13 @@
       inherit username homeDirectory;
       sessionVariables.NIXPKGS_ALLOW_UNFREE = "1";
       sessionVariables.NH_FLAKE = "${homeDirectory}/.dotfiles";
+    };
+    programs.thunderbird = {
+      enable = true;
+      profiles.michael = {
+        isDefault = true;
+        search.default = "google";
+      };
     };
   };
 }

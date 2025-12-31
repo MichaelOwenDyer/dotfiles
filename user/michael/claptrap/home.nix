@@ -5,9 +5,11 @@
   ...
 }:
 
-let wayland = true;
+let
+  wayland = true;
 
-in {
+in
+{
   home.stateVersion = "24.11";
 
   imports = [
@@ -25,6 +27,8 @@ in {
     {
       home.packages = with pkgs; [
         moonlight-qt
+        whatsie
+        jetbrains.rust-rover
       ];
     }
   ];

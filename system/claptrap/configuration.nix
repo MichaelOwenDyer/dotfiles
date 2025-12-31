@@ -24,7 +24,7 @@
     (import ../modules/plymouth.nix { theme = "colorful_sliced"; })
     ../modules/stylix.nix
   ];
-  
+
   services.xserver.xkb = {
     layout = "us";
     variant = "";
@@ -58,14 +58,18 @@
     enable = true;
     dockerSocket.enable = true;
   };
-  
+
   stylix = {
-    fonts.sizes = let fontSize = 12; in {
-      applications = fontSize;
-      desktop = fontSize;
-      popups = fontSize;
-      terminal = fontSize + 2;
-    };
+    fonts.sizes =
+      let
+        fontSize = 12;
+      in
+      {
+        applications = fontSize;
+        desktop = fontSize;
+        popups = fontSize;
+        terminal = fontSize + 2;
+      };
   };
   qt.platformTheme = lib.mkForce "gnome";
 

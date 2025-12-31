@@ -33,11 +33,11 @@
   # Terminal
   programs.ghostty.enable = true;
   # Run commands when entering a directory
-  # programs.direnv = {
-  #   enable = true;
-  #   silent = true;
-  #   nix-direnv.enable = true;
-  # };
+  programs.direnv = {
+    enable = true;
+    silent = true;
+    nix-direnv.enable = true;
+  };
   # Better cd
   programs.zoxide.enable = true;
   # Fuzzy file search https://github.com/junegunn/fzf
@@ -75,7 +75,7 @@
   home.packages = with pkgs; [
     nixd # https://github.com/nix-community/nixd
     nixfmt-rfc-style # https://github.com/NixOS/nixfmt
-    rustup # https://github.com/rust-lang/rustup
+    # rustup # https://github.com/rust-lang/rustup
     ripgrep # rg: Rust grep https://github.com/BurntSushi/ripgrep
     ripgrep-all # rga: Rust grep with deep search https://github.com/phiresky/ripgrep-all
     fd # Find files https://github.com/sharkdp/fd
@@ -94,6 +94,7 @@
     lazyjj # Terminal UI for Jujutsu https://github.com/Cretezy/lazyjj
     # alacritty # GPU-accelerated terminal emulator written in Rust https://github.com/alacritty/alacritty
     zellij # Terminal multiplexer written in Rust https://github.com/zellij-org/zellij
+    # devenv
   ];
   home.shellAliases = {
     cd = "z";
