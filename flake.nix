@@ -4,10 +4,20 @@
   outputs =
     inputs:
     let
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-      forEachSupportedSystem = fn: inputs.nixpkgs.lib.genAttrs supportedSystems (system: fn {
-        pkgs = inputs.nixpkgs.legacyPackages.${system};
-      });
+      supportedSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+      forEachSupportedSystem =
+        fn:
+        inputs.nixpkgs.lib.genAttrs supportedSystems (
+          system:
+          fn {
+            pkgs = inputs.nixpkgs.legacyPackages.${system};
+          }
+        );
       userSystemIntegrationOptions = ./user/system-integration-options.nix;
       machines = {
         nixos = {
@@ -37,109 +47,139 @@
       };
     in
     {
-      nixosConfigurations = let lib = inputs.nixpkgs.lib; in lib.mapAttrs (
-        hostname: { system, hostConfiguration, users }:
-        lib.nixosSystem {
-          inherit system;
-          specialArgs = {
-            hardware = inputs.hardware.nixosModules;
-            base16-lib = inputs.nixpkgs.legacyPackages.${system}.callPackage inputs.stylix.inputs.base16.lib {};
-            nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
-          };
-          modules = [
-            userSystemIntegrationOptions
-            (import hostConfiguration { inherit hostname users; })
-            inputs.home-manager.nixosModules.home-manager
-            inputs.stylix.nixosModules.stylix
-            {
-              nix.settings.experimental-features = [
-                "flakes"
-                "nix-command"
-                "pipe-operators"
-              ];
-              nixpkgs = {
-                hostPlatform = system;
-                config.allowUnfree = true;
-                overlays = import ./overlays.nix inputs;
-              };
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-              };
-            }
-          ];
-        }
-      ) machines.nixos;
+      nixosConfigurations =
+        let
+          lib = inputs.nixpkgs.lib;
+        in
+        lib.mapAttrs (
+          hostname:
+          {
+            system,
+            hostConfiguration,
+            users,
+          }:
+          lib.nixosSystem {
+            inherit system;
+            specialArgs = {
+              hardware = inputs.hardware.nixosModules;
+              base16-lib =
+                inputs.nixpkgs.legacyPackages.${system}.callPackage inputs.stylix.inputs.base16.lib
+                  { };
+              nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
+            };
+            modules = [
+              userSystemIntegrationOptions
+              (import hostConfiguration { inherit hostname users; })
+              inputs.home-manager.nixosModules.home-manager
+              inputs.stylix.nixosModules.stylix
+              {
+                nix.settings.experimental-features = [
+                  "flakes"
+                  "nix-command"
+                  "pipe-operators"
+                ];
+                nixpkgs = {
+                  hostPlatform = system;
+                  config.allowUnfree = true;
+                  overlays = import ./overlays.nix inputs;
+                };
+                home-manager = {
+                  useGlobalPkgs = true;
+                  useUserPackages = true;
+                };
+              }
+            ];
+          }
+        ) machines.nixos;
 
-      darwinConfigurations = let lib = inputs.nix-darwin.lib; in lib.mapAttrs (
-        hostname: { system, hostConfiguration, users }:
-        lib.darwinSystem {
-          inherit system;
-          specialArgs = {
-            base16-lib = inputs.nixpkgs.legacyPackages.${system}.callPackage inputs.stylix.inputs.base16.lib {};
-            nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
-          };
-          modules = [
-            userSystemIntegrationOptions
-            (import hostConfiguration { inherit hostname users; })
-            inputs.stylix.darwinModules.stylix # Declare no-op options for compatibility even though the theme won't be applied
-            inputs.home-manager.darwinModules.home-manager
-            {
-              nixpkgs = {
-                hostPlatform = system;
-                config.allowUnfree = true;
-                overlays = import ./overlays.nix inputs;
-              };
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-              };
-            }
-          ];
-        }
-      ) machines.darwin;
+      darwinConfigurations =
+        let
+          lib = inputs.nix-darwin.lib;
+        in
+        lib.mapAttrs (
+          hostname:
+          {
+            system,
+            hostConfiguration,
+            users,
+          }:
+          lib.darwinSystem {
+            inherit system;
+            specialArgs = {
+              base16-lib =
+                inputs.nixpkgs.legacyPackages.${system}.callPackage inputs.stylix.inputs.base16.lib
+                  { };
+              nix-wallpaper = inputs.nix-wallpaper.packages.${system}.default;
+            };
+            modules = [
+              userSystemIntegrationOptions
+              (import hostConfiguration { inherit hostname users; })
+              inputs.stylix.darwinModules.stylix # Declare no-op options for compatibility even though the theme won't be applied
+              inputs.home-manager.darwinModules.home-manager
+              {
+                nixpkgs = {
+                  hostPlatform = system;
+                  config.allowUnfree = true;
+                  overlays = import ./overlays.nix inputs;
+                };
+                home-manager = {
+                  useGlobalPkgs = true;
+                  useUserPackages = true;
+                };
+              }
+            ];
+          }
+        ) machines.darwin;
 
-      homeConfigurations = let lib = inputs.nixpkgs.lib; in lib.listToAttrs (lib.flatten (
-        lib.mapAttrsToList
-        (
-          hostname: { system, users, ... }:
-          lib.mapAttrsToList
-          (
-            username: home:
-            lib.nameValuePair
-            "${username}@${hostname}"
-            (inputs.home-manager.lib.homeManagerConfiguration {
-              pkgs = inputs.nixpkgs.legacyPackages.${system};
-              modules = [
-                home
-                userSystemIntegrationOptions
-                inputs.stylix.homeModules.stylix
-                {
-                  nixpkgs = {
-                    config.allowUnfree = true;
-                    overlays = import ./overlays.nix inputs;
-                  };
-                }
-              ];
-            })
+      homeConfigurations =
+        let
+          lib = inputs.nixpkgs.lib;
+        in
+        lib.listToAttrs (
+          lib.flatten (
+            lib.mapAttrsToList
+              (
+                hostname:
+                { system, users, ... }:
+                lib.mapAttrsToList (
+                  username: home:
+                  lib.nameValuePair "${username}@${hostname}" (
+                    inputs.home-manager.lib.homeManagerConfiguration {
+                      pkgs = inputs.nixpkgs.legacyPackages.${system};
+                      modules = [
+                        home
+                        userSystemIntegrationOptions
+                        inputs.stylix.homeModules.stylix
+                        {
+                          nixpkgs = {
+                            config.allowUnfree = true;
+                            overlays = import ./overlays.nix inputs;
+                          };
+                        }
+                      ];
+                    }
+                  )
+                ) users
+              )
+              {
+                inherit (machines.nixos) claptrap rustbucket;
+                inherit (machines.darwin) mac;
+              }
           )
-          users
-        )
-        {
-          inherit (machines.nixos) claptrap rustbucket;
-          inherit (machines.darwin) mac;
-        }
-      ));
+        );
 
-      devShells = forEachSupportedSystem ({ pkgs }: {
-        default = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            git
-            home-manager
-          ];
-          NIX_CONFIG = "experimental-features = flakes nix-command pipe-operators";
-        };
-      });
+      devShells = forEachSupportedSystem (
+        { pkgs }:
+        {
+          default = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              git
+              home-manager
+            ];
+            NIX_CONFIG = "experimental-features = flakes nix-command pipe-operators";
+          };
+        }
+      );
     };
 
   inputs = {
@@ -195,7 +235,7 @@
 
     # Theming for NixOS
     # https://github.com/danth/stylix
-		# Themes: https://tinted-theming.github.io/tinted-gallery/
+    # Themes: https://tinted-theming.github.io/tinted-gallery/
     stylix = {
       url = "github:danth/stylix";
       inputs = {

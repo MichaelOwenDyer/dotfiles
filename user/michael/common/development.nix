@@ -11,8 +11,11 @@
 {
   programs.git = {
     enable = true;
-    userName = name;
-    userEmail = email;
+    settings = {
+      user = {
+        inherit name email;
+      };
+    };
     extraConfig = {
       init = {
         defaultBranch = "main";

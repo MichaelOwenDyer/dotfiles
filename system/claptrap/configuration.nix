@@ -19,10 +19,11 @@
     ./hardware-configuration.nix
     ../modules/wifi.nix
     ../modules/audio.nix
-    ../modules/gnome.nix
+    ../modules/niri.nix
+    #    ../modules/gnome.nix
     ../modules/gnome-keyring.nix
     (import ../modules/plymouth.nix { theme = "colorful_sliced"; })
-    ../modules/stylix.nix
+    # ../modules/stylix.nix
   ];
 
   services.xserver.xkb = {
@@ -76,16 +77,12 @@
   powerManagement.cpuFreqGovernor = "powersave";
 
   # Hibernate when power button is short-pressed, power off when long-pressed
-  services.logind = {
-    powerKey = "hibernate";
-    powerKeyLongPress = "poweroff";
-    # Sleep when lid is closed
-    lidSwitch = "suspend-then-hibernate";
-    # Sleep after 10 minutes of idle time
-    extraConfig = ''
-      IdleAction=suspend-then-hibernate
-      IdleActionSec=10min
-    '';
+  services.logind.settings.Login = {
+    HandlePowerKey = "hibernate";
+    HandlePowerKeyLongPress = "poweroff";
+    HandleLidSwitch = "suspend-then-hibernate";
+    IdleAction = "suspend-then-hibernate";
+    IdleActionSec = "10min";
   };
   # Hibernate after 20 minutes of sleep
   systemd.sleep.extraConfig = ''
