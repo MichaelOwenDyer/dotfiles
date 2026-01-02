@@ -10,7 +10,7 @@
     {
       programs.git = {
         enable = true;
-        extraConfig = {
+        settings = {
           init.defaultBranch = "main";
           pull.rebase = true;
           url = {
@@ -82,6 +82,7 @@
         wl-clipboard
         lazyjj
         zellij
+        jq
       ];
 
       home.shellAliases = {

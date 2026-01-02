@@ -34,7 +34,6 @@
       with inputs.self.modules.homeManager;
       [
         system-default
-        overlays
         stylix
       ]
       ++ [ inputs.self.modules.generic.systemConstants ];
