@@ -1,0 +1,49 @@
+{
+  inputs,
+  ...
+}:
+{
+  # Default settings needed for all darwinConfigurations
+
+  flake.modules.darwin.system-default = {
+    # Let Determinate Nix handle the nix installation
+    nix.enable = false;
+
+    nixpkgs.config.allowUnfree = true;
+
+    # Used for backwards compatibility
+    system.stateVersion = 4;
+
+    # Create /etc/zshrc that loads the nix-darwin environment
+    programs.zsh.enable = true;
+
+    # Enable sudo Touch ID authentication
+    security.pam.enableSudoTouchIdAuth = true;
+
+    system.defaults = {
+      finder = {
+        AppleShowAllExtensions = true;
+        AppleShowAllFiles = true;
+        ShowPathbar = true;
+        FXPreferredViewStyle = "clmv";
+        ShowStatusBar = true;
+        ShowRemovableMediaOnDesktop = false;
+        ShowExternalHardDrivesOnDesktop = false;
+        QuitMenuItem = true;
+        FXEnableExtensionChangeWarning = false;
+        FXDefaultSearchScope = "SCcf";
+      };
+      dock = {
+        autohide = true;
+        mru-spaces = false;
+      };
+      screencapture = {
+        type = "png";
+        show-thumbnail = false;
+        location = "~/Desktop";
+        target = "clipboard";
+      };
+      screensaver.askForPasswordDelay = 10;
+    };
+  };
+}
