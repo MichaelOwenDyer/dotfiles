@@ -5,9 +5,9 @@
 {
   # Zen Browser
 
-  flake.modules.homeManager.browser-zen =
+  flake.modules.homeManager.zen-browser =
     { pkgs, ... }:
     {
-      home.packages = [ pkgs.zen-browser.default ];
+      home.packages = [ pkgs.zen-browser ];
     };
 }

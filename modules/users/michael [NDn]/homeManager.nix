@@ -18,6 +18,7 @@ in
         ide-helix
         wayland-env
         niri-clipboard
+        zen-browser
       ];
 
       home.username = username;
