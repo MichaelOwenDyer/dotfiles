@@ -6,9 +6,9 @@
   # Development tools and configuration
 
   flake.modules.homeManager.development =
-    { pkgs, config, ... }:
+    { pkgs, ... }:
     {
-      imports = with inputs.self.modules.homeManager [
+      imports = with inputs.self.modules.homeManager; [
         git
         gitui
         direnv
@@ -44,11 +44,13 @@
         lazyjj
         zellij
         jq
+        fastfetch
       ];
 
       home.shellAliases = {
         cd = "z";
         ls = "eza";
+        ycut = "${pkgs.yt-dlp}/bin/yt-dlp --external-downloader ${pkgs.ffmpeg}/bin/ffmpeg --external-downloader-args \"ffmpeg_i:-ss $1 -to $2\"";
       };
     };
 }
