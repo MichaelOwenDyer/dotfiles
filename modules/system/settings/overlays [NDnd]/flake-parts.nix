@@ -18,23 +18,5 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # Nix build tool
-    nh = {
-      url = "github:nix-community/nh";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Zen Browser
-    zen-browser = {
-      url = "github:MichaelOwenDyer/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Generate wallpapers for NixOS
-    nix-wallpaper = {
-      url = "github:lunik1/nix-wallpaper";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 }
