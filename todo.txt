@@ -1,0 +1,11 @@
+battery percentage in dms
+volume keys
+brightness keys
+install clipboard tools to fix in dms
+find nice window switcher app
+fix lock screen and idle behavior
+fix horizontal swiping in chrome
+dms weather module
+zen browser update
+os keyring does not match login password - why
+configure and learn how to use yazi - open hx from it, fuzzy search, rg, zoxide
