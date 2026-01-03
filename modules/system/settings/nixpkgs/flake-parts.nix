@@ -5,7 +5,7 @@
 {
   flake-file.inputs = {
     # Stable nixpkgs for the occasional fallback
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.11";
 
     # Unstable nixpkgs (used by default)
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
