@@ -17,6 +17,7 @@ in
         nh
         ide-helix
         wayland-env
+        niri-clipboard
       ];
 
       home.username = username;
