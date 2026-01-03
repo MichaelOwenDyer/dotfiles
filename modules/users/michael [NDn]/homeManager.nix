@@ -10,7 +10,12 @@ in
 {
   # Home-Manager configuration for michael
   flake.modules.homeManager.${username} =
-    { pkgs, lib, config, ... }:
+    {
+      pkgs,
+      lib,
+      config,
+      ...
+    }:
     {
       imports = with inputs.self.modules.homeManager; [
         system-desktop
@@ -19,6 +24,7 @@ in
         wayland-env
         niri-clipboard
         zen-browser
+        mpv
       ];
 
       home.username = username;
