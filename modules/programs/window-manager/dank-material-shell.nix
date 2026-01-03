@@ -3,12 +3,9 @@
   ...
 }:
 {
-  # Niri scrolling window manager
-
-  flake.modules.nixos.niri =
+  flake.modules.nixos.dank-material-shell =
     { pkgs, ... }:
     {
-      programs.niri.enable = true;
       programs.dms-shell = {
         enable = true;
 
@@ -33,14 +30,13 @@
       services.geoclue2.enable = true;
 
       environment.systemPackages = with pkgs; [
-        fuzzel
-        swaylock
-        cursor-cli
+        fuzzel # lightweight application launcher
+        swaylock # screen locker
       ];
     };
 
   # Clipboard history daemon (for DMS clipboard widget)
-  flake.modules.homeManager.niri-clipboard =
+  flake.modules.homeManager.dank-material-shell =
     { pkgs, ... }:
     {
       systemd.user.services.cliphist = {
