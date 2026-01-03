@@ -10,4 +10,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
+
+  flake.modules.nixos.overlays = {
+    nixpkgs.overlays = [
+      (final: _prev: {
+        zen-browser = inputs.zen-browser.packages.${final.stdenv.hostPlatform.system};
+      })
+    ];
+  };
+
+  flake.modules.darwin.overlays = {
+    nixpkgs.overlays = [
+      (final: _prev: {
+        zen-browser = inputs.zen-browser.packages.${final.stdenv.hostPlatform.system};
+      })
+    ];
+  };
 }

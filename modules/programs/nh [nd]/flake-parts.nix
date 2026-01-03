@@ -10,4 +10,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
+
+  flake.modules.nixos.overlays = {
+    nixpkgs.overlays = [ inputs.nh.overlays.default ];
+  };
+
+  flake.modules.darwin.overlays = {
+    nixpkgs.overlays = [ inputs.nh.overlays.default ];
+  };
 }
