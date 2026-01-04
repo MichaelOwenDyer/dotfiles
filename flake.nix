@@ -20,7 +20,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:nix-community/nh";
     };
-    niri.url = "github:sodiboo/niri-flake";
+    niri-flake.url = "github:sodiboo/niri-flake";
     nix-darwin = {
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:LnL7/nix-darwin";
