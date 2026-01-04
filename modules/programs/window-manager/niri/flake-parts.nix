@@ -7,8 +7,6 @@
     # Use managed flake for Niri instead of nixpkgs directly
     niri = {
       url = "github:sodiboo/niri-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-stable.follows = "nixpkgs-stable";
     };
   };
 
