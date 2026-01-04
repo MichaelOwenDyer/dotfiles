@@ -13,8 +13,7 @@
         overlays
         home-manager
         stylix
-      ]
-      ++ [ inputs.self.modules.generic.systemConstants ];
+      ];
   };
 
   flake.modules.darwin.system-essential = {
@@ -25,8 +24,7 @@
         overlays
         home-manager
         stylix
-      ]
-      ++ [ inputs.self.modules.generic.systemConstants ];
+      ];
   };
 
   flake.modules.homeManager.system-essential = {
@@ -35,7 +33,6 @@
       [
         system-default
         stylix
-      ]
-      ++ [ inputs.self.modules.generic.systemConstants ];
+      ];
   };
 }
