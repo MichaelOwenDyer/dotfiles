@@ -13,6 +13,7 @@
         gitui
         direnv
         ghostty
+        yazi
       ];
 
       # Better cd
@@ -23,9 +24,6 @@
 
       # Enhanced cat
       programs.bat.enable = true;
-
-      # Terminal file browser
-      programs.yazi.enable = true;
 
       # Modern VCS
       programs.jujutsu.enable = true;
