@@ -28,11 +28,6 @@
 
       # Location services (for DMS weather widget)
       services.geoclue2.enable = true;
-
-      environment.systemPackages = with pkgs; [
-        fuzzel # lightweight application launcher
-        swaylock # screen locker
-      ];
     };
 
   # Clipboard history daemon (for DMS clipboard widget)

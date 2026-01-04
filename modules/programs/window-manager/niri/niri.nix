@@ -18,5 +18,11 @@
 
         # '';
       };
+      environment.systemPackages = with pkgs; [
+        playerctl # For media hotkeys
+        brightnessctl # For brightness hotkeys
+        fuzzel # lightweight application launcher
+        swaylock # screen locker
+      ];
     };
 }
