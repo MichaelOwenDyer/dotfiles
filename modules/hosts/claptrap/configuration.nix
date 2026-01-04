@@ -12,6 +12,7 @@
         system-desktop
         wifi
         niri
+        dank-material-shell
         gnome-keyring
         plymouth
       ];

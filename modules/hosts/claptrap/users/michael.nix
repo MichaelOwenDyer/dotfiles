@@ -17,13 +17,14 @@
 
   # Host-specific home-manager configuration for michael on claptrap
   flake.modules.homeManager."michael@claptrap" =
-    { pkgs, ... }:
+    { ... }:
     {
       imports = with inputs.self.modules.homeManager; [
         michael
         ide-vscode
         ide-cursor
         browser-chrome
+        dank-material-shell
       ];
 
       home.stateVersion = "24.11";

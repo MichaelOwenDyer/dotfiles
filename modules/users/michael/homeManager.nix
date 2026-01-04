@@ -11,9 +11,7 @@ in
   # Home-Manager configuration for michael
   flake.modules.homeManager.${username} =
     {
-      pkgs,
       lib,
-      config,
       ...
     }:
     {
@@ -22,7 +20,6 @@ in
         nh
         ide-helix
         wayland-env
-        niri-clipboard
         zen-browser
         mpv
       ];

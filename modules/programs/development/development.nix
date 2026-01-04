@@ -45,6 +45,7 @@
         zellij
         jq
         fastfetch
+        cursor-cli
       ];
 
       home.shellAliases = {
