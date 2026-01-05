@@ -9,10 +9,13 @@
     { lib, config, ... }:
     {
       imports = with inputs.self.modules.darwin; [
-        system-cli
+        overlays
+        system-default
+        home-manager
+        _1password
       ];
 
-      networking.hostName = "mac";
+      system.stateVersion = 6;
 
       # Set Git commit hash for darwin-version
       system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;

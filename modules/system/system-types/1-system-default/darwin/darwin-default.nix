@@ -8,17 +8,17 @@
   flake.modules.darwin.system-default = {
     # Let Determinate Nix handle the nix installation
     nix.enable = false;
+    nix.extraOptions = ''
+      warn-dirty = false
+    '';
 
     nixpkgs.config.allowUnfree = true;
-
-    # Used for backwards compatibility
-    system.stateVersion = 4;
 
     # Create /etc/zshrc that loads the nix-darwin environment
     programs.zsh.enable = true;
 
     # Enable sudo Touch ID authentication
-    security.pam.enableSudoTouchIdAuth = true;
+    security.pam.services.sudo_local.touchIdAuth = true;
 
     system.defaults = {
       finder = {

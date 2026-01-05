@@ -23,7 +23,6 @@
         system-default
         overlays
         home-manager
-        stylix
       ];
   };
 

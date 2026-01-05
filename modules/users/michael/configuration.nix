@@ -16,7 +16,12 @@ in
 {
   # NixOS user configuration
   flake.modules.nixos.${username} =
-    { pkgs, lib, config, ... }:
+    {
+      pkgs,
+      lib,
+      config,
+      ...
+    }:
     {
       imports = with inputs.self.modules.nixos; [
         shell-fish
