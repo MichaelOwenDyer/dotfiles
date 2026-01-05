@@ -5,14 +5,16 @@
 {
   # Default settings needed for all darwinConfigurations
 
-  flake.modules.darwin.system-default = {
+  flake.modules.darwin.default-settings = {
+    imports = [ inputs.self.modules.darwin.overlays ];
+
+    nixpkgs.config.allowUnfree = true;
+
     # Let Determinate Nix handle the nix installation
     nix.enable = false;
     nix.extraOptions = ''
       warn-dirty = false
     '';
-
-    nixpkgs.config.allowUnfree = true;
 
     # Create /etc/zshrc that loads the nix-darwin environment
     programs.zsh.enable = true;

@@ -14,12 +14,16 @@
     };
 
   # Host-specific home-manager configuration for michael on rpi-3b
-  # Minimal configuration for the Raspberry Pi (no Wayland, no desktop apps)
   flake.modules.homeManager."michael@rpi-3b" =
     { ... }:
     {
-      # Remove Wayland-specific config on RPi
-      imports = [ inputs.self.modules.homeManager.michael ];
+      imports = with inputs.self.modules.homeManager; [
+        git
+        gitui
+        ide-helix
+        yazi
+        nh
+      ];
 
       home.stateVersion = "25.11";
     };

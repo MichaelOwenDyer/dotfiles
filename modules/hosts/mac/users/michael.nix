@@ -26,7 +26,7 @@
     { lib, pkgs, ... }:
     {
       imports = with inputs.self.modules.homeManager; [
-        system-default
+        default-settings
         nh
         git
         gitui

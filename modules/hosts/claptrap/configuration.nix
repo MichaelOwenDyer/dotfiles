@@ -9,12 +9,16 @@
     { pkgs, lib, ... }:
     {
       imports = with inputs.self.modules.nixos; [
+        claptrap-hardware
         system-desktop
-        wifi
+        home-manager
+        ly
         niri
+        essential-packages
         dank-material-shell
         gnome-keyring
         plymouth
+        ssh
       ];
 
       networking.hostName = "claptrap";
@@ -23,9 +27,6 @@
         layout = "us";
         variant = "";
       };
-
-      # Use Ly for the login screen
-      services.displayManager.ly.enable = true;
 
       # Enable XDG desktop portal for Wayland
       xdg.portal = {

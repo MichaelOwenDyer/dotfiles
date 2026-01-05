@@ -3,7 +3,7 @@
   ...
 }:
 {
-  flake.modules.nixos.rpi-3b =
+  flake.modules.nixos.rpi-3b-hardware =
     { lib, modulesPath, ... }:
     {
       imports = [

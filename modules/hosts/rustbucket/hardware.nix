@@ -3,7 +3,7 @@
   ...
 }:
 {
-  flake.modules.nixos.rustbucket =
+  flake.modules.nixos.rustbucket-hardware =
     { pkgs, ... }:
     {
       boot.initrd.availableKernelModules = [

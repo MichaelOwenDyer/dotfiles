@@ -7,7 +7,7 @@
     hardware.url = "github:NixOS/nixos-hardware/master";
   };
 
-  flake.modules.nixos.claptrap =
+  flake.modules.nixos.claptrap-hardware =
     { ... }:
     {
       imports = [

@@ -16,7 +16,6 @@ in
     }:
     {
       imports = with inputs.self.modules.homeManager; [
-        system-desktop
         nh
         ide-helix
         wayland-env

@@ -9,9 +9,9 @@
     { lib, config, ... }:
     {
       imports = with inputs.self.modules.darwin; [
-        overlays
-        system-default
+        default-settings
         home-manager
+        essential-packages
         _1password
       ];
 

@@ -5,7 +5,9 @@
 {
   # Default settings needed for all nixosConfigurations
 
-  flake.modules.nixos.system-default = {
+  flake.modules.nixos.default-settings = {
+    imports = [ inputs.self.modules.nixos.overlays ];
+
     nixpkgs.config.allowUnfree = true;
 
     nix.settings = {

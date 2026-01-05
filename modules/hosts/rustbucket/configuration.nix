@@ -9,14 +9,17 @@
     { config, lib, pkgs, ... }:
     {
       imports = with inputs.self.modules.nixos; [
+        rustbucket-hardware
         system-desktop
         gaming
         wifi
-        gnome
+        niri
         gnome-keyring
         plymouth
         stylix-config
         local-streaming-network
+        essential-packages
+        ssh
       ];
 
       networking.hostName = "rustbucket";

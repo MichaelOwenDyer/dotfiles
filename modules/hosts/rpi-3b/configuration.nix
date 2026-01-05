@@ -9,7 +9,9 @@
     { ... }:
     {
       imports = with inputs.self.modules.nixos; [
-        system-cli
+        rpi-3b-hardware
+        essential-packages
+        ssh
       ];
 
       networking.hostName = "rpi-3b";

@@ -18,8 +18,4 @@
       };
     };
   };
-
-  flake.modules.darwin.ssh = {
-    # Darwin SSH configuration (system preferences typically handle this)
-  };
 }
