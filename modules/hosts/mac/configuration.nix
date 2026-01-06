@@ -13,6 +13,7 @@
         home-manager
         essential-packages
         _1password
+        macos-disconnect-on-sleep
       ];
 
       system.stateVersion = 6;
