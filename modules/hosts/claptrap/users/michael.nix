@@ -25,6 +25,7 @@
         ide-cursor
         browser-chrome
         dank-material-shell
+        niri
       ];
 
       home.stateVersion = "24.11";
