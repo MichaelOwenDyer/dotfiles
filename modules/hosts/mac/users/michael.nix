@@ -47,7 +47,6 @@
         mos
         scroll-reverser
         hours
-        orbstack
         nodejs_24
         pnpm_9
         maven

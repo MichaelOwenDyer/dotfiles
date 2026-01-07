@@ -14,6 +14,7 @@
         essential-packages
         _1password
         macos-disconnect-on-sleep
+        orbstack
       ];
 
       system.stateVersion = 6;
