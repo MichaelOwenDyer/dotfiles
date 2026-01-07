@@ -10,5 +10,5 @@
     };
   };
 
-  flake.darwinConfigurations = inputs.self.lib.mkDarwin "x86_64-darwin" "mac";
+  flake.darwinConfigurations = inputs.self.lib.mkDarwin "aarch64-darwin" "mac";
 }
