@@ -41,9 +41,10 @@
       };
       screencapture = {
         type = "png";
-        show-thumbnail = false;
+        show-thumbnail = false; # Skip the floating thumbnail preview which delays saving
+        # Save screenshots to Desktop by default, use control key to save directly to clipboard
+        target = "file";
         location = "~/Desktop";
-        target = "clipboard";
       };
       screensaver.askForPasswordDelay = 10;
     };
