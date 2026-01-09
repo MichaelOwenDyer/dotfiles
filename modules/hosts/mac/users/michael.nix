@@ -31,8 +31,11 @@
         git
         gitui
         yazi
+        fzf
         ide-helix
         ide-vscode
+        cursor-cli
+        nix-lang
       ];
 
       programs.git.settings.user = {

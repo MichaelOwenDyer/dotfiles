@@ -14,23 +14,17 @@
         direnv
         ghostty
         yazi
+        zoxide
+        fzf
+        jujutsu
+        nix-lang
+        shell-alias-cd-zoxide
+        shell-alias-ls-eza
+        shell-alias-cat-bat
+        shell-alias-find-fd
       ];
 
-      # Better cd
-      programs.zoxide.enable = true;
-
-      # Fuzzy file search
-      programs.fzf.enable = true;
-
-      # Enhanced cat
-      programs.bat.enable = true;
-
-      # Modern VCS
-      programs.jujutsu.enable = true;
-
       home.packages = with pkgs; [
-        nixd
-        nixfmt-rfc-style
         ripgrep
         ripgrep-all
         fd
@@ -41,9 +35,7 @@
         wl-clipboard
         lazyjj
         zellij
-        jq
         fastfetch
-        cursor-cli
       ];
 
       home.shellAliases = {

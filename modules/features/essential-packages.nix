@@ -16,6 +16,7 @@
         gnupg1
         curl
         wget
+        jq
       ];
     in
     {

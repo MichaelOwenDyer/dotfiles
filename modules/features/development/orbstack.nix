@@ -11,9 +11,7 @@
   flake.modules.darwin.orbstack =
     { pkgs, ... }:
     {
-      environment.systemPackages = with pkgs; [
-        orbstack
-      ];
+      environment.systemPackages = [ pkgs.orbstack ];
     };
 
   flake.modules.homeManager.orbstack =

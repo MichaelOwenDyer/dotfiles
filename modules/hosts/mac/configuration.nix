@@ -15,6 +15,9 @@
         _1password
         macos-disconnect-on-sleep
         orbstack
+        shell-alias-cd-zoxide
+        shell-alias-cat-bat
+        shell-alias-ls-eza
       ];
 
       system.stateVersion = 6;
