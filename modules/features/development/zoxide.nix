@@ -14,6 +14,9 @@
     { pkgs, ... }:
     {
       environment.systemPackages = [ pkgs.zoxide ];
+      programs.zsh.interactiveShellInit = ''
+        eval "$(${pkgs.zoxide}/bin/zoxide init zsh)"
+      '';
     };
 
   flake.modules.homeManager.zoxide =
