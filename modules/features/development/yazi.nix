@@ -10,45 +10,33 @@
     {
       programs.yazi = {
         enable = true;
+        plugins = {
+          # TODO: Add keymaps for these plugins
+          inherit (pkgs.yaziPlugins) git sudo ouch diff gitui compress;
+        };
+        flavors = {
+          inherit (pkgs.yaziPlugins) nord;
+        };
         settings = {
-          yazi = {
-            ratio = [
-              1
-              4
-              3
-            ];
-            sort_by = "natural";
-            sort_sensitive = true;
-            sort_reverse = false;
-            sort_dir_first = true;
-            linemode = "none";
+          mgr = {
             show_hidden = true;
             show_symlink = true;
+            sort_dir_first = true;
           };
-
-          preview = {
-            image_filter = "lanczos3";
-            image_quality = 90;
-            tab_size = 1;
-            max_width = 600;
-            max_height = 900;
-            cache_dir = "";
-            ueberzug_scale = 1;
-            ueberzug_offset = [
-              0
-              0
-              0
-              0
-            ];
-          };
-
-          tasks = {
-            micro_workers = 5;
-            macro_workers = 10;
-            bizarre_retry = 5;
-          };
+          # TODO: Open text files in yazi using helix editor
+#          opener = {
+#            edit = [{ run = "hx $s"; block = true; }];
+#          };
+#          open = {
+#            prepend_rules = [{ mime = "text/plain"; use = "edit"; }];
+#          };
         };
       };
+      xdg.configFile."yazi/theme.toml".text = ''
+        [flavor]
+        light = "nord"
+        dark = "nord"
+      '';
       # enable y shell wrapper that provides the ability to
       # change the current working directory when exiting Yazi.
       programs.fish.interactiveShellInit = ''
