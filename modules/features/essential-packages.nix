@@ -4,20 +4,20 @@
 {
   flake.modules =
     let
-      selectPackagesFrom = pkgs: with pkgs; [
-        git
-        gitui
-        ripgrep
-        yazi
-        helix
-        fd
-        tree
-        openssh
-        gnupg1
-        curl
-        wget
-        jq
-      ];
+      selectPackagesFrom =
+        pkgs: with pkgs; [
+          git
+          gitui
+          ripgrep
+          yazi
+          fd
+          tree
+          openssh
+          gnupg1
+          curl
+          wget
+          jq
+        ];
     in
     {
       nixos.essential-packages =

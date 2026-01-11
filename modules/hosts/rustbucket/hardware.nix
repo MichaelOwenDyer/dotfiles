@@ -20,64 +20,81 @@
       boot.kernelModules = [ "kvm-intel" ];
       boot.extraModulePackages = [ ];
 
-      environment.systemPackages = with pkgs; [
-        ntfs3g
-      ];
-
       fileSystems."/" = {
-        device = "/dev/disk/by-uuid/130acd15-8d64-4c32-a670-bc954b945594";
-        fsType = "ext4";
+        device = "/dev/disk/by-uuid/cde2807c-cd90-4e03-97ef-2532813ddc6e";
+        fsType = "btrfs";
+        options = [ "subvol=@root" ];
       };
 
       fileSystems."/boot" = {
-        device = "/dev/disk/by-uuid/4595-D8A1";
+        device = "/dev/disk/by-uuid/224D-B1B8";
         fsType = "vfat";
         options = [
-          "fmask=0077"
-          "dmask=0077"
-          "umask=0077"
+          "fmask=0022"
+          "dmask=0022"
         ];
+      };
+
+      fileSystems."/home" = {
+        device = "/dev/disk/by-uuid/cde2807c-cd90-4e03-97ef-2532813ddc6e";
+        fsType = "btrfs";
+        options = [ "subvol=@home" ];
+      };
+
+      fileSystems."/nix" = {
+        device = "/dev/disk/by-uuid/cde2807c-cd90-4e03-97ef-2532813ddc6e";
+        fsType = "btrfs";
+        options = [ "subvol=@nix" ];
+      };
+
+      fileSystems."/var/log" = {
+        device = "/dev/disk/by-uuid/cde2807c-cd90-4e03-97ef-2532813ddc6e";
+        fsType = "btrfs";
+        options = [ "subvol=@log" ];
       };
 
       fileSystems."/mnt/steam_libraries/hdd" = {
         device = "/dev/disk/by-uuid/7EAEA85CAEA80EA9";
-        fsType = "ntfs-3g";
+        fsType = "ntfs3";
         options = [
-          "defaults"
+          "rw"
+          "exec"
+          "prealloc"
           "nofail"
           "uid=1000"
           "gid=100"
           "umask=002"
           "windows_names"
-          "locale=en_US.UTF-8"
         ];
       };
 
       fileSystems."/mnt/steam_libraries/ssd1" = {
         device = "/dev/disk/by-uuid/FADAB218DAB1D15D";
-        fsType = "ntfs-3g";
+        fsType = "ntfs3";
         options = [
-          "defaults"
+          "rw"
+          "exec"
+          "discard"
           "nofail"
+          "prealloc"
           "uid=1000"
           "gid=100"
           "umask=002"
           "windows_names"
-          "locale=en_US.UTF-8"
         ];
       };
 
-      fileSystems."/mnt/steam_libraries/ssd2" = {
-        device = "/dev/disk/by-uuid/F808E17108E12F76";
-        fsType = "ntfs-3g";
+      fileSystems."/mnt/windows" = {
+        device = "/dev/disk/by-uuid/8EA61750A6173863";
+        fsType = "ntfs3";
         options = [
-          "defaults"
+          "ro"
           "nofail"
           "uid=1000"
           "gid=100"
-          "umask=002"
+          "umask=022"
           "windows_names"
-          "locale=en_US.UTF-8"
+          "iocharset=utf8"
         ];
       };
 

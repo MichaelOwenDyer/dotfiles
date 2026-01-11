@@ -6,18 +6,26 @@
   # Gaming PC configuration (MSI Z97A Gaming 7, i7 4790K, 1660 Ti)
 
   flake.modules.nixos.rustbucket =
-    { config, lib, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       imports = with inputs.self.modules.nixos; [
         rustbucket-hardware
-        system-desktop
+        home-manager
+        desktop
         gaming
         wifi
+        bluetooth
+        ly
         niri
+        dank-material-shell
         gnome-keyring
         plymouth
-        stylix-config
-        local-streaming-network
+        # local-streaming-network
         essential-packages
         ssh
       ];
@@ -49,70 +57,26 @@
       };
 
       # Local streaming network configuration
-      localStreaming = {
-        enable = true;
-        wifiInterface = "wlan0";
-        wifiDefaultGateway = "192.168.0.254";
-        streamingInterface = "enp4s0";
-        streamingIpv4Addr = "192.168.50.1";
-        streamingIpv6Addr = "fdc9:1a4b:53e1:50::1";
-        upstreamDnsServers = [
-          "8.8.8.8"
-          "4.4.4.4"
-        ];
-      };
+      # localStreaming = {
+      #   enable = true;
+      #   wifiInterface = "wlan0";
+      #   wifiDefaultGateway = "192.168.0.254";
+      #   streamingInterface = "enp4s0";
+      #   streamingIpv4Addr = "192.168.50.1";
+      #   streamingIpv6Addr = "fdc9:1a4b:53e1:50::1";
+      #   upstreamDnsServers = [
+      #     "8.8.8.8"
+      #     "4.4.4.4"
+      #   ];
+      # };
 
       # Passwordless sudo
       security.sudo.wheelNeedsPassword = false;
 
-      stylix = {
-        fonts.sizes =
-          let
-            fontSize = 11;
-          in
-          {
-            applications = fontSize;
-            desktop = fontSize;
-            popups = fontSize;
-            terminal = fontSize;
-          };
-      };
-      qt.platformTheme = lib.mkForce "gnome";
-
-      services.displayManager.gdm = {
-        enable = true;
-        autoSuspend = false;
-      };
-      services.displayManager.autoLogin = {
-        enable = true;
-        user = "michael";
-      };
-
-      systemd.services."getty@tty1".enable = false;
-      systemd.services."autovt@tty1".enable = false;
-
-      # Prevent GNOME from automatically suspending
-      security.polkit = {
-        enable = true;
-        extraConfig = ''
-          polkit.addRule(
-            function(action, subject) {
-              if (action.id == "org.freedesktop.login1.suspend" ||
-                  action.id == "org.freedesktop.login1.suspend-multiple-sessions" ||
-                  action.id == "org.freedesktop.login1.hibernate" ||
-                  action.id == "org.freedesktop.login1.hibernate-multiple-sessions")
-              {
-                  return polkit.Result.NO;
-              }
-            }
-          );
-        '';
-      };
-
-      programs.dconf.enable = true;
-
       # Enable CUDA hardware acceleration
-      nixpkgs.config.cudaSupport = true;
+      # Commented out: this caused several huge packages
+      # (primarily onnxruntime) to build from source which takes forever
+      # nixpkgs.config.cudaSupport = true;
 
       # Load nvidia driver for Xorg and Wayland
       services.xserver.videoDrivers = [ "nvidia" ];

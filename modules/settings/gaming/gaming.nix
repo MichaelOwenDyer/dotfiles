@@ -26,7 +26,7 @@
           lutris
           heroic
           bottles
-          protonup
+          protonup-ng
         ];
         sessionVariables = {
           STEAM_EXTRA_COMPAT_TOOLS_PATHS = "/home/user/.steam/compatibilitytools.d";
