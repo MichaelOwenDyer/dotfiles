@@ -5,11 +5,11 @@
 {
   # Assign user michael to host mac
 
-  flake.modules.darwin.mac =
+  flake.modules.darwin.michael-mac =
     { pkgs, ... }:
     {
       home-manager.users."michael.dyer" = {
-        imports = [ inputs.self.modules.homeManager."michael@mac" ];
+        imports = [ inputs.self.modules.homeManager.michael-mac ];
       };
 
       users.users."michael.dyer" = {
@@ -22,7 +22,7 @@
     };
 
   # Host-specific home-manager configuration for michael on mac
-  flake.modules.homeManager."michael@mac" =
+  flake.modules.homeManager.michael-mac =
     { lib, pkgs, ... }:
     {
       imports = with inputs.self.modules.homeManager; [

@@ -11,6 +11,7 @@
       imports = with inputs.self.modules.darwin; [
         default-settings
         home-manager
+        michael-mac
         essential-packages
         _1password
         macos-disconnect-on-sleep

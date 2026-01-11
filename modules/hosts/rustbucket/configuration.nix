@@ -28,6 +28,7 @@
         # local-streaming-network
         essential-packages
         ssh
+        michael-rustbucket
       ];
 
       networking.hostName = "rustbucket";

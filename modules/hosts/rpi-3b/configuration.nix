@@ -12,6 +12,7 @@
         rpi-3b-hardware
         essential-packages
         ssh
+        michael-rpi-3b
       ];
 
       networking.hostName = "rpi-3b";

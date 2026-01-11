@@ -3,7 +3,6 @@
   ...
 }:
 let
-  username = "michael";
   name = "Michael Dyer";
   email = "michaelowendyer@gmail.com";
   defaultHashedPassword = "$y$j9T$pSkVWxgO/9dyqt8MMHzaM0$RO5g8OOpFb4pdgMuDIVraPvsLMSvMTU2/y8JQWfmrs1";
@@ -15,7 +14,7 @@ let
 in
 {
   # NixOS user configuration
-  flake.modules.nixos.${username} =
+  flake.modules.nixos.michael =
     {
       pkgs,
       lib,
@@ -27,7 +26,7 @@ in
         shell-fish
       ];
 
-      users.users.${username} = {
+      users.users.michael = {
         isNormalUser = true;
         description = name;
         hashedPassword = lib.mkDefault defaultHashedPassword;
@@ -42,27 +41,6 @@ in
           "docker"
         ];
         openssh.authorizedKeys.keys = trustedSshKeys;
-      };
-    };
-
-  # Darwin user configuration
-  flake.modules.darwin.${username} =
-    { pkgs, ... }:
-    {
-      imports = with inputs.self.modules.darwin; [
-        shell-zsh
-      ];
-
-      home-manager.users.${username} = {
-        imports = [ inputs.self.modules.homeManager.${username} ];
-      };
-
-      system.primaryUser = username;
-
-      users.users.${username} = {
-        name = username;
-        home = "/Users/${username}";
-        shell = pkgs.zsh;
       };
     };
 }

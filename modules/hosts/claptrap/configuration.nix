@@ -19,6 +19,7 @@
         gnome-keyring
         plymouth
         ssh
+        michael-claptrap
       ];
 
       networking.hostName = "claptrap";
