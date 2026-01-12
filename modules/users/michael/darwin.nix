@@ -1,4 +1,5 @@
 {
+  inputs,
   ...
 }:
 {
@@ -15,8 +16,8 @@
       };
 
       users.users.michael = {
-        name = username;
-        home = "/Users/michael";
+        name = "michael.dyer";
+        home = "/Users/michael.dyer";
         shell = pkgs.zsh;
       };
     };
