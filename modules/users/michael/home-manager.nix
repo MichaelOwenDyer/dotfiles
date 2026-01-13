@@ -3,28 +3,27 @@
   ...
 }:
 let
-  username = "michael";
   name = "Michael Dyer";
   email = "michaelowendyer@gmail.com";
 in
 {
   # Home-Manager configuration for michael
-  flake.modules.homeManager.${username} =
+  flake.modules.homeManager.michael =
     {
       lib,
       ...
     }:
     {
       imports = with inputs.self.modules.homeManager; [
-        nh
         ide-helix
-        wayland-env
         zen-browser
         mpv
       ];
 
-      home.username = username;
-      home.homeDirectory = lib.mkDefault "/home/${username}";
+      home = {
+        username = "michael";
+        homeDirectory = lib.mkDefault "/home/michael";
+      };
 
       # Git configuration with user info
       programs.git.settings.user = {
@@ -39,7 +38,7 @@ in
       # Thunderbird
       programs.thunderbird = {
         enable = true;
-        profiles.${username} = {
+        profiles.michael = {
           isDefault = true;
           search.default = "google";
         };

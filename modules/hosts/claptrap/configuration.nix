@@ -10,8 +10,7 @@
     {
       imports = with inputs.self.modules.nixos; [
         claptrap-hardware
-        system-desktop
-        home-manager
+        desktop
         ly
         niri
         essential-packages

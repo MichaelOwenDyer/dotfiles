@@ -18,16 +18,12 @@
         home-manager
         desktop
         gaming
-        wifi
-        bluetooth
         ly
         niri
         dank-material-shell
         gnome-keyring
         plymouth
         # local-streaming-network
-        essential-packages
-        ssh
         michael-rustbucket
       ];
 

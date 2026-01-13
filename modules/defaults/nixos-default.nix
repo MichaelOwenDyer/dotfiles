@@ -6,7 +6,10 @@
   # Default settings needed for all nixosConfigurations
 
   flake.modules.nixos.default-settings = {
-    imports = [ inputs.self.modules.nixos.overlays ];
+    imports = with inputs.self.modules.nixos; [
+      overlays
+      nh
+    ];
 
     nixpkgs.config.allowUnfree = true;
 
@@ -26,12 +29,6 @@
     nix.extraOptions = ''
       warn-dirty = false
     '';
-
-    # Run garbage collection weekly
-    nix.gc = {
-      automatic = true;
-      dates = "weekly";
-    };
 
     # Localization defaults
     i18n.defaultLocale = "en_US.UTF-8";

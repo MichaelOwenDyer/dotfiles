@@ -22,6 +22,11 @@
   flake.modules.homeManager.niri =
     { pkgs, ... }:
     {
+      home.sessionVariables = {
+        NIXOS_OZONE_WL = "1";
+        GTK_USE_PORTAL = "1";
+      };
+
       programs.niri.settings = {
         # Spawn commands at startup
         spawn-at-startup = [

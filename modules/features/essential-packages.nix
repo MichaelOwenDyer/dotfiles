@@ -8,9 +8,6 @@
         pkgs: with pkgs; [
           git
           gitui
-          ripgrep
-          yazi
-          fd
           tree
           openssh
           gnupg1

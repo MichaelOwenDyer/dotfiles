@@ -2,6 +2,18 @@
   ...
 }:
 {
+  flake.modules.nixos.gitui =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = [ pkgs.gitui ];
+    };
+
+  flake.modules.darwin.gitui =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = [ pkgs.gitui ];
+    };
+
   flake.modules.homeManager.gitui = {
     programs.gitui = {
       enable = true;

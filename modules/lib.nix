@@ -35,11 +35,11 @@
     };
 
     # Create a home-manager configuration for a given system and module name
-    mkHomeManager = system: name: inputs.home-manager.lib.homeManagerConfiguration {
-      pkgs = inputs.nixpkgs.legacyPackages.${system};
-      modules = [
-        inputs.self.modules.homeManager.${name}
-      ];
-    };
+    mkHomeManager =
+      system: name:
+      inputs.home-manager.lib.homeManagerConfiguration {
+        pkgs = inputs.nixpkgs.legacyPackages.${system};
+        modules = [ inputs.self.modules.homeManager.${name} ];
+      };
   };
 }

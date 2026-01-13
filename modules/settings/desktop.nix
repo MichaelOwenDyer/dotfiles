@@ -9,9 +9,10 @@
     { pkgs, ... }:
     {
       imports = with inputs.self.modules.nixos; [
-        default-settings
+        cli
         wifi
         audio
+        bluetooth
       ];
 
       # Enable XDG desktop portal

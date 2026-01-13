@@ -18,17 +18,7 @@ let
 in
 {
   # Home Manager configurations for NixOS and Darwin systems
-  flake.modules.nixos.home-manager = {
-    imports = [
-      inputs.home-manager.nixosModules.home-manager
-    ];
-    inherit home-manager;
-  };
+  flake.modules.nixos.home-manager = { inherit home-manager; };
 
-  flake.modules.darwin.home-manager = {
-    imports = [
-      inputs.home-manager.darwinModules.home-manager
-    ];
-    inherit home-manager;
-  };
+  flake.modules.darwin.home-manager = { inherit home-manager; };
 }

@@ -5,9 +5,9 @@
   # fzf - A command-line fuzzy finder
 
   flake.modules.nixos.fzf =
-    { ... }:
+    { pkgs, ... }:
     {
-      programs.fzf.enable = true;
+      environment.systemPackages = [ pkgs.fzf ];
     };
 
   flake.modules.darwin.fzf =
