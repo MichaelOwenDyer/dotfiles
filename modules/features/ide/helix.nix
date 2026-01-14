@@ -4,6 +4,17 @@
 }:
 {
   # Helix editor configuration
+  flake.modules.nixos.ide-helix =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = [ pkgs.helix ];
+    };
+
+  flake.modules.darwin.ide-helix =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = [ pkgs.helix ];
+    };
 
   flake.modules.homeManager.ide-helix =
     { lib, pkgs, ... }:
@@ -34,7 +45,7 @@
           {
             name = "nix";
             auto-format = true;
-            formatter.command = lib.getExe pkgs.nixfmt-rfc-style;
+            formatter.command = lib.getExe pkgs.nixfmt;
           }
         ];
         extraConfig = ''

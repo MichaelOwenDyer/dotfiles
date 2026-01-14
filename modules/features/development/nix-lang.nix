@@ -7,7 +7,7 @@
     {
       environment.systemPackages = with pkgs; [
         nixd
-        nixfmt-rfc-style
+        nixfmt
         tree-sitter-grammars.tree-sitter-nix
       ];
     };
@@ -17,7 +17,7 @@
     {
       environment.systemPackages = with pkgs; [
         nixd
-        nixfmt-rfc-style
+        nixfmt
         tree-sitter-grammars.tree-sitter-nix
       ];
     };
@@ -27,7 +27,7 @@
     {
       home.packages = with pkgs; [
         nixd
-        nixfmt-rfc-style
+        nixfmt
         tree-sitter-grammars.tree-sitter-nix
       ];
     };
