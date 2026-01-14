@@ -9,6 +9,7 @@
     { pkgs, ... }:
     {
       imports = with inputs.self.modules.nixos; [
+        default-settings
         wifi
         audio
         bluetooth
