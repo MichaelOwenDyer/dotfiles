@@ -5,7 +5,7 @@
 {
   # Zsh shell configuration
 
-  flake.modules.homeManager.shell-zsh =
+  flake.modules.homeManager.zsh-shell =
     { pkgs, ... }:
     {
       programs.zsh = {
@@ -16,11 +16,11 @@
       };
     };
 
-  flake.modules.nixos.shell-zsh = {
+  flake.modules.nixos.zsh-shell = {
     programs.zsh.enable = true;
   };
 
-  flake.modules.darwin.shell-zsh = {
+  flake.modules.darwin.zsh-shell = {
     programs.zsh.enable = true;
   };
 }

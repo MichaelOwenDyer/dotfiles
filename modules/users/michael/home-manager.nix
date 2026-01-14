@@ -9,19 +9,16 @@ in
 {
   # Home-Manager configuration for michael
   flake.modules.homeManager.michael =
-    {
-      lib,
-      ...
-    }:
+    { lib, ... }:
     {
       imports = with inputs.self.modules.homeManager; [
+        cli
         ide-helix
         zen-browser
-        mpv
       ];
 
       home = {
-        username = "michael";
+        username = lib.mkDefault "michael";
         homeDirectory = lib.mkDefault "/home/michael";
       };
 

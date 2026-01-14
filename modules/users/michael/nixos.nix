@@ -16,16 +16,13 @@ in
 {
   # Extra NixOS configuration for any system michael is a user on
   flake.modules.nixos.michael =
-    {
-      pkgs,
-      lib,
-      config,
-      ...
-    }:
+    { pkgs, lib, config, ... }:
     {
       imports = with inputs.self.modules.nixos; [
         home-manager # Enable home-manager on this NixOS system
-        shell-fish
+        fish-shell
+        cli
+        ssh
       ];
 
       users.users.michael = {

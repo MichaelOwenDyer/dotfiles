@@ -8,17 +8,12 @@
     { pkgs, ... }:
     {
       imports = with inputs.self.modules.darwin; [
-        shell-zsh
+        home-manager
+        zsh-shell
       ];
 
       home-manager.users.michael = {
         imports = [ inputs.self.modules.homeManager.michael ];
-      };
-
-      users.users.michael = {
-        name = "michael.dyer";
-        home = "/Users/michael.dyer";
-        shell = pkgs.zsh;
       };
     };
 }

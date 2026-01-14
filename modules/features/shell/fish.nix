@@ -5,7 +5,7 @@
 {
   # Fish shell configuration
 
-  flake.modules.homeManager.shell-fish =
+  flake.modules.homeManager.fish-shell =
     { pkgs, ... }:
     {
       home.shell.enableFishIntegration = true;
@@ -47,11 +47,11 @@
     };
 
   # NixOS needs fish enabled for users to use it as shell
-  flake.modules.nixos.shell-fish = {
+  flake.modules.nixos.fish-shell = {
     programs.fish.enable = true;
   };
 
-  flake.modules.darwin.shell-fish = {
+  flake.modules.darwin.fish-shell = {
     programs.fish.enable = true;
   };
 }

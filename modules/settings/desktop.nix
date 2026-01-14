@@ -9,7 +9,6 @@
     { pkgs, ... }:
     {
       imports = with inputs.self.modules.nixos; [
-        cli
         wifi
         audio
         bluetooth

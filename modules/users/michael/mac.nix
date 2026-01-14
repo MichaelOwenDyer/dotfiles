@@ -8,6 +8,11 @@
   flake.modules.darwin.michael-mac =
     { pkgs, ... }:
     {
+      imports = with inputs.self.modules.darwin; [
+        # michael # TODO: use common michael settings when available
+        _1password
+      ];
+
       home-manager.users."michael.dyer" = {
         imports = [ inputs.self.modules.homeManager.michael-mac ];
       };
@@ -26,16 +31,11 @@
     { lib, pkgs, ... }:
     {
       imports = with inputs.self.modules.homeManager; [
+        # michael # TODO: use common michael settings when available
         default-settings
-        nh
-        git
-        gitui
-        yazi
-        fzf
-        ide-helix
-        ide-vscode
+        orbstack
+        cli
         cursor-cli
-        nix-lang
       ];
 
       programs.git.settings.user = {
@@ -44,9 +44,7 @@
       };
 
       home.packages = with pkgs; [
-        ripgrep
         alt-tab-macos
-        jq
         mos
         scroll-reverser
         hours
@@ -56,7 +54,10 @@
         gradle_9
       ];
 
-      home.homeDirectory = lib.mkForce "/Users/michael.dyer";
-      home.stateVersion = "26.05";
+      home = {
+        username = "michael.dyer";
+        homeDirectory = "/Users/michael.dyer";
+        stateVersion = "26.05";
+      };
     };
 }
