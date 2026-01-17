@@ -10,7 +10,7 @@
     {
       imports = with inputs.self.modules.nixos; [
         claptrap-hardware
-        desktop
+        laptop
         ly
         niri
         essential-packages

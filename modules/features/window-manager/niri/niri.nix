@@ -39,14 +39,6 @@
               "XDG_SESSION_TYPE=wayland"
             ];
           }
-          {
-            argv = [
-              "systemctl"
-              "--user"
-              "restart"
-              "dms.service"
-            ];
-          }
         ];
 
         # Input configuration

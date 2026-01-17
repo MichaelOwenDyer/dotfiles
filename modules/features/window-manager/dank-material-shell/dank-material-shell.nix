@@ -34,6 +34,17 @@
   flake.modules.homeManager.dank-material-shell =
     { pkgs, ... }:
     {
+      # Start DMS automatically when Niri starts
+      programs.niri.settings.spawn-at-startup = [
+        {
+          argv = [
+            "systemctl"
+            "--user"
+            "restart"
+            "dms.service"
+          ];
+        }
+      ];
       systemd.user.services.cliphist = {
         Unit = {
           Description = "Clipboard history service";
