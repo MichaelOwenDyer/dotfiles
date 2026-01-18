@@ -1,12 +1,11 @@
 {
-  inputs,
   ...
 }:
 {
   # Zsh shell configuration
 
   flake.modules.homeManager.zsh-shell =
-    { pkgs, ... }:
+    { ... }:
     {
       programs.zsh = {
         enable = true;

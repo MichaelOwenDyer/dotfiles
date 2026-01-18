@@ -1,12 +1,11 @@
 {
-  inputs,
   ...
 }:
 {
   # Firefox browser
 
   flake.modules.homeManager.browser-firefox =
-    { pkgs, lib, config, ... }:
+    { pkgs, config, ... }:
     {
       home.sessionVariables = {
         MOZ_ENABLE_WAYLAND = "1";

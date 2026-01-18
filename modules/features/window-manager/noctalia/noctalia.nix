@@ -10,7 +10,7 @@
     };
 
   flake.modules.homeManager.noctalia-shell =
-    { lib, ... }:
+    { ... }:
     {
       imports = [ inputs.noctalia.homeModules.default ];
 

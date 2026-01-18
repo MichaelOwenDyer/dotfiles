@@ -69,9 +69,8 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 - [x] Update README to reflect current directory structure (2026-01-19)
 - [x] Fix hardcoded `/home/user/.steam` path in gaming module (2026-01-19)
 - [x] Remove unused parameters from modules (2026-01-19)
-  - `1password.nix`, `desktop.nix`, `rustbucket/hardware.nix`, `rustbucket.nix`
-  - `cursor.nix`, `chrome.nix`, `hyprland.nix`, `vscode.nix`
-  - `audio.nix`, `wifi.nix`, `ssh.nix`
+  - Batch 1: `1password.nix`, `desktop.nix`, `rustbucket/hardware.nix`, `rustbucket.nix`, `cursor.nix`, `chrome.nix`, `hyprland.nix`, `vscode.nix`, `audio.nix`, `wifi.nix`, `ssh.nix`
+  - Batch 2: `noctalia.nix`, `firefox.nix`, `gnome-keyring.nix`, `zsh.nix`, `stylix-config.nix`, `plymouth.nix`
 - [x] Add `default-settings` to rpi-3b configuration (2026-01-19)
 - [x] Remove duplicate `home-manager` import from rustbucket (2026-01-19)
 - [x] Remove redundant `console.font` from claptrap and rustbucket (2026-01-19)
