@@ -9,14 +9,13 @@
     { ... }:
     {
       imports = with inputs.self.modules.nixos; [
+        default-settings
         rpi-3b-hardware
         michael-rpi-3b
         ssh
       ];
 
       networking.hostName = "rpi-3b";
-
-      console.font = "Lat2-Terminus16";
 
       # Use the extlinux boot loader
       boot.loader.grub.enable = false;

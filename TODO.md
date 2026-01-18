@@ -24,8 +24,6 @@ Tracking improvements, bugfixes, and planned features for this configuration.
   - Consider: `niri/{base,keybinds,appearance,window-rules}.nix`
 - [ ] **Integrate theming with stylix** - Niri has hardcoded Catppuccin colors
   - Location: `modules/features/window-manager/niri/niri.nix`
-- [ ] **Add `default-settings` to rpi-3b** - Missing base configuration
-  - Location: `modules/hosts/rpi-3b/configuration.nix`
 
 ### Low Priority
 
@@ -74,3 +72,4 @@ Tracking improvements, bugfixes, and planned features for this configuration.
   - `1password.nix`, `desktop.nix`, `rustbucket/hardware.nix`, `rustbucket.nix`
   - `cursor.nix`, `chrome.nix`, `hyprland.nix`, `vscode.nix`
   - `audio.nix`, `wifi.nix`, `ssh.nix`
+- [x] Add `default-settings` to rpi-3b configuration (2026-01-19)
