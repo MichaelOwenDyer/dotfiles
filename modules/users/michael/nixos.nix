@@ -16,7 +16,7 @@ in
 {
   # Extra NixOS configuration for any system michael is a user on
   flake.modules.nixos.michael =
-    { pkgs, lib, config, ... }:
+    { pkgs, lib, ... }:
     {
       imports = with inputs.self.modules.nixos; [
         home-manager # Enable home-manager on this NixOS system

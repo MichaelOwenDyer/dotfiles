@@ -23,9 +23,9 @@
         michael
         ide-vscode
         ide-cursor
-        browser-chrome
-        dank-material-shell
         niri
+        noctalia-shell
+        development
       ];
 
       home.stateVersion = "24.11";

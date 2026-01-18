@@ -33,6 +33,10 @@
     nixpkgs-lib.follows = "nixpkgs";
     nixpkgs-master.url = "github:NixOS/nixpkgs/master";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.11";
+    noctalia = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:noctalia-dev/noctalia-shell";
+    };
     nur = {
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:nix-community/NUR";

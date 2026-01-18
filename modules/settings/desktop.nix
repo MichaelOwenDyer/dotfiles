@@ -22,6 +22,6 @@
       # Enable PolicyKit for managing system-wide privileges
       security.polkit.enable = true;
       # Enable tuned for performance optimization
-      services.tuned.enable = true;
+      # services.tuned.enable = true;
     };
 }

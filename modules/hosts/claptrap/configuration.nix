@@ -13,8 +13,7 @@
         laptop
         ly
         niri
-        essential-packages
-        dank-material-shell
+        noctalia-shell
         gnome-keyring
         plymouth
         ssh
@@ -52,19 +51,19 @@
         dockerSocket.enable = true;
       };
 
-      stylix = {
-        fonts.sizes =
-          let
-            fontSize = 12;
-          in
-          {
-            applications = fontSize;
-            desktop = fontSize;
-            popups = fontSize;
-            terminal = fontSize + 2;
-          };
-      };
-      qt.platformTheme = lib.mkForce "gnome";
+      # stylix = {
+      #   fonts.sizes =
+      #     let
+      #       fontSize = 12;
+      #     in
+      #     {
+      #       applications = fontSize;
+      #       desktop = fontSize;
+      #       popups = fontSize;
+      #       terminal = fontSize + 2;
+      #     };
+      # };
+      # qt.platformTheme = lib.mkForce "gnome";
 
       powerManagement.cpuFreqGovernor = "powersave";
 

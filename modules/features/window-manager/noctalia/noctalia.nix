@@ -3,14 +3,14 @@
   ...
 }:
 {
-  flake.modules.nixos.noctalia =
-    { pkgs, ... }:
+  flake.modules.nixos.noctalia-shell =
+    { ... }:
     {
       imports = [ inputs.noctalia.nixosModules.default ];
     };
 
-  flake.modules.homeManager.noctalia =
-    { lib, pkgs, ... }:
+  flake.modules.homeManager.noctalia-shell =
+    { lib, ... }:
     {
       imports = [ inputs.noctalia.homeModules.default ];
 
@@ -34,10 +34,5 @@
           version = 1;
         };
       };
-
-      # Spawn Noctalia Shell at Niri startup if systemd user unit is not enabled
-      programs.niri.settings.spawn-at-startup = lib.mkIf (!programs.noctalia-shell.systemd.enable) [{
-        command = [ "noctalia-shell" ];
-      }];
     };
 }
