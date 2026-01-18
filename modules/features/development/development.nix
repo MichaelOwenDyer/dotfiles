@@ -18,6 +18,7 @@
         fzf
         jujutsu
         nix-lang
+        cursor-cli
         shell-alias-cd-zoxide
         shell-alias-ls-eza
         shell-alias-cat-bat
