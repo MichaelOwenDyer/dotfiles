@@ -20,10 +20,8 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 
 ### Medium Priority
 
-- [ ] **Split large niri module** - 457 lines is unwieldy
-  - Consider: `niri/{base,keybinds,appearance,window-rules}.nix`
 - [ ] **Integrate theming with stylix** - Niri has hardcoded Catppuccin colors
-  - Location: `modules/features/window-manager/niri/niri.nix`
+  - Location: `modules/features/window-manager/niri/appearance.nix`
 
 ### Low Priority
 
@@ -74,3 +72,4 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 - [x] Add `default-settings` to rpi-3b configuration (2026-01-19)
 - [x] Remove duplicate `home-manager` import from rustbucket (2026-01-19)
 - [x] Remove redundant `console.font` from claptrap and rustbucket (2026-01-19)
+- [x] Split niri module into `niri.nix`, `input.nix`, `appearance.nix`, `keybinds.nix` (2026-01-19)
