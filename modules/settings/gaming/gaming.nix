@@ -1,5 +1,4 @@
 {
-  inputs,
   ...
 }:
 {
@@ -29,7 +28,8 @@
           protonup-ng
         ];
         sessionVariables = {
-          STEAM_EXTRA_COMPAT_TOOLS_PATHS = "/home/user/.steam/compatibilitytools.d";
+          # Use $HOME so this works for any user
+          STEAM_EXTRA_COMPAT_TOOLS_PATHS = "$HOME/.steam/compatibilitytools.d";
         };
       };
     };

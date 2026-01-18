@@ -17,8 +17,6 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 
 - [ ] **Secrets management** - Hashed password is stored in git (`modules/users/michael/nixos.nix`)
   - Implement `agenix` or `sops-nix` for encrypted secrets
-- [ ] **Hardcoded path in gaming module** - `"/home/user/.steam"` should be dynamic
-  - Location: `modules/settings/gaming/gaming.nix`
 
 ### Medium Priority
 
@@ -73,3 +71,4 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 ## Completed
 
 - [x] Update README to reflect current directory structure (2026-01-19)
+- [x] Fix hardcoded `/home/user/.steam` path in gaming module (2026-01-19)
