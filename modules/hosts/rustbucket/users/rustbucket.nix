@@ -17,7 +17,7 @@
 
   # Host-specific home-manager configuration for michael on rustbucket
   flake.modules.homeManager.michael-rustbucket =
-    { pkgs, ... }:
+    { ... }:
     {
       imports = with inputs.self.modules.homeManager; [
         michael

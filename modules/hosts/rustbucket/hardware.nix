@@ -1,10 +1,9 @@
 {
-  inputs,
   ...
 }:
 {
   flake.modules.nixos.rustbucket-hardware =
-    { pkgs, ... }:
+    { ... }:
     {
       boot.initrd.availableKernelModules = [
         "xhci_pci"

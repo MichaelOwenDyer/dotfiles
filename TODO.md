@@ -29,8 +29,6 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 
 ### Low Priority
 
-- [ ] Remove unused `pkgs` parameters (e.g., `1password.nix`)
-- [ ] Standardize module parameter declarations (`{ ... }:` vs `{ pkgs, ... }:`)
 - [ ] Add comments to uncommented modules for consistency
 
 ---
@@ -72,3 +70,7 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 
 - [x] Update README to reflect current directory structure (2026-01-19)
 - [x] Fix hardcoded `/home/user/.steam` path in gaming module (2026-01-19)
+- [x] Remove unused parameters from modules (2026-01-19)
+  - `1password.nix`, `desktop.nix`, `rustbucket/hardware.nix`, `rustbucket.nix`
+  - `cursor.nix`, `chrome.nix`, `hyprland.nix`, `vscode.nix`
+  - `audio.nix`, `wifi.nix`, `ssh.nix`

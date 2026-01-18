@@ -6,7 +6,7 @@
   # Desktop environment
 
   flake.modules.nixos.desktop =
-    { pkgs, ... }:
+    { ... }:
     {
       imports = with inputs.self.modules.nixos; [
         default-settings
