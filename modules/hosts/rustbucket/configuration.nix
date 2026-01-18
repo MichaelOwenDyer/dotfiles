@@ -15,7 +15,6 @@
     {
       imports = with inputs.self.modules.nixos; [
         rustbucket-hardware
-        home-manager
         desktop
         gaming
         ly
@@ -31,10 +30,7 @@
 
       powerManagement.cpuFreqGovernor = "performance";
 
-      console = {
-        font = "Lat2-Terminus16";
-        keyMap = "us";
-      };
+      console.keyMap = "us";
 
       services.xserver.xkb = {
         layout = "us";

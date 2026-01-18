@@ -73,3 +73,5 @@ Tracking improvements, bugfixes, and planned features for this configuration.
   - `cursor.nix`, `chrome.nix`, `hyprland.nix`, `vscode.nix`
   - `audio.nix`, `wifi.nix`, `ssh.nix`
 - [x] Add `default-settings` to rpi-3b configuration (2026-01-19)
+- [x] Remove duplicate `home-manager` import from rustbucket (2026-01-19)
+- [x] Remove redundant `console.font` from claptrap and rustbucket (2026-01-19)
