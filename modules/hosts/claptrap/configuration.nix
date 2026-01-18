@@ -13,7 +13,7 @@
         laptop
         ly
         niri
-        noctalia-shell
+        dank-material-shell
         gnome-keyring
         plymouth
         ssh

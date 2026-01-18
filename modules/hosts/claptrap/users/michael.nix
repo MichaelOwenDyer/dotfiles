@@ -24,7 +24,7 @@
         ide-vscode
         ide-cursor
         niri
-        noctalia-shell
+        dank-material-shell
         development
       ];
 
