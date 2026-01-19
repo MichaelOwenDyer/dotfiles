@@ -38,12 +38,13 @@
         flavors = {
           inherit (pkgs.yaziPlugins) nord;
         };
+        theme = {
+          flavor = {
+            light = "nord";
+            dark = "nord";
+          };
+        };
       };
-      xdg.configFile."yazi/theme.toml".text = ''
-        [flavor]
-        light = "nord"
-        dark = "nord"
-      '';
       # enable y shell wrapper that provides the ability to
       # change the current working directory when exiting Yazi.
       programs.fish.interactiveShellInit = ''

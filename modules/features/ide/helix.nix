@@ -1,5 +1,4 @@
 {
-  inputs,
   ...
 }:
 {
@@ -31,14 +30,22 @@
         ];
         defaultEditor = true;
         settings = {
-          editor.cursor-shape = {
-            normal = "block";
-            insert = "bar";
-            select = "underline";
-          };
           editor = {
+            cursor-shape = {
+              normal = "block";
+              insert = "bar";
+              select = "underline";
+            };
             line-number = "relative";
             lsp.display-messages = true;
+          };
+          keys.normal = {
+            esc = [ "collapse_selection" "keep_primary_selection" ];
+            space = {
+              q = ":q";
+              space = "file_picker";
+              w = ":w";
+            };
           };
         };
         languages.language = [
@@ -48,15 +55,6 @@
             formatter.command = lib.getExe pkgs.nixfmt;
           }
         ];
-        extraConfig = ''
-          [keys.normal]
-          esc = ["collapse_selection", "keep_primary_selection"]
-
-          [keys.normal.space]
-          q = ":q"
-          space = "file_picker"
-          w = ":w"
-        '';
       };
 
       home.sessionVariables = {

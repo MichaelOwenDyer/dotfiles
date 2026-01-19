@@ -48,6 +48,7 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 
 ### Architecture
 
+- [ ] **Distributed builds** - Builder module for rustbucket/mac, client module for claptrap/rpi-3b
 - [ ] **Disko** - Declarative disk partitioning
 - [ ] **Impermanence** - Stateless root filesystem
 - [ ] **Custom module options** - e.g., `options.my.development.enable`
@@ -73,3 +74,5 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 - [x] Remove duplicate `home-manager` import from rustbucket (2026-01-19)
 - [x] Remove redundant `console.font` from claptrap and rustbucket (2026-01-19)
 - [x] Split niri module into `niri.nix`, `input.nix`, `appearance.nix`, `keybinds.nix` (2026-01-19)
+- [x] Fix yazi config error: use `theme.flavor` instead of manual xdg config file (2026-01-19)
+- [x] Fix helix config error: move keybinds from `extraConfig` to `settings.keys` (2026-01-19)
