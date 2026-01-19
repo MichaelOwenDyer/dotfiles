@@ -22,7 +22,7 @@
             ocamllabs.ocaml-platform
             tamasfe.even-better-toml
             vscjava.vscode-java-pack
-            pkgs.stable.vscode-extensions.rust-lang.rust-analyzer
+            rust-lang.rust-analyzer
             jnoortheen.nix-ide
             mkhl.direnv
             myriad-dreamin.tinymist

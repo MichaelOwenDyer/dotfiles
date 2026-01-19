@@ -58,8 +58,7 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 
 ## Dependency Maintenance
 
-- [ ] Review `niri-flake` not following nixpkgs (potential version mismatch)
-- [ ] Consider lazy evaluation for `pkgs.stable`/`pkgs.master` to reduce build time
+- [ ] Periodically run `nix flake update` to keep inputs current
 
 ---
 
@@ -78,3 +77,6 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 - [x] Fix helix config error: move keybinds from `extraConfig` to `settings.keys` (2026-01-19)
 - [x] Remove redundant `home.sessionVariables.EDITOR` from helix (defaultEditor handles it) (2026-01-19)
 - [x] Fix EDITOR not set to hx - use `systemd.user.sessionVariables` for graphical session (2026-01-19)
+- [x] Switch vscode rust-analyzer from `pkgs.stable` to unstable (2026-01-19)
+- [x] Document niri-flake intentionally not following nixpkgs (uses own cache) (2026-01-19)
+- [x] Document pkgs.stable/master availability and current usage status (2026-01-19)

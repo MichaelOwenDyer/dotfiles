@@ -7,6 +7,8 @@
     # Use managed flake for Niri instead of nixpkgs directly
     niri-flake = {
       url = "github:sodiboo/niri-flake";
+      # Note: intentionally NOT following nixpkgs - niri-flake pins specific
+      # nixpkgs versions for stability and uses its own binary cache
     };
   };
 
