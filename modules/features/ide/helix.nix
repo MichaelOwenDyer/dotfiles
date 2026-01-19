@@ -171,11 +171,6 @@
               "v" = "vsplit";
               "s" = "hsplit";
 
-              # Git
-              g = {
-                g = ":sh lazygit";
-                b = "blame";
-              };
 
               # LSP
               l = {
