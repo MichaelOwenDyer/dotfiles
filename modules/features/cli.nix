@@ -6,7 +6,7 @@
   # Basic CLI environment
 
   flake.modules.nixos.cli =
-    { pkgs, ... }:
+    { ... }:
     {
       imports = with inputs.self.modules.nixos; [
         nh
@@ -24,7 +24,7 @@
     };
 
   flake.modules.darwin.cli =
-    { pkgs, ... }:
+    { ... }:
     {
       imports = with inputs.self.modules.darwin; [
         nh

@@ -80,3 +80,4 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 - [x] Switch vscode rust-analyzer from `pkgs.stable` to unstable (2026-01-19)
 - [x] Document niri-flake intentionally not following nixpkgs (uses own cache) (2026-01-19)
 - [x] Document pkgs.stable/master availability and current usage status (2026-01-19)
+- [x] Remove additional unused parameters from cli.nix and darwin.nix (2026-01-19)
