@@ -33,12 +33,10 @@
           # Web
           typescript-language-server
           vscode-langservers-extracted # HTML, CSS, JSON, ESLint
-          tailwindcss-language-server
           nodePackages.prettier
 
-          # Systems
+          # Rust
           rust-analyzer
-          clang-tools # clangd
 
           # JVM
           java-language-server
@@ -50,11 +48,10 @@
           # Shell/Ops
           bash-language-server
           docker-language-server
-          terraform-ls
 
           # Nix
           nil
-          nixfmt-rfc-style
+          nixfmt
 
           # Markdown
           marksman
@@ -169,7 +166,7 @@
           {
             name = "nix";
             auto-format = true;
-            formatter.command = lib.getExe pkgs.nixfmt-rfc-style;
+            formatter.command = lib.getExe pkgs.nixfmt;
           }
           {
             name = "rust";
