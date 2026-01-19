@@ -3,16 +3,18 @@
   ...
 }:
 {
-  # Desktop environment
+  # Laptop configuration - extends desktop with laptop-specific settings
 
   flake.modules.nixos.laptop =
     { ... }:
     {
       imports = with inputs.self.modules.nixos; [
         desktop
+        touchpad
+        hibernate
       ];
 
-      # Enable power-profiles-daemon for managing power profiles on laptops
-      # services.power-profiles-daemon.enable = true;
+      # Use powersave governor by default on laptops
+      powerManagement.cpuFreqGovernor = "powersave";
     };
 }

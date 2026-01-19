@@ -81,3 +81,10 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 - [x] Document niri-flake intentionally not following nixpkgs (uses own cache) (2026-01-19)
 - [x] Document pkgs.stable/master availability and current usage status (2026-01-19)
 - [x] Remove additional unused parameters from cli.nix and darwin.nix (2026-01-19)
+- [x] Extract reusable modules from host configurations (2026-01-19)
+  - `systemd-boot` - bootloader configuration
+  - `keyboard-us` - US keyboard layout
+  - `nvidia` - NVIDIA GPU driver
+  - `podman` - container runtime with Docker compatibility
+  - `hibernate` - suspend-then-hibernate power management
+  - `touchpad` - libinput touchpad configuration
