@@ -56,9 +56,5 @@
           }
         ];
       };
-
-      home.sessionVariables = {
-        "EDITOR" = "hx";
-      };
     };
 }
