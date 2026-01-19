@@ -115,10 +115,6 @@
               character = "│";
             };
 
-            # Sticky scrolling (show parent scope)
-            # Benefit: Always know which function/class you're in
-            sticky-scroll.enable = true;
-
             # File picker settings
             file-picker = {
               hidden = false; # Show hidden files
@@ -142,14 +138,8 @@
             # Smarter auto-pairs
             auto-pairs = true;
 
-            # Completion settings
-            completion = {
-              auto-info = true; # Show docs in completion menu
-              padding = {
-                top = 0;
-                bottom = 0;
-              };
-            };
+            # Show completion docs automatically
+            auto-info = true;
           };
 
           keys.normal = {
@@ -170,7 +160,6 @@
               # Window management
               "v" = "vsplit";
               "s" = "hsplit";
-
 
               # LSP
               l = {
