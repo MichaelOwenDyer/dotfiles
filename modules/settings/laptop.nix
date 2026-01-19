@@ -16,5 +16,8 @@
 
       # Use powersave governor by default on laptops
       powerManagement.cpuFreqGovernor = "powersave";
+
+      # Reduce wifi scanning on low signal to save battery
+      networking.wireless.scanOnLowSignal = false;
     };
 }

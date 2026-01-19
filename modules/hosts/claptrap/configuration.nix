@@ -23,14 +23,8 @@
 
       networking.hostName = "claptrap";
 
-      # XDG portal with GTK as default (for Wayland)
-      xdg.portal.config.common.default = [ "gtk" ];
-
       # Host-specific applications
       programs.zoom-us.enable = true;
-
-      # Reduce wifi scanning on low signal (saves battery)
-      networking.wireless.scanOnLowSignal = false;
 
       system.stateVersion = "24.11";
     };

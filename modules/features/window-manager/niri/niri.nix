@@ -16,6 +16,9 @@
         package = pkgs.niri-unstable; # Use unstable version - breakages expected
         # package = pkgs.niri-stable;
       };
+
+      # Use GTK portal as default for Wayland
+      xdg.portal.config.common.default = [ "gtk" ];
     };
 
   # Niri scrolling window manager - Home Manager module
