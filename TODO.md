@@ -88,3 +88,14 @@ Tracking improvements, bugfixes, and planned features for this configuration.
   - `podman` - container runtime with Docker compatibility
   - `hibernate` - suspend-then-hibernate power management
   - `touchpad` - libinput touchpad configuration
+- [x] Opinionated enhancements across modules (2026-01-19)
+  - `nixos-default`: nix gc, fwupd, inotify limits, flake registry settings
+  - `ssh`: security hardening, fail2ban, modern key exchange algorithms
+  - `systemd-boot`: silent boot, tmp cleanup, console mode
+  - `nvidia`: hardware acceleration, wayland environment variables
+  - `wifi`: systemd-resolved, iwd network configuration, mac randomization
+  - `laptop`: TLP power management, thermald, battery charge thresholds
+  - `git`: delta diffs, aliases, push defaults, rerere, histogram diff
+  - `fish`: abbreviations, functions, additional plugins (done, colored-man-pages)
+  - `helix`: comprehensive LSP setup, keybinds, editor settings, formatters
+  - `ghostty`: theme, font, keybindings, shell integration
