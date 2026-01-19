@@ -48,7 +48,7 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 
 ### Architecture
 
-- [ ] **Distributed builds** - Builder module for rustbucket/mac, client module for claptrap/rpi-3b
+- [x] **Distributed builds** - Builder module for rustbucket/mac, client module for claptrap/rpi-3b (2026-01-19)
 - [ ] **Disko** - Declarative disk partitioning
 - [ ] **Impermanence** - Stateless root filesystem
 - [ ] **Custom module options** - e.g., `options.my.development.enable`

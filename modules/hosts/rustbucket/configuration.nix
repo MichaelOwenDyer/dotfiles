@@ -18,11 +18,16 @@
         dank-material-shell
         gnome-keyring
         plymouth
+        distributed-build-server
         # local-streaming-network
         michael-rustbucket
       ];
 
       networking.hostName = "rustbucket";
+
+      distributed-build.server = with inputs.self.lib.distributedBuild; {
+        authorizedKeys = [ clientKeys.claptrap ];
+      };
 
       # Performance mode for gaming desktop
       powerManagement.cpuFreqGovernor = "performance";
@@ -32,7 +37,10 @@
 
       # Static IP for wifi interface
       networking.interfaces.wlan0.ipv4.addresses = [
-        { address = "192.168.0.1"; prefixLength = 24; }
+        {
+          address = "192.168.0.1";
+          prefixLength = 24;
+        }
       ];
 
       # Passwordless sudo for convenience on personal gaming machine

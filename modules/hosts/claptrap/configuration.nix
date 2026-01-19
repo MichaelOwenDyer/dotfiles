@@ -18,12 +18,17 @@
         gnome-keyring
         plymouth
         ssh
+        distributed-build-client
         michael-claptrap
       ];
 
       networking.hostName = "claptrap";
 
-      # Host-specific applications
+      distributed-build.client = with inputs.self.lib.distributedBuild; {
+        publicKey = clientKeys.claptrap;
+        builders = [ builders.rustbucket ];
+      };
+
       programs.zoom-us.enable = true;
 
       system.stateVersion = "24.11";
