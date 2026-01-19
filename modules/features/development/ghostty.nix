@@ -28,7 +28,7 @@
 
         settings = {
           # Theme matching your Catppuccin setup
-          theme = "catppuccin-mocha";
+          theme = "Catppuccin Mocha";
 
           # Font configuration
           # Benefit: Consistent with your terminal aesthetic
