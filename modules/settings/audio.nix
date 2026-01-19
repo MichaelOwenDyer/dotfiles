@@ -2,19 +2,18 @@
   ...
 }:
 {
-  # Audio configuration with PipeWire
+  # PipeWire audio with PulseAudio and ALSA compatibility
 
   flake.modules.nixos.audio = {
-    # Enable sound with pipewire
     services.pulseaudio.enable = false;
-    security.rtkit.enable = true;
+    security.rtkit.enable = true; # Realtime scheduling for audio
+
     services.pipewire = {
       enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-      # If you want to use JACK applications, uncomment this
-      # jack.enable = true;
+      # jack.enable = true; # Uncomment for JACK applications
     };
   };
 }

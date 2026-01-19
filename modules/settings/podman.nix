@@ -2,14 +2,14 @@
   ...
 }:
 {
-  # Podman container runtime with Docker compatibility
+  # Podman with Docker socket compatibility
 
   flake.modules.nixos.podman =
     { ... }:
     {
       virtualisation.podman = {
         enable = true;
-        dockerSocket.enable = true; # Enable Docker socket for compatibility
+        dockerSocket.enable = true;
       };
     };
 }

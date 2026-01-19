@@ -3,7 +3,7 @@
   ...
 }:
 {
-  # Desktop environment - common settings for graphical workstations
+  # Common settings for graphical workstations
 
   flake.modules.nixos.desktop =
     { ... }:
@@ -17,13 +17,8 @@
         bluetooth
       ];
 
-      # Enable XDG desktop portal
       xdg.portal.enable = true;
-
-      # Enable dconf for desktop application configuration
       programs.dconf.enable = true;
-
-      # Enable PolicyKit for system-wide privilege management
       security.polkit.enable = true;
     };
 }

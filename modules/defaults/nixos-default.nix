@@ -4,7 +4,7 @@
   ...
 }:
 {
-  # Default settings needed for all nixosConfigurations
+  # Default settings for all NixOS configurations
 
   flake.modules.nixos.default-settings = {
     imports = with inputs.self.modules.nixos; [
@@ -26,12 +26,8 @@
         "@wheel"
       ];
 
-      # Avoid copying unnecessary source files to the nix store
-      # Benefit: Faster evaluations and less disk usage
+      # Disable the global flake registry for faster commands and explicit dependencies
       flake-registry = "";
-
-      # Avoid downloading/updating the global flake registry
-      # Benefit: Faster nix commands, explicit dependency management
       use-registries = false;
     };
 
@@ -39,38 +35,28 @@
       warn-dirty = false
     '';
 
-    # Note: Garbage collection is handled by nh clean (see modules/features/nh/nh.nix)
-    # nh clean runs twice weekly, keeps 7 generations, and is GC-root aware
+    # Garbage collection is handled by nh clean (see modules/features/nh/nh.nix)
 
-    # Localization defaults
+    # Localization
     i18n.defaultLocale = "en_US.UTF-8";
     time.timeZone = "Europe/Berlin";
     console.font = "Lat2-Terminus16";
 
-    # Enables unpatched dynamic binaries to run and find the libs they need
-    # Benefit: Run pre-compiled binaries (e.g., from curl | sh installers) without patching
+    # Allow running unpatched dynamic binaries (e.g., from curl | sh installers)
     programs.nix-ld.enable = true;
 
-    # Disable nano as default editor
+    # Clear NixOS default editor so users can set their own via home-manager
     programs.nano.enable = false;
-
-    # Remove NixOS default EDITOR (let users set their own via home-manager)
     environment.variables.EDITOR = lib.mkForce null;
 
-    # nftables is the modern packet filtering framework
-    # Benefit: Replaces iptables with a cleaner, more performant implementation
-    networking.nftables.enable = true;
+    # Modern alternatives to legacy subsystems
+    networking.nftables.enable = true; # Replaces iptables
+    services.dbus.implementation = "broker"; # Faster, more secure D-Bus
 
-    # dbus-broker is a high-performance, modern D-Bus implementation
-    # Benefit: Lower latency, better security, reduced resource usage
-    services.dbus.implementation = "broker";
-
-    # Enable firmware updates via fwupd
-    # Benefit: Keep hardware firmware current for security and compatibility
+    # Firmware updates via fwupd
     services.fwupd.enable = lib.mkDefault true;
 
-    # Increase inotify limits for file watchers (IDEs, build tools, etc.)
-    # Benefit: Prevents "too many open files" errors in large projects
+    # Increase inotify limits for IDEs and build tools watching large projects
     boot.kernel.sysctl = {
       "fs.inotify.max_user_watches" = 524288;
       "fs.inotify.max_user_instances" = 1024;

@@ -2,7 +2,7 @@
   ...
 }:
 {
-  # Touchpad configuration via libinput
+  # Touchpad with tapping and palm rejection
 
   flake.modules.nixos.touchpad =
     { ... }:
@@ -11,7 +11,7 @@
         enable = true;
         touchpad = {
           tapping = true;
-          tappingButtonMap = "lrm";
+          tappingButtonMap = "lrm"; # 1/2/3 finger tap = left/right/middle
           disableWhileTyping = true;
           clickMethod = "clickfinger";
         };

@@ -2,13 +2,17 @@
   ...
 }:
 {
+  # Bluetooth with high-quality audio codecs
+
   flake.modules.nixos.bluetooth =
     { ... }:
     {
-      hardware.bluetooth.enable = true; # enables support for Bluetooth
-      hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
+      hardware.bluetooth = {
+        enable = true;
+        powerOnBoot = true;
+      };
 
-      # Optional: if using PipeWire for audio
+      # WirePlumber configuration for Bluetooth audio
       services.pipewire.wireplumber.extraConfig = {
         "monitor.bluez.properties" = {
           "bluez5.enable-sbc-xq" = true;

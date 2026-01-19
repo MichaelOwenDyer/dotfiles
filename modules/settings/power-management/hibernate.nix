@@ -2,13 +2,11 @@
   ...
 }:
 {
-  # Hibernate and suspend-then-hibernate configuration
-  # Suitable for laptops that should hibernate after extended sleep
+  # Suspend-then-hibernate for laptops
 
   flake.modules.nixos.hibernate =
     { lib, ... }:
     {
-      # Power button and lid switch behavior
       services.logind.settings.Login = {
         HandlePowerKey = lib.mkDefault "hibernate";
         HandlePowerKeyLongPress = lib.mkDefault "poweroff";

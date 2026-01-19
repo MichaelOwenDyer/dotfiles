@@ -2,7 +2,7 @@
   ...
 }:
 {
-  # US keyboard layout configuration
+  # US keyboard layout
 
   flake.modules.nixos.keyboard-us =
     { ... }:

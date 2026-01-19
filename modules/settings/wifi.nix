@@ -2,53 +2,32 @@
   ...
 }:
 {
-  # WiFi configuration with NetworkManager and iwd
+  # WiFi with NetworkManager, iwd backend, and systemd-resolved
 
   flake.modules.nixos.wifi = {
     networking.networkmanager = {
       enable = true;
-
-      # iwd is faster, more reliable, and uses less memory than wpa_supplicant
-      # Benefit: Quicker connections, better roaming, lower resource usage
-      wifi.backend = "iwd";
-
-      # Use systemd-resolved for DNS (integrates with NetworkManager)
-      # Benefit: Proper per-interface DNS, DNSSEC support, better VPN handling
+      wifi.backend = "iwd"; # Faster and more reliable than wpa_supplicant
       dns = "systemd-resolved";
     };
 
     networking.wireless.iwd = {
       enable = true;
       settings = {
-        IPv6 = {
-          Enabled = true;
-        };
-        Settings = {
-          AutoConnect = true;
-        };
+        IPv6.Enabled = true;
+        Settings.AutoConnect = true;
         General = {
-          # Enable built-in DHCP client (faster than external dhclient)
-          # Benefit: Faster IP acquisition, fewer processes
-          EnableNetworkConfiguration = true;
-
-          # Use randomized MAC address for scanning
-          # Benefit: Privacy protection when probing for networks
-          AddressRandomization = "network";
+          EnableNetworkConfiguration = true; # Built-in DHCP client
+          AddressRandomization = "network"; # MAC randomization for privacy
         };
-        Network = {
-          # Enable IPv6 privacy extensions
-          # Benefit: Prevents tracking via stable IPv6 addresses
-          EnableIPv6 = true;
-        };
+        Network.EnableIPv6 = true;
       };
     };
 
-    # Enable systemd-resolved for modern DNS handling
-    # Benefit: DNS caching, DNSSEC validation, split DNS for VPNs
+    # DNS with caching and DNSSEC
     services.resolved = {
       enable = true;
       dnssec = "allow-downgrade";
-      # Fallback DNS servers (Cloudflare + Google)
       fallbackDns = [
         "1.1.1.1"
         "8.8.8.8"
