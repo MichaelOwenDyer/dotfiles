@@ -39,13 +39,8 @@
       warn-dirty = false
     '';
 
-    # Automatic garbage collection to prevent disk bloat
-    # Benefit: Keeps /nix/store from growing unbounded on long-running systems
-    nix.gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 14d";
-    };
+    # Note: Garbage collection is handled by nh clean (see modules/features/nh/nh.nix)
+    # nh clean runs twice weekly, keeps 7 generations, and is GC-root aware
 
     # Localization defaults
     i18n.defaultLocale = "en_US.UTF-8";

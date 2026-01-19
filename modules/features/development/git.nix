@@ -106,16 +106,17 @@ in
     programs.git = {
       enable = true;
       inherit settings;
+    };
 
-      # Delta for syntax-highlighted diffs
-      # Benefit: Much more readable diffs with colors and line numbers
-      delta = {
-        enable = true;
-        options = {
-          navigate = true;
-          side-by-side = false;
-          line-numbers = true;
-        };
+    # Delta for syntax-highlighted diffs
+    # Benefit: Much more readable diffs with colors and line numbers
+    programs.delta = {
+      enable = true;
+      enableGitIntegration = true;
+      options = {
+        navigate = true;
+        side-by-side = false;
+        line-numbers = true;
       };
     };
   };
