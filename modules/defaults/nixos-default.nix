@@ -1,5 +1,6 @@
 {
   inputs,
+  lib,
   ...
 }:
 {
@@ -37,6 +38,12 @@
 
     # enables unpatched dynamic binaries to run and find the libs they need
     programs.nix-ld.enable = true;
+
+    # Disable nano as default editor
+    programs.nano.enable = false;
+
+    # Remove NixOS default EDITOR (let users set their own via home-manager)
+    environment.variables.EDITOR = lib.mkForce null;
 
     # nftables is the modern packet filtering framework
     networking.nftables.enable = true;

@@ -8,7 +8,6 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 
 - [ ] VSCode complains on first startup about authentication with the OS keyring not matching
 - [ ] Caffeine doesn't show up in system tray
-- [ ] Investigate environment variable best practices (sessionVariables vs shell config)
 
 ---
 
@@ -78,3 +77,4 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 - [x] Fix yazi config error: use `theme.flavor` instead of manual xdg config file (2026-01-19)
 - [x] Fix helix config error: move keybinds from `extraConfig` to `settings.keys` (2026-01-19)
 - [x] Remove redundant `home.sessionVariables.EDITOR` from helix (defaultEditor handles it) (2026-01-19)
+- [x] Fix EDITOR not set to hx - use `systemd.user.sessionVariables` for graphical session (2026-01-19)

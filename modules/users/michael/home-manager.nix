@@ -13,6 +13,7 @@ in
     {
       imports = with inputs.self.modules.homeManager; [
         cli
+        fish-shell
         ide-helix
         zen-browser
       ];

@@ -18,6 +18,12 @@
   flake.modules.homeManager.ide-helix =
     { lib, pkgs, ... }:
     {
+      # Set EDITOR/VISUAL in systemd user session (propagates to graphical sessions)
+      systemd.user.sessionVariables = {
+        EDITOR = "hx";
+        VISUAL = "hx";
+      };
+
       programs.helix = {
         enable = true;
         extraPackages = with pkgs; [
