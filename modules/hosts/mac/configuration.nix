@@ -6,12 +6,11 @@
   # macOS configuration
 
   flake.modules.darwin.mac =
-    { lib, config, ... }:
+    { ... }:
     {
       imports = with inputs.self.modules.darwin; [
         default-settings
         macos-disconnect-on-sleep
-        home-manager
         michael-mac
       ];
 

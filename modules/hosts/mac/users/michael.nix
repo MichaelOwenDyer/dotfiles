@@ -9,6 +9,7 @@
     { pkgs, ... }:
     {
       imports = with inputs.self.modules.darwin; [
+        home-manager # Add home-manager to this system
         # michael # TODO: use common michael settings when available
         _1password
       ];
@@ -28,7 +29,7 @@
 
   # Host-specific home-manager configuration for michael on mac
   flake.modules.homeManager.michael-mac =
-    { lib, pkgs, ... }:
+    { pkgs, ... }:
     {
       imports = with inputs.self.modules.homeManager; [
         # michael # TODO: use common michael settings when available
