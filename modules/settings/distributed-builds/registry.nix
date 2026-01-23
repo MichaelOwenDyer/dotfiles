@@ -22,6 +22,7 @@
           "kvm"
         ];
         identityFile = "/root/.ssh/nixremote";
+        signingKey = "rustbucket-1:AMe1QbSNHWw+Cyau5rwhAxknUDtmb49vY8tyIbOVAn0=";
       };
     };
   };

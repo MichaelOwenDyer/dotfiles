@@ -14,6 +14,14 @@
           default = [ ];
           description = "SSH public keys authorized to connect as nixremote";
         };
+        signingKeyPath = lib.mkOption {
+          type = lib.types.path;
+          default = null;
+          description = ''
+            Path to private key for signing builds.
+            After changing this run nix store sign --all -k path/to/key to retroactively sign build artifacts.
+          '';
+        };
       };
 
       config = {
@@ -27,7 +35,12 @@
         };
 
         users.groups.nixremote = { };
-        nix.settings.trusted-users = [ "nixremote" ];
+        nix = {
+          settings.trusted-users = [ "nixremote" ];
+          extraOptions = ''
+            secret-key-files = ${config.distributed-build.server.signingKeyPath}
+          '';
+        };
 
         # Ensure SSH is enabled on the server
         services.openssh.enable = true;

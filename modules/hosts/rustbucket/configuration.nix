@@ -28,6 +28,7 @@
 
       distributed-build.server = with inputs.self.lib.distributedBuild; {
         authorizedKeys = [ clientKeys.claptrap ];
+        signingKeyPath = "/etc/nix/cache-priv-key.pem";
       };
 
       # Performance mode for gaming desktop

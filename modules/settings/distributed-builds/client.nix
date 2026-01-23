@@ -21,6 +21,7 @@
           default = [ ];
           description = ''
             List of remote builders to use.
+            If a builder has a signingKey attribute, it will also be used as a substituter.
           '';
         };
       };
@@ -45,6 +46,16 @@
           extraOptions = ''
             builders-use-substitutes = true
           '';
+          settings = {
+            substituters =
+              config.distributed-build.client.builders
+              |> lib.filter (builder: builder.signingKey or null != null)
+              |> lib.map (builder: "ssh-ng://nixremote@${builder.hostName}");
+            trusted-public-keys =
+              config.distributed-build.client.builders
+              |> lib.filter (builder: builder.signingKey or null != null)
+              |> lib.map (builder: builder.signingKey);
+          };
         };
         programs.ssh.extraConfig =
           config.distributed-build.client.builders
