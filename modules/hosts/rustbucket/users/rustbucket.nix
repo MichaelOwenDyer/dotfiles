@@ -26,6 +26,7 @@
         ide-vscode
         ide-cursor
         zen-browser
+        development
       ];
 
       home.stateVersion = "24.11";
