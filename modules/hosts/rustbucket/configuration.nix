@@ -18,6 +18,7 @@
         dank-material-shell
         gnome-keyring
         plymouth
+        ssh
         distributed-build-server
         # local-streaming-network
         michael-rustbucket

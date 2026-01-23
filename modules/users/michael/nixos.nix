@@ -21,8 +21,6 @@ in
       imports = with inputs.self.modules.nixos; [
         home-manager # Enable home-manager on this NixOS system
         fish-shell
-        cli
-        ssh
       ];
 
       users.users.michael = {

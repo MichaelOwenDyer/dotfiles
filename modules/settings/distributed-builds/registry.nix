@@ -21,7 +21,7 @@
           "big-parallel"
           "kvm"
         ];
-        identityFile = "/root/.ssh/nixremote.pub";
+        identityFile = "/root/.ssh/nixremote";
       };
     };
   };

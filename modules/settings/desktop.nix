@@ -15,6 +15,7 @@
         wifi
         audio
         bluetooth
+        cli
       ];
 
       xdg.portal.enable = true;

@@ -22,12 +22,15 @@
           group = "nixremote";
           home = "/var/lib/nixremote";
           createHome = true;
-          shell = "/bin/sh";
+          shell = "/run/current-system/sw/bin/bash";
           openssh.authorizedKeys.keys = config.distributed-build.server.authorizedKeys;
         };
 
         users.groups.nixremote = { };
         nix.settings.trusted-users = [ "nixremote" ];
+
+        # Ensure SSH is enabled on the server
+        services.openssh.enable = true;
       };
     };
 }

@@ -14,8 +14,6 @@
           default = null;
           description = ''
             SSH public key for root to connect to builders.
-            Generate with: sudo ssh-keygen -t ed25519 -f /root/.ssh/nixremote -N ""
-            Then set this to the contents of /root/.ssh/nixremote.pub
           '';
         };
         builders = lib.mkOption {
@@ -51,7 +49,7 @@
         programs.ssh.extraConfig =
           config.distributed-build.client.builders
           |> lib.concatMapStrings (builder: ''
-            Host rustbucket
+            Host ${builder.hostName}
               HostName ${builder.host-ip}
               User nixremote
               IdentitiesOnly yes
