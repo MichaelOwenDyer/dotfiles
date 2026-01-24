@@ -24,6 +24,7 @@
         ide-vscode
         ide-cursor
         niri
+        niri-outputs-claptrap
         dank-material-shell
         development
       ];

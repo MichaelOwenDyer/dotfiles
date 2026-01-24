@@ -22,6 +22,7 @@
       imports = with inputs.self.modules.homeManager; [
         michael
         niri
+        niri-outputs-rustbucket
         dank-material-shell
         ide-vscode
         ide-cursor
