@@ -20,11 +20,25 @@
         plymouth
         ssh
         distributed-build-server
-        # local-streaming-network
+        local-streaming-network
         michael-rustbucket
       ];
 
       networking.hostName = "rustbucket";
+
+      # Local streaming network configuration
+      localStreaming = {
+        enable = true;
+        wifiInterface = "wlan0";
+        wifiDefaultGateway = "192.168.0.254";
+        streamingInterface = "enp4s0";
+        streamingIpv4Addr = "192.168.50.1";
+        streamingIpv6Addr = "fdc9:1a4b:53e1:50::1";
+        upstreamDnsServers = [
+          "8.8.8.8"
+          "4.4.4.4"
+        ];
+      };
 
       distributed-build.server = with inputs.self.lib.distributedBuild; {
         authorizedKeys = [ clientKeys.claptrap ];

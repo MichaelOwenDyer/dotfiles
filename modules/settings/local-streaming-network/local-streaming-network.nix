@@ -8,11 +8,20 @@
   # The actual network settings should be configured in the host feature
 
   flake.modules.nixos.local-streaming-network =
-    { pkgs, lib, config, ... }:
+    {
+      pkgs,
+      lib,
+      config,
+      ...
+    }:
     {
       # Define options for configurable parameters
       options.localStreaming = {
-        enable = lib.mkEnableOption "local streaming network";
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = true; # Importing the module enables it automatically, but it can be disabled without un-importing it
+          description = "local streaming network";
+        };
         wifiInterface = lib.mkOption {
           type = lib.types.str;
           description = "WiFi interface name";
@@ -35,7 +44,10 @@
         };
         upstreamDnsServers = lib.mkOption {
           type = lib.types.listOf lib.types.str;
-          default = [ "8.8.8.8" "4.4.4.4" ];
+          default = [
+            "8.8.8.8"
+            "4.4.4.4"
+          ];
           description = "Upstream DNS servers";
         };
       };
@@ -83,6 +95,7 @@
           enable = true;
           settings = {
             interface = config.localStreaming.streamingInterface;
+            bind-interfaces = true;
             dhcp-range = [
               "192.168.50.100,192.168.50.200,12h"
               "fdc9:1a4b:53e1:50::,ra-stateless,12h"
@@ -101,21 +114,6 @@
           requires = [ "sys-subsystem-net-devices-${config.localStreaming.streamingInterface}.device" ];
           after = [ "sys-subsystem-net-devices-${config.localStreaming.streamingInterface}.device" ];
           wantedBy = [ "network-online.target" ];
-        };
-
-        services.sunshine = {
-          enable = true;
-          autoStart = true;
-          openFirewall = true;
-          capSysAdmin = true;
-        };
-
-        systemd.user.services.sunshine.serviceConfig = {
-          Environment = [
-            "WAYLAND_DISPLAY="
-            "DISPLAY=:0"
-            "__NV_PRIME_RENDER_OFFLOAD=1"
-          ];
         };
       };
     };
