@@ -24,11 +24,17 @@
         niri
         niri-outputs-rustbucket
         dank-material-shell
+        idle
         ide-vscode
         ide-cursor
         zen-browser
         development
       ];
+
+      services.idle = {
+        displayTimeout = 300;
+        lockTimeout = 600;
+      };
 
       home.stateVersion = "24.11";
     };
