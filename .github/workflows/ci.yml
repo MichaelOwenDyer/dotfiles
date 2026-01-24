@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    name: Flake check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@main
+
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Run flake check
+        run: nix flake check --all-systems
+
+  format:
+    name: Format check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@main
+
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Check formatting with nixfmt
+        run: nix run nixpkgs#nixfmt -- --check .
+
+  build:
+    name: Build ${{ matrix.host }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - host: claptrap
+            system: x86_64-linux
+            os: ubuntu-latest
+            type: nixos
+          - host: rustbucket
+            system: x86_64-linux
+            os: ubuntu-latest
+            type: nixos
+          - host: rpi-3b
+            system: aarch64-linux
+            os: ubuntu-latest
+            type: nixos
+          - host: mac
+            system: aarch64-darwin
+            os: macos-latest
+            type: darwin
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@main
+
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Build ${{ matrix.host }} configuration
+        run: |
+          if [ "${{ matrix.type }}" = "nixos" ]; then
+            nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel --dry-run
+          else
+            nix build .#darwinConfigurations.${{ matrix.host }}.config.system.build.toplevel --dry-run
+          fi
