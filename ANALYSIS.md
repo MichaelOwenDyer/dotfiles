@@ -68,7 +68,7 @@ This approach:
 
 ## 2. Static Dependency Analysis
 
-### 2.1 Flake Inputs (15 total)
+### 2.1 Flake Inputs (14 total)
 
 | Input | Purpose | Follows nixpkgs? |
 |-------|---------|------------------|
@@ -84,7 +84,7 @@ This approach:
 | `nh` | Nix helper CLI | ✅ Yes |
 | `niri-flake` | Niri window manager | No (has own nixpkgs) |
 | `nur` | User repository | ✅ Yes |
-| `stylix` | Theming system | ✅ Yes |
+| `stylix` | Theming system (not currently used) | ✅ Yes |
 | `zen-browser` | Zen browser (forked) | ✅ Yes |
 | `noctalia` | Noctalia shell | ✅ Yes |
 
@@ -101,7 +101,7 @@ flake.nix
 │   │                       ├─ nix-darwin
 │   │                       ├─ nh
 │   │                       ├─ nur
-│   │                       ├─ stylix
+│   │                       ├─ stylix (not currently used)
 │   │                       └─ zen-browser
 │   ├── nixpkgs-stable (fallback)
 │   ├── nixpkgs-master (bleeding edge)
@@ -213,7 +213,7 @@ rustbucket
 | Hardcoded paths | `gaming.nix`: `"/home/user/.steam"` | Medium | Use `config.users.users.<name>.home` |
 | Inconsistent module params | Some use `{ ... }:`, others `{ pkgs, ... }:` | Low | Standardize on explicit params |
 | Outdated README | Mentions `system`/`user` directories that don't exist | Medium | Update documentation |
-| Magic strings | Niri config has hardcoded colors | Low | Consider extracting to variables or stylix |
+| Magic strings | Niri config has hardcoded colors | Low | Consider extracting to variables |
 | Hashed password in repo | `michael/nixos.nix` | Medium | Use `agenix` or `sops-nix` for secrets |
 
 ### 4.3 Code Style Consistency
@@ -309,8 +309,7 @@ rustbucket
 
 ### 7.3 Architecture Improvements
 
-1. **Extract theming to stylix** - Currently niri has hardcoded Catppuccin colors
-2. **Create a `roles` abstraction**:
+1. **Create a `roles` abstraction**:
    ```
    roles/
    ├── workstation.nix  # Desktop + development
@@ -318,7 +317,7 @@ rustbucket
    └── gaming.nix       # Steam + GPU optimizations
    ```
 
-3. **Split large modules** - `niri.nix` is 457 lines; consider:
+2. **Split large modules** - `niri.nix` is 457 lines; consider:
    ```
    niri/
    ├── base.nix
@@ -354,13 +353,12 @@ defaultHashedPassword = "$y$j9T$...";
 ### 8.3 `modules/features/window-manager/niri/niri.nix`
 
 ```nix
-# ISSUE: Large monolithic module (457 lines)
-# ISSUE: Hardcoded theme colors instead of using stylix
+# ISSUE: Hardcoded theme colors
 active.color = "#74c7ec";
 inactive.color = "#6c7086";
 ```
 
-**Fix:** Split into smaller modules and integrate with stylix for theming.
+**Fix:** Consider extracting colors to variables for easier customization.
 
 ### 8.4 `modules/lib.nix`
 
@@ -382,10 +380,10 @@ The README references a directory structure (`system`/`user`/`profiles`/`machine
 
 | Metric | Value |
 |--------|-------|
-| Total Nix files | 88 |
+| Total Nix files | 98 |
 | Host configurations | 4 |
-| Feature modules | ~45 |
-| Flake inputs | 15 |
+| Feature modules | ~49 |
+| Flake inputs | 14 |
 | Overlays | 5 |
 | Lines of Nix code | ~3,500 |
 
@@ -403,9 +401,7 @@ This is a **well-structured configuration** that demonstrates good understanding
 
 **Priority Improvements:**
 1. Implement secrets management (`agenix`)
-2. Update README documentation
-3. Add CI for format checking and build validation
-4. Integrate theming with stylix consistently
+2. Add CI for format checking and build validation
 
 **Technical Debt:**
 - Hardcoded values in several modules
