@@ -7,7 +7,15 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 ## Bugfixes
 
 - [ ] VSCode complains on first startup about authentication with the OS keyring not matching
+- [ ] OS keyring does not match login password - investigate root cause
 - [ ] Caffeine doesn't show up in system tray
+
+---
+
+## Improvements
+
+- [ ] Replace fuzzel with built-in niri dms window switcher / launcher
+- [ ] Unify lock screen and auto lock on idle with dms
 
 ---
 

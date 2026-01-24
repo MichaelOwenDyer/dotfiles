@@ -1,5 +1,0 @@
-brightness keys
-find nice window switcher app
-fix lock screen and idle behavior
-dms weather module
-os keyring does not match login password - why
