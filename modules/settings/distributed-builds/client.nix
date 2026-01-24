@@ -50,13 +50,19 @@
             substituters =
               config.distributed-build.client.builders
               |> lib.filter (builder: builder.signingKey or null != null)
-              |> lib.map (builder: "ssh-ng://nixremote@${builder.hostName}");
+              |> lib.map (builder: "ssh-ng://nixremote@${builder.hostName}?compress=false");
             trusted-public-keys =
               config.distributed-build.client.builders
               |> lib.filter (builder: builder.signingKey or null != null)
               |> lib.map (builder: builder.signingKey);
           };
         };
+        # Ensure socket directory exists for SSH multiplexing
+        system.activationScripts.sshSocketDir = ''
+          mkdir -p /root/.ssh/sockets
+          chmod 700 /root/.ssh/sockets
+        '';
+
         programs.ssh.extraConfig =
           config.distributed-build.client.builders
           |> lib.concatMapStrings (builder: ''
@@ -66,6 +72,9 @@
               IdentitiesOnly yes
               IdentityFile ${builder.identityFile}
               StrictHostKeyChecking accept-new
+              ControlMaster auto
+              ControlPath /root/.ssh/sockets/%r@%h-%p
+              ControlPersist 60
           '');
       };
     };
