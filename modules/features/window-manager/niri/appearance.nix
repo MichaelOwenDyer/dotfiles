@@ -14,6 +14,11 @@
         # Transparent background for DMS wallpaper integration
         background-color = "transparent";
 
+        # Default column width
+        default-column-width = {
+          proportion = 0.9;
+        };
+
         # Preset column widths for cycling with Mod+R
         preset-column-widths = [
           { proportion = 0.9; }
@@ -28,16 +33,13 @@
 
         # Preset window heights for cycling with Mod+Shift+R
         preset-window-heights = [
+          { proportion = 0.7; }
           { proportion = 0.5; }
           { proportion = 0.3; }
           { proportion = 0.5; }
           { proportion = 0.7; }
+          { proportion = 1.0; }
         ];
-
-        # Default column width
-        default-column-width = {
-          proportion = 0.9;
-        };
 
         # Focus ring - Catppuccin-style colors
         focus-ring = {
