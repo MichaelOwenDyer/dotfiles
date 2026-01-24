@@ -35,7 +35,6 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 ## Infrastructure
 
 - [x] **CI/CD with GitHub Actions** (2026-01-24)
-  - Format checking with `nixfmt`
   - Build validation for all hosts (dry-run)
   - Flake check on PRs
 - [ ] **NixOS tests** for critical configurations

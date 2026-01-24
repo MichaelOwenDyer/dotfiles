@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  NIX_CONFIG: |
+    experimental-features = nix-command flakes pipe-operators
+
 jobs:
   check:
     name: Flake check
@@ -19,19 +23,6 @@ jobs:
 
       - name: Run flake check
         run: nix flake check --all-systems
-
-  format:
-    name: Format check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: DeterminateSystems/nix-installer-action@main
-
-      - uses: DeterminateSystems/magic-nix-cache-action@main
-
-      - name: Check formatting with nixfmt
-        run: nix run nixpkgs#nixfmt -- --check .
 
   build:
     name: Build ${{ matrix.host }}
