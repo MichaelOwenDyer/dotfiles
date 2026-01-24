@@ -1,0 +1,37 @@
+This is a NixOS dotfiles repository using flake-parts and home-manager.
+
+## Workflow
+
+1. Always keep TODO.md up-to-date and detailed. Update it when:
+   - Starting work on an item (mark in progress or add context)
+   - Completing an item (move to Completed section with date)
+   - Discovering new issues or improvements (add to appropriate section)
+
+2. Handle one TODO item at a time. Focus on completing the current task before moving to the next.
+
+3. After making code changes, run `nh os build` to confirm successful evaluation. Fix any errors before proceeding.
+
+4. For changes requiring manual testing:
+   - Provide clear instructions on what to test
+   - Explain how to verify the changes work as expected
+   - User will run `nh os switch` or `nh os test` and try the changes
+   - Wait for user approval before committing
+
+5. After user approval, make a commit with a simple lowercase message. Do not push.
+
+## Repository Structure
+
+- `flake.nix` - Auto-generated flake entry point (do not edit directly)
+- `modules/` - All configuration modules using flake-parts
+  - `hosts/` - Per-machine configurations (claptrap, rustbucket, mac, rpi-3b)
+  - `features/` - Optional feature modules (browser, development, shell, window-manager)
+  - `settings/` - System settings (audio, bluetooth, nvidia, etc.)
+  - `users/` - User configurations
+  - `defaults/` - Base configurations for NixOS, darwin, home-manager
+
+## Conventions
+
+- Module pattern: `flake.modules.{nixos,homeManager,darwin}.moduleName`
+- Use `inputs.self.modules.*` for internal module references
+- Prefer home-manager for user-level configuration
+- Keep modules focused and composable
