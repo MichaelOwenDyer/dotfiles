@@ -14,8 +14,18 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 
 ## Improvements
 
-- [ ] Replace fuzzel with built-in niri dms window switcher / launcher
-- [ ] Unify lock screen and auto lock on idle with dms
+### Niri & DMS
+
+- [ ] **Update DMS for 1.2** - Remove cliphist service (DMS has native clipboard), update module name to `programs.dank-material-shell`
+- [ ] **Enable DMS niri integration** - Use `programs.dank-material-shell.niri.includes` for automatic config integration
+- [ ] **Replace fuzzel with DMS launcher** - Use built-in window switcher / launcher
+- [ ] **Configure lock screen and idle** - Unify with DMS lock screen features
+- [ ] **Configure Niri displays per-host** - Separate output modules for claptrap/rustbucket
+- [ ] **Investigate DMS plugins** - Review available plugins in registry
+
+### Other
+
+
 
 ---
 
