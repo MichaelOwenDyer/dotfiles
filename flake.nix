@@ -25,10 +25,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:LnL7/nix-darwin";
     };
-    nix-wallpaper = {
-      inputs.nixpkgs.follows = "nixpkgs";
-      url = "github:lunik1/nix-wallpaper";
-    };
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-lib.follows = "nixpkgs";
     nixpkgs-master.url = "github:NixOS/nixpkgs/master";

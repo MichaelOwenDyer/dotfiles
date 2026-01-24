@@ -83,7 +83,6 @@ This approach:
 | `import-tree` | Module discovery | No |
 | `nh` | Nix helper CLI | ✅ Yes |
 | `niri-flake` | Niri window manager | No (has own nixpkgs) |
-| `nix-wallpaper` | Wallpaper generator | ✅ Yes |
 | `nur` | User repository | ✅ Yes |
 | `stylix` | Theming system | ✅ Yes |
 | `zen-browser` | Zen browser (forked) | ✅ Yes |
@@ -110,8 +109,7 @@ flake.nix
 │
 └── DESKTOP LAYER
     ├── niri-flake (own nixpkgs - potential inconsistency)
-    ├── noctalia (shell overlay)
-    └── nix-wallpaper
+    └── noctalia (shell overlay)
 ```
 
 ### 2.3 Overlay Stack
