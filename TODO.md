@@ -19,13 +19,14 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 - [ ] **Update DMS for 1.2** - Remove cliphist service (DMS has native clipboard), update module name to `programs.dank-material-shell`
 - [ ] **Enable DMS niri integration** - Use `programs.dank-material-shell.niri.includes` for automatic config integration
 - [ ] **Replace fuzzel with DMS launcher** - Use built-in window switcher / launcher
-- [ ] **Configure lock screen and idle** - Unify with DMS lock screen features
+- [ ] **Configure lock screen and idle** - Unify with DMS lock screen features, make screen turn off automatically and lock
 - [ ] **Configure Niri displays per-host** - Separate output modules for claptrap/rustbucket
 - [ ] **Investigate DMS plugins** - Review available plugins in registry
 
 ### Other
 
 - [ ] **Configure router with Nix** - Replace imperative router configuration with declarative NixOS setup
+- [ ] **Fix TV output requiring HDMI replug** - TV output stops working after being off or displaying something else for a while
 
 ---
 
