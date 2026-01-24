@@ -35,3 +35,5 @@ This is a NixOS dotfiles repository using flake-parts and home-manager.
 - Use `inputs.self.modules.*` for internal module references
 - Prefer home-manager for user-level configuration
 - Keep modules focused and composable
+- Stage new files before evaluating (`git add`) to ensure they are picked up
+- Add comments only where truly valuable for understanding, necessary documentation, or consistency with the codebase
