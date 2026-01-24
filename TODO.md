@@ -25,7 +25,7 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 
 ### Other
 
-
+- [ ] **Configure router with Nix** - Replace imperative router configuration with declarative NixOS setup
 
 ---
 
