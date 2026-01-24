@@ -11,6 +11,9 @@
         keyboard = {
           numlock = true;
         };
+        mouse = {
+          scroll-factor = 1.0;
+        };
         touchpad = {
           tap = true;
           drag = true;

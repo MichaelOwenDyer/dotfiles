@@ -4,8 +4,6 @@
 }:
 {
   # Niri scrolling window manager - NixOS module
-  # Note: programs.niri.settings is a home-manager option, not NixOS
-  # The niri-flake module auto-imports homeModules.config when home-manager is detected
   flake.modules.nixos.niri =
     { pkgs, ... }:
     {
