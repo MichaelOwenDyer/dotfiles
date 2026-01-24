@@ -24,8 +24,8 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 - [x] **Update DMS for 1.2** - Using flake directly with `programs.dank-material-shell` (2026-01-24)
 - [x] **Enable DMS niri integration** - `programs.dank-material-shell.niri.includes` configured (2026-01-24)
 - [x] **Replace fuzzel with DMS launcher** - Using DMS built-in launcher (2026-01-24)
-- [ ] **Configure lock screen and idle** - Unify with DMS lock screen features, make screen turn off automatically and lock
-- [ ] **Configure Niri displays per-host** - Separate output modules for claptrap/rustbucket
+- [x] **Configure lock screen and idle** - Unify with DMS lock screen features, make screen turn off automatically and lock
+- [x] **Configure Niri displays per-host** - Separate output modules for claptrap/rustbucket
 - [ ] **Investigate DMS plugins** - Review available plugins in registry
 
 ### Other
