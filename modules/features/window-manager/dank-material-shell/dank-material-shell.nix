@@ -41,6 +41,14 @@
         niri.includes = {
           enable = true;
           override = true;
+          # Exclude binds - we define keybinds explicitly in niri-keybinds module
+          filesToInclude = [
+            "alttab"
+            "colors"
+            "layout"
+            "outputs"
+            "wpblur"
+          ];
         };
       };
     };
