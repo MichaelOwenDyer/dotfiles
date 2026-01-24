@@ -39,12 +39,23 @@
         # Spawn commands at startup
         spawn-at-startup = [
           {
+            # Export Wayland environment to D-Bus and systemd
+            # Required for portals, gnome-keyring, and other session services
             argv = [
               "dbus-update-activation-environment"
               "--systemd"
               "WAYLAND_DISPLAY"
               "XDG_CURRENT_DESKTOP=niri"
               "XDG_SESSION_TYPE=wayland"
+            ];
+          }
+          {
+            # Initialize gnome-keyring secrets component
+            # Connects PAM-started daemon to D-Bus session for apps like VSCode
+            argv = [
+              "gnome-keyring-daemon"
+              "--start"
+              "--components=secrets"
             ];
           }
         ];

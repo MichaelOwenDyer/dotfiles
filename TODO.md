@@ -6,8 +6,13 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 
 ## Bugfixes
 
-- [ ] VSCode complains on first startup about authentication with the OS keyring not matching
-- [ ] OS keyring does not match login password - investigate root cause
+- [x] VSCode complains on first startup about authentication with the OS keyring not matching (2026-01-24)
+  - Added PAM integration for `ly` display manager in `gnome-keyring.nix`
+  - Added `passwd` PAM service for automatic keyring password sync
+  - Added `gnome-keyring-daemon --start --components=secrets` to niri startup
+- [x] OS keyring does not match login password - investigate root cause (2026-01-24)
+  - Root cause: keyring created with different password than login password
+  - Fix: delete `~/.local/share/keyrings/login.keyring` and re-login to recreate with correct password
 - [ ] Caffeine doesn't show up in system tray
 
 ---
