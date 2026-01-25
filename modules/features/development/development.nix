@@ -13,7 +13,6 @@
         gitui
         direnv
         ghostty
-        yazi
         zoxide
         fzf
         jujutsu

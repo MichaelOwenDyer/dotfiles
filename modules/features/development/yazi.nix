@@ -23,9 +23,66 @@
             show_symlink = true;
             sort_dir_first = true;
           };
+          plugin = {
+            # Note: Home Manager uses 'name' but yazi expects 'url'
+            # Using 'url' directly here since settings are passed through as-is
+            prepend_fetchers = [
+              {
+                id = "git";
+                url = "*";
+                run = "git";
+              }
+              {
+                id = "git";
+                url = "*/";
+                run = "git";
+              }
+            ];
+          };
         };
+        keymap = {
+          mgr.prepend_keymap = [
+            # gitui - open gitui in current directory
+            # Using shell --block to properly handle terminal
+            {
+              on = "G";
+              run = "shell --block gitui";
+              desc = "Open gitui";
+            }
+            # diff - diff selected file with hovered file
+            {
+              on = "D";
+              run = "plugin diff";
+              desc = "Diff selected with hovered file";
+            }
+            # compress - create archive from selected files
+            {
+              on = "C";
+              run = "plugin compress";
+              desc = "Compress selected files";
+            }
+            # sudo - run operations with elevated privileges
+            {
+              on = [ "s" "p" ];
+              run = "plugin sudo -- paste";
+              desc = "Paste with sudo";
+            }
+            {
+              on = [ "s" "d" ];
+              run = "plugin sudo -- remove";
+              desc = "Delete with sudo";
+            }
+            {
+              on = [ "s" "r" ];
+              run = "plugin sudo -- rename";
+              desc = "Rename with sudo";
+            }
+          ];
+        };
+        initLua = ''
+          require("git"):setup()
+        '';
         plugins = {
-          # TODO: Add keymaps for these plugins
           inherit (pkgs.yaziPlugins)
             git
             sudo
