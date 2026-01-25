@@ -14,6 +14,9 @@ Tracking improvements, bugfixes, and planned features for this configuration.
   - Root cause: keyring created with different password than login password
   - Fix: delete `~/.local/share/keyrings/login.keyring` and re-login to recreate with correct password
 - [ ] Caffeine doesn't show up in system tray
+- [ ] `network-setup.service` fails on boot due to race condition (interface not up yet)
+  - Affects `local-streaming-network` module on rustbucket
+  - Networking still works via NetworkManager, but service shows failed
 
 ---
 
@@ -47,6 +50,7 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 ### Low Priority
 
 - [ ] Add comments to uncommented modules for consistency
+- [ ] Rewrite `impermanence-diff` in Rust (bash script has output issues)
 
 ---
 
@@ -70,7 +74,11 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 
 - [x] **Distributed builds** - Builder module for rustbucket/mac, client module for claptrap/rpi-3b (2026-01-19)
 - [ ] **Disko** - Declarative disk partitioning
-- [ ] **Impermanence** - Stateless root filesystem
+- [x] **Impermanence** - Stateless root filesystem (2026-01-25)
+  - Root wiped on every boot via Btrfs snapshot rollback
+  - Persistence declared per-module using `lib.mkIf (config ? impermanence)` pattern
+  - `impermanence-diff` script to audit untracked state
+  - Bootstrap script auto-copies files to `/persist` on first activation
 - [ ] **Custom module options** - e.g., `options.my.development.enable`
 - [ ] **Roles abstraction** - `workstation`, `server`, `gaming` presets
 

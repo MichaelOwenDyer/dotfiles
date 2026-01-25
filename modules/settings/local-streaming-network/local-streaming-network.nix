@@ -115,6 +115,13 @@
           after = [ "sys-subsystem-net-devices-${config.localStreaming.streamingInterface}.device" ];
           wantedBy = [ "network-online.target" ];
         };
+
+        # Impermanence: dnsmasq state is ephemeral
+        impermanence = lib.mkIf (config ? impermanence) {
+          ignoredPaths = [
+            "/etc/dnsmasq-conf.conf" # Generated config
+          ];
+        };
       };
     };
 }

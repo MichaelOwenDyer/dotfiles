@@ -44,6 +44,16 @@
 
         # Ensure SSH is enabled on the server
         services.openssh.enable = true;
+
+        # Impermanence: persist signing key, ignore empty build user home
+        impermanence = lib.mkIf (config ? impermanence) {
+          persistedFiles = [
+            (toString config.distributed-build.server.signingKeyPath)
+          ];
+          ignoredPaths = [
+            "/var/lib/nixremote" # Empty home for build user
+          ];
+        };
       };
     };
 }

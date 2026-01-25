@@ -52,6 +52,14 @@
         options = [ "subvol=@log" ];
       };
 
+      # Persistent state for impermanence
+      fileSystems."/persist" = {
+        device = "/dev/disk/by-uuid/cde2807c-cd90-4e03-97ef-2532813ddc6e";
+        fsType = "btrfs";
+        options = [ "subvol=@persist" ];
+        neededForBoot = true;
+      };
+
       fileSystems."/mnt/steam_libraries/hdd" = {
         device = "/dev/disk/by-uuid/7EAEA85CAEA80EA9";
         fsType = "ntfs3";

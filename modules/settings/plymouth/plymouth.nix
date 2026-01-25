@@ -5,7 +5,7 @@
   # Plymouth boot splash - configurable theme
 
   flake.modules.nixos.plymouth =
-    { pkgs, lib, ... }:
+    { config, pkgs, lib, ... }:
     {
       boot.plymouth = {
         enable = true;
@@ -27,5 +27,10 @@
         "rd.udev.log_level=3"
         "udev.log_priority=3"
       ];
+
+      # Impermanence: plymouth state is ephemeral
+      impermanence = lib.mkIf (config ? impermanence) {
+        ignoredPaths = [ "/var/lib/plymouth" ];
+      };
     };
 }

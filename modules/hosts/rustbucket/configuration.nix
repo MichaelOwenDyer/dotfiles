@@ -21,6 +21,7 @@
         ssh
         distributed-build-server
         local-streaming-network
+        impermanence
         michael-rustbucket
       ];
 
@@ -56,6 +57,10 @@
 
       # Longer boot menu timeout for dual-boot selection
       boot.loader.timeout = 15;
+
+      # Impermanence - wipe root on every boot
+      # Persistence is configured by individual modules (wifi, bluetooth, ssh, etc.)
+      impermanence.wipeOnBoot = true;
 
       system.stateVersion = "24.11";
     };

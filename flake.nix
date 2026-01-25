@@ -19,6 +19,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:nix-community/home-manager/master";
     };
+    impermanence = {
+      inputs = {
+        home-manager.follows = "home-manager";
+        nixpkgs.follows = "nixpkgs";
+      };
+      url = "github:nix-community/impermanence";
+    };
     import-tree.url = "github:vic/import-tree";
     nh = {
       inputs.nixpkgs.follows = "nixpkgs";
