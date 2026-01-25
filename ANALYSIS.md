@@ -1,15 +1,17 @@
 # NixOS Dotfiles Configuration Analysis
 
-**Analysis Date:** January 19, 2026  
+**Analysis Date:** January 25, 2026  
 **Analyzed by:** Claude (AI Code Review)
 
 ---
 
 ## Executive Summary
 
-This is a well-architected, multi-host NixOS configuration using modern Nix patterns. The codebase demonstrates solid understanding of the Nix ecosystem with some areas for improvement in consistency and documentation. The "dendritic" pattern via `flake-file` and `import-tree` is an innovative approach that reduces boilerplate while maintaining modularity.
+This is a well-architected, multi-host NixOS configuration using modern Nix patterns. The codebase demonstrates solid understanding of the Nix ecosystem with continuous improvements in modularity, security, and code quality. The "dendritic" pattern via `flake-file` and `import-tree` creates a clean, scalable architecture.
 
-**Overall Quality Rating: B+**
+**Overall Quality Rating: A-**
+
+*Rating improved from B+ due to: secrets management implementation, CI/CD pipeline, niri module split, custom module options, comprehensive documentation, and code quality improvements.*
 
 ---
 
@@ -24,6 +26,8 @@ This is a well-architected, multi-host NixOS configuration using modern Nix patt
 | Module Discovery | `import-tree` | Recursive module importing |
 | User Config | `home-manager` | Per-user configuration |
 | Darwin Support | `nix-darwin` | macOS system configuration |
+| Secrets | `sops-nix` | Encrypted secrets management |
+| Theming | `stylix` | System-wide theming (available) |
 
 ### 1.2 Directory Structure
 
@@ -34,7 +38,8 @@ modules/
 │   ├── browser/        # Browser configurations (zen, firefox, chrome)
 │   ├── development/    # Dev tools and shell aliases
 │   ├── ide/            # Editor configurations (helix, cursor, vscode)
-│   ├── shell/          # Shell configurations (fish, zsh)
+│   ├── nh/             # Nix helper CLI
+│   ├── shell/          # Shell configurations (fish, zsh, nushell)
 │   └── window-manager/ # WM configs (niri, gnome, hyprland, dank-material-shell)
 ├── hosts/              # Per-machine configurations
 │   ├── claptrap/       # Dell XPS 13 laptop (x86_64-linux)
@@ -42,8 +47,13 @@ modules/
 │   ├── rpi-3b/         # Raspberry Pi 3B (aarch64-linux)
 │   └── mac/            # macOS system (aarch64-darwin)
 ├── repositories/       # nixpkgs overlays and NUR
-├── settings/           # System-level settings (audio, bluetooth, etc.)
-└── users/              # User-specific configurations
+├── settings/           # System-level settings (audio, bluetooth, secrets, etc.)
+│   ├── distributed-builds/  # Builder/client infrastructure
+│   ├── local-streaming-network/  # Game streaming setup
+│   ├── power-management/    # Hibernate, idle management
+│   └── secrets/        # sops-nix encrypted secrets
+├── users/              # User-specific configurations
+└── lib.nix             # Helper functions (mkNixos, mkDarwin, mkHomeManager)
 ```
 
 ### 1.3 Module Composition Pattern
@@ -62,19 +72,20 @@ The configuration uses a **multi-context module pattern** where features define 
 This approach:
 - ✅ Keeps related configuration together
 - ✅ Makes it easy to ensure feature parity across systems
-- ⚠️ Can lead to larger files for complex features
+- ✅ Uses custom module options for configurable features
 
 ---
 
 ## 2. Static Dependency Analysis
 
-### 2.1 Flake Inputs (14 total)
+### 2.1 Flake Inputs (17 total)
 
 | Input | Purpose | Follows nixpkgs? |
 |-------|---------|------------------|
 | `nixpkgs` | Primary package source (unstable) | - |
 | `nixpkgs-stable` | Fallback packages (25.11) | No |
 | `nixpkgs-master` | Early access packages | No |
+| `nixpkgs-lib` | Library functions | Follows nixpkgs |
 | `home-manager` | User configuration | ✅ Yes |
 | `nix-darwin` | macOS support | ✅ Yes |
 | `hardware` | Hardware quirks | No |
@@ -82,11 +93,14 @@ This approach:
 | `flake-file` | Flake generation | No |
 | `import-tree` | Module discovery | No |
 | `nh` | Nix helper CLI | ✅ Yes |
-| `niri-flake` | Niri window manager | No (has own nixpkgs) |
+| `niri-flake` | Niri window manager | No (intentional - uses own cache) |
 | `nur` | User repository | ✅ Yes |
-| `stylix` | Theming system (not currently used) | ✅ Yes |
+| `sops-nix` | Secrets management | ✅ Yes |
+| `stylix` | Theming system | ✅ Yes |
+| `systems` | System definitions | No |
 | `zen-browser` | Zen browser (forked) | ✅ Yes |
 | `noctalia` | Noctalia shell | ✅ Yes |
+| `dank-material-shell` | Desktop shell | ✅ Yes |
 
 ### 2.2 Dependency Graph (Simplified)
 
@@ -101,14 +115,16 @@ flake.nix
 │   │                       ├─ nix-darwin
 │   │                       ├─ nh
 │   │                       ├─ nur
-│   │                       ├─ stylix (not currently used)
+│   │                       ├─ sops-nix
+│   │                       ├─ stylix
+│   │                       ├─ dank-material-shell
 │   │                       └─ zen-browser
-│   ├── nixpkgs-stable (fallback)
+│   ├── nixpkgs-stable (25.11 fallback)
 │   ├── nixpkgs-master (bleeding edge)
 │   └── hardware (Dell XPS, etc.)
 │
 └── DESKTOP LAYER
-    ├── niri-flake (own nixpkgs - potential inconsistency)
+    ├── niri-flake (own nixpkgs - uses upstream binary cache)
     └── noctalia (shell overlay)
 ```
 
@@ -121,14 +137,15 @@ Overlays are applied to both NixOS and Darwin:
 3. **niri-flake overlay** (niri-unstable, niri-stable)
 4. **nh overlay** (nh CLI tool)
 5. **zen-browser overlay** (`pkgs.zen-browser`)
+6. **dank-material-shell overlay** (DMS packages)
 
-### 2.4 Dependency Concerns
+### 2.4 Dependency Notes
 
-| Issue | Severity | Description |
-|-------|----------|-------------|
-| `niri-flake` nixpkgs | Medium | Uses its own nixpkgs, not following the flake's - potential version mismatch |
-| Triple nixpkgs evaluation | Low | `stable`, `master`, and main nixpkgs all evaluated - increases build time |
-| `hardware` not following | Low | Uses separate nixpkgs checkout |
+| Item | Status | Notes |
+|------|--------|-------|
+| `niri-flake` nixpkgs | ✅ Intentional | Uses own nixpkgs for upstream binary cache support |
+| Triple nixpkgs evaluation | ℹ️ Documented | `stable`, `master`, and main all available via overlays |
+| `hardware` not following | Low impact | Hardware quirks don't need version alignment |
 
 ---
 
@@ -138,9 +155,9 @@ Overlays are applied to both NixOS and Darwin:
 
 | Host | Architecture | Type | Key Features |
 |------|--------------|------|--------------|
-| `claptrap` | x86_64-linux | Laptop | Dell XPS 13 9360, Niri, hibernate support |
-| `rustbucket` | x86_64-linux | Desktop | Nvidia GPU, Gaming, Steam |
-| `rpi-3b` | aarch64-linux | Server | Minimal, SSH-only |
+| `claptrap` | x86_64-linux | Laptop | Dell XPS 13 9360, Niri, TLP, hibernate |
+| `rustbucket` | x86_64-linux | Desktop | Nvidia GPU, Gaming, Steam, distributed build server |
+| `rpi-3b` | aarch64-linux | Server | Minimal, SSH-only, headless |
 | `mac` | aarch64-darwin | Workstation | Determinate Nix, Touch ID |
 
 ### 3.2 Module Import Chains
@@ -149,7 +166,9 @@ Overlays are applied to both NixOS and Darwin:
 ```
 claptrap
 ├── claptrap-hardware (Dell XPS 13 9360 from nixos-hardware)
-├── laptop → desktop → default-settings
+├── laptop → desktop → default-settings → overlays, nh, sops
+│   └── touchpad, hibernate, TLP power management
+├── podman (container runtime)
 ├── ly (display manager)
 ├── niri (window manager)
 ├── dank-material-shell
@@ -163,11 +182,23 @@ claptrap
 ```
 rustbucket
 ├── rustbucket-hardware
-├── home-manager
-├── desktop → default-settings
+├── desktop → default-settings → overlays, nh, sops
+├── nvidia (GPU drivers with hardware acceleration)
 ├── gaming (Steam, Wine, Lutris, etc.)
 ├── ly, niri, dank-material-shell, gnome-keyring, plymouth
+├── ssh
+├── distributed-build-server
+├── local-streaming-network
 └── michael-rustbucket → michael (user)
+```
+
+**rpi-3b (Raspberry Pi)**:
+```
+rpi-3b
+├── default-settings → overlays, nh, sops
+├── rpi-3b-hardware
+├── ssh
+└── michael-rpi-3b → michael (user)
 ```
 
 ### 3.3 Configuration Observations
@@ -176,19 +207,8 @@ rustbucket
 - Clean separation of hardware-specific and feature modules
 - Consistent use of `default-settings` base for all hosts
 - Good use of `nixos-hardware` for Dell XPS quirks
-
-**Issues Identified:**
-
-1. **Duplicate `home-manager` import** in `rustbucket`:
-   - `desktop` doesn't import `home-manager`, but `michael` does via `nixos.michael`
-   - Adding explicit `home-manager` import is redundant
-
-2. **Inconsistent laptop vs desktop hierarchy**:
-   - `laptop` imports `desktop`, but `claptrap` doesn't import `laptop` properly
-   - The import chain is: `claptrap` → `laptop` (but laptop currently only has commented code)
-
-3. **Missing `default-settings` on `rpi-3b`**:
-   - Pi configuration doesn't import base settings, missing `nh`, flake features
+- Host-specific niri output configurations (`claptrap/niri-outputs.nix`, `rustbucket/niri-outputs.nix`)
+- Custom module options for complex features (distributed builds, local streaming)
 
 ---
 
@@ -198,35 +218,49 @@ rustbucket
 
 | Pattern | Example | Assessment |
 |---------|---------|------------|
-| Multi-context modules | `git.nix`, `fish.nix` | ✅ Excellent DRY approach |
+| Multi-context modules | `git.nix`, `fish.nix`, `nushell.nix` | ✅ Excellent DRY approach |
 | Helper functions | `lib.nix` with `mkNixos`, `mkDarwin` | ✅ Reduces boilerplate |
-| Shell alias abstraction | `shell-alias/*.nix` | ✅ Composable, follows single responsibility |
+| Shell alias abstraction | `shell-alias/*.nix` | ✅ Composable, single responsibility |
 | Flake input follows | Most inputs follow nixpkgs | ✅ Reduces duplication |
 | SSH key management | Centralized in user module | ✅ Single source of truth |
 | Feature bundling | `cli.nix`, `development.nix` | ✅ Good high-level abstractions |
+| Module split | `niri/` split into input, appearance, keybinds | ✅ Improved maintainability |
+| Custom options | `distributed-build.*`, `localStreaming.*` | ✅ Proper Nix module patterns |
+| Secrets management | sops-nix with host SSH keys | ✅ No plaintext secrets in repo |
 
-### 4.2 Anti-Patterns and Issues
+### 4.2 Recent Improvements (Since Last Analysis)
+
+| Improvement | Status | Details |
+|-------------|--------|---------|
+| Secrets management | ✅ Implemented | sops-nix encrypts user password |
+| CI/CD pipeline | ✅ Implemented | GitHub Actions with flake check and build validation |
+| Niri module split | ✅ Completed | `niri.nix`, `input.nix`, `appearance.nix`, `keybinds.nix` |
+| Gaming module fix | ✅ Fixed | Uses `$HOME` instead of hardcoded path |
+| Unused parameters | ✅ Cleaned | Removed from 16+ modules |
+| README updated | ✅ Updated | Reflects current directory structure |
+| rpi-3b default-settings | ✅ Added | Now imports base configuration |
+| Custom module options | ✅ Added | `distributed-build.*`, `localStreaming.*` |
+| Nushell support | ✅ Added | Full nushell configuration with custom commands |
+
+### 4.3 Remaining Issues
 
 | Issue | Location | Severity | Recommendation |
 |-------|----------|----------|----------------|
-| Unused `pkgs` parameter | Multiple modules like `1password.nix` | Low | Remove unused parameters |
-| Hardcoded paths | `gaming.nix`: `"/home/user/.steam"` | Medium | Use `config.users.users.<name>.home` |
-| Inconsistent module params | Some use `{ ... }:`, others `{ pkgs, ... }:` | Low | Standardize on explicit params |
-| Outdated README | Mentions `system`/`user` directories that don't exist | Medium | Update documentation |
-| Magic strings | Niri config has hardcoded colors | Low | Consider extracting to variables |
-| Hashed password in repo | `michael/nixos.nix` | Medium | Use `agenix` or `sops-nix` for secrets |
+| Hardcoded theme colors | `niri/appearance.nix` | Low | Consider using Stylix for theming |
+| Passwordless sudo | `rustbucket/configuration.nix` | Low | Documented as intentional for gaming machine |
+| Some modules lack comments | Various | Low | Add documentation headers |
 
-### 4.3 Code Style Consistency
+### 4.4 Code Style Consistency
 
 **Consistent:**
 - Import organization (alphabetical within groups)
 - Use of `with inputs.self.modules.*` pattern
 - Module structure follows established pattern
+- Module headers with comments describing purpose
 
-**Inconsistent:**
-- Some files have comments, others don't
-- Variable naming (`name` vs `userName`)
-- Some modules declare `{ inputs, ... }:` even when not using `inputs`
+**Minor Inconsistencies:**
+- Some files have detailed comments, others minimal
+- Variable naming mostly consistent (`name` for display name)
 
 ---
 
@@ -236,17 +270,24 @@ rustbucket
 
 | Area | Status | Notes |
 |------|--------|-------|
-| SSH Configuration | ✅ Good | No root login, no password auth |
-| Sudo | ⚠️ Warning | Passwordless on rustbucket |
-| Secrets Management | ❌ Poor | Hashed password in git |
-| Firewall | ✅ Good | Uses nftables |
-| Unfree Packages | ℹ️ Info | Explicitly allowed |
+| SSH Configuration | ✅ Good | No root login, no password auth, fail2ban |
+| Secrets Management | ✅ Good | sops-nix with age encryption |
+| Sudo | ℹ️ Intentional | Passwordless on rustbucket (gaming convenience) |
+| Firewall | ✅ Good | Uses nftables, trusted interfaces configured |
+| Password Storage | ✅ Good | Hashed password encrypted in `secrets.yaml` |
+| Key Management | ✅ Good | Host SSH keys used for secret decryption |
 
-### 5.2 Recommendations
+### 5.2 sops-nix Implementation
 
-1. **Implement secrets management** using `agenix` or `sops-nix`
-2. **Review passwordless sudo** on rustbucket - consider requiring password for sensitive operations
-3. **SSH keys** are properly managed but should be rotated periodically
+```nix
+# Host SSH keys serve as age keys for decryption
+sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+sops.defaultSopsFile = ./secrets.yaml;
+
+# User password read from decrypted secret at activation
+sops.secrets."michael-password".neededForUsers = true;
+users.users.michael.hashedPasswordFile = config.sops.secrets."michael-password".path;
+```
 
 ---
 
@@ -259,9 +300,10 @@ rustbucket
 | Flake-based configuration | ✅ | Modern approach |
 | Pinned inputs via flake.lock | ✅ | Reproducible builds |
 | Overlay composition | ✅ | Well-organized |
-| Module options | ⚠️ | No custom options defined |
-| Tests | ❌ | No NixOS tests defined |
-| Formatting | ⚠️ | No nixfmt/alejandra CI |
+| Custom module options | ✅ | Used for complex features |
+| Tests | ⚠️ | No NixOS tests defined yet |
+| CI/CD | ✅ | GitHub Actions for validation |
+| Formatting | ⚠️ | No automated formatting in CI |
 
 ### 6.2 Home-Manager Best Practices
 
@@ -270,109 +312,85 @@ rustbucket
 | `useGlobalPkgs` | ✅ | Reduces evaluation time |
 | `useUserPackages` | ✅ | Proper profile path |
 | State version tracking | ✅ | Defined per-host |
-| Shell integration | ✅ | Using `home.shell.enableFishIntegration` |
+| Shell integration | ✅ | `home.shell.enableFishIntegration` etc. |
+| Session variables | ✅ | `systemd.user.sessionVariables` for graphical |
 
 ---
 
-## 7. Potential Expansion Directions
+## 7. Feature Highlights
 
-### 7.1 Short-term Improvements
+### 7.1 Distributed Builds
 
-1. **Add `agenix` for secrets management**
-   ```nix
-   # Encrypt sensitive values like hashed passwords
-   inputs.agenix.url = "github:ryantm/agenix";
-   ```
-
-2. **Create custom module options** for frequently-used patterns:
-   ```nix
-   options.my.development.enable = mkEnableOption "development tools";
-   ```
-
-3. **Add CI/CD with GitHub Actions**:
-   - Format checking with `alejandra` or `nixfmt`
-   - Build validation for all hosts
-   - Flake check on PRs
-
-4. **Implement NixOS tests**:
-   ```nix
-   flake.checks.x86_64-linux.claptrap-boots = 
-     nixosTest { ... };
-   ```
-
-### 7.2 Medium-term Enhancements
-
-1. **Disko integration** for declarative disk partitioning
-2. **Impermanence module** for stateless root filesystem
-3. **Microvm.nix** for lightweight development VMs
-4. **devenv or devbox** integration for project-specific environments
-
-### 7.3 Architecture Improvements
-
-1. **Create a `roles` abstraction**:
-   ```
-   roles/
-   ├── workstation.nix  # Desktop + development
-   ├── server.nix       # Headless + ssh
-   └── gaming.nix       # Steam + GPU optimizations
-   ```
-
-2. **Split large modules** - `niri.nix` is 457 lines; consider:
-   ```
-   niri/
-   ├── base.nix
-   ├── keybinds.nix
-   ├── appearance.nix
-   └── window-rules.nix
-   ```
-
----
-
-## 8. Specific Code Critiques
-
-### 8.1 `modules/settings/gaming/gaming.nix`
+Custom module options for builder infrastructure:
 
 ```nix
-# ISSUE: Hardcoded path
-environment.sessionVariables = {
-  STEAM_EXTRA_COMPAT_TOOLS_PATHS = "/home/user/.steam/compatibilitytools.d";
+options.distributed-build.client = {
+  publicKey = lib.mkOption { ... };
+  builders = lib.mkOption { ... };
+};
+
+options.distributed-build.server = {
+  authorizedKeys = lib.mkOption { ... };
+  signingKeyPath = lib.mkOption { ... };
 };
 ```
 
-**Fix:** This should reference the actual user or be configurable.
+### 7.2 Local Streaming Network
 
-### 8.2 `modules/users/michael/nixos.nix`
-
-```nix
-# ISSUE: Password hash in version control
-defaultHashedPassword = "$y$j9T$...";
-```
-
-**Fix:** Use `agenix` to encrypt this secret.
-
-### 8.3 `modules/features/window-manager/niri/niri.nix`
+Declarative game streaming network with DHCP/DNS:
 
 ```nix
-# ISSUE: Hardcoded theme colors
-active.color = "#74c7ec";
-inactive.color = "#6c7086";
+options.localStreaming = {
+  enable = lib.mkOption { ... };
+  wifiInterface = lib.mkOption { ... };
+  streamingInterface = lib.mkOption { ... };
+  # ... configurable IP addresses, DNS servers
+};
 ```
 
-**Fix:** Consider extracting colors to variables for easier customization.
+### 7.3 Niri Window Manager
 
-### 8.4 `modules/lib.nix`
+Modular configuration split into:
+- `niri.nix` - Core NixOS and Home-Manager setup
+- `input.nix` - Keyboard, mouse, touchpad settings
+- `appearance.nix` - Layout, colors, window rules
+- `keybinds.nix` - Comprehensive keybind configuration with DMS integration
 
-```nix
-# OBSERVATION: mkHomeManager returns raw config, not attrset like mkNixos/mkDarwin
-mkHomeManager = system: name:
-  inputs.home-manager.lib.homeManagerConfiguration { ... };
-```
+### 7.4 Shell Support
 
-**Note:** This asymmetry is intentional for `homeConfigurations` but worth documenting.
+Multiple shells configured:
+- **Fish** - Primary shell with abbreviations, plugins, functions
+- **Nushell** - Modern shell with structured data, custom commands
+- **Zsh** - Available as alternative
 
-### 8.5 README.md
+---
 
-The README references a directory structure (`system`/`user`/`profiles`/`machines`) that no longer exists. The current structure uses `modules/hosts`, `modules/users`, and `modules/features`.
+## 8. Potential Expansion Directions
+
+### 8.1 Short-term Improvements
+
+1. **Add formatting to CI** (`alejandra` or `nixfmt`):
+   ```yaml
+   - name: Check formatting
+     run: nix fmt -- --check
+   ```
+
+2. **Implement NixOS tests** for critical configurations
+
+3. **Investigate Stylix** for unified theming across niri, shells, and applications
+
+### 8.2 Medium-term Enhancements
+
+1. **Disko integration** - Declarative disk partitioning
+2. **Impermanence module** - Stateless root filesystem
+3. **Custom module options** - `options.my.development.enable` pattern
+4. **Roles abstraction** - `workstation`, `server`, `gaming` presets
+
+### 8.3 Infrastructure
+
+1. **NixOS tests** for boot, services, and user configuration
+2. **Binary cache** - Set up Cachix or similar for faster builds
+3. **Automatic updates** - Scheduled flake.lock updates with CI
 
 ---
 
@@ -380,36 +398,40 @@ The README references a directory structure (`system`/`user`/`profiles`/`machine
 
 | Metric | Value |
 |--------|-------|
-| Total Nix files | 98 |
+| Total Nix files | 105 |
 | Host configurations | 4 |
-| Feature modules | ~49 |
-| Flake inputs | 14 |
-| Overlays | 5 |
-| Lines of Nix code | ~3,500 |
+| Feature modules | ~55 |
+| Flake inputs | 17 |
+| Overlays | 6 |
+| Custom module options | 2 major (distributed-build, localStreaming) |
+| CI jobs | 2 (check, build matrix) |
 
 ---
 
 ## 10. Conclusion
 
-This is a **well-structured configuration** that demonstrates good understanding of Nix patterns. The use of `flake-parts`, `flake-file`, and `import-tree` creates a clean, modular architecture that scales well.
+This is a **well-structured, production-quality configuration** that demonstrates excellent understanding of modern Nix patterns. Since the last analysis, significant improvements have been made in security (sops-nix), maintainability (module splits), and infrastructure (CI/CD).
 
 **Key Strengths:**
-- Modern flake-based architecture
-- Good separation of concerns
+- Modern flake-based architecture with dendritic pattern
+- Good separation of concerns with multi-context modules
 - Multi-platform support (Linux + Darwin)
-- Composable feature modules
+- Secure secrets management with sops-nix
+- CI/CD pipeline for validation
+- Custom module options for complex features
+- Comprehensive documentation (README, TODO, inline comments)
 
-**Priority Improvements:**
-1. Implement secrets management (`agenix`)
-2. Add CI for format checking and build validation
+**Remaining Priorities:**
+1. Add NixOS tests for critical configurations
+2. Add formatting checks to CI
+3. Consider Stylix integration for theming
 
 **Technical Debt:**
-- Hardcoded values in several modules
-- Inconsistent parameter declarations
-- Missing tests
+- Minimal: hardcoded theme colors could use Stylix
+- Some modules could benefit from additional comments
 
-The codebase is in good shape for personal use and demonstrates a thoughtful approach to NixOS configuration management.
+The codebase is in excellent shape for personal use and demonstrates a thoughtful, evolving approach to NixOS configuration management.
 
 ---
 
-*This analysis was generated by reviewing all 88 Nix files in the repository, examining the flake.lock dependency graph, and evaluating against Nix community best practices.*
+*This analysis was generated by reviewing all 105 Nix files in the repository, examining the flake.lock dependency graph, and evaluating against Nix community best practices.*
