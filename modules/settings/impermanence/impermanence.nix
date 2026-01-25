@@ -19,69 +19,90 @@
     let
       cfg = config.impermanence;
 
-      # Script to check for untracked state
-      impermanence-diff = pkgs.writeShellScriptBin "impermanence-diff" ''
-        set -euo pipefail
+      # Generate Rust arrays from the NixOS configuration
+      persistedFilesRust = lib.concatMapStringsSep ", " (f: ''"${f}"'') cfg.persistedFiles;
+      persistedDirsRust = lib.concatMapStringsSep ", " (d: ''"${d}"'') cfg.persistedDirectories;
+      ignoredPathsRust = lib.concatMapStringsSep ", " (p: ''"${p}"'') cfg.ignoredPaths;
 
-        # Colors for output
-        RED='\033[0;31m'
-        YELLOW='\033[1;33m'
-        GREEN='\033[0;32m'
-        NC='\033[0m' # No Color
+      # Script to check for untracked state (Rust implementation)
+      impermanence-diff = pkgs.writers.writeRustBin "impermanence-diff" {} ''
+        use std::{fs, path::Path, process::ExitCode};
 
-        # Build arrays from the NixOS configuration
-        PERSISTED_FILES=(${lib.concatMapStringsSep " " (f: ''"${f}"'') cfg.persistedFiles})
-        PERSISTED_DIRS=(${lib.concatMapStringsSep " " (d: ''"${d}"'') cfg.persistedDirectories})
-        IGNORABLE=(${lib.concatMapStringsSep " " (p: ''"${p}"'') cfg.ignoredPaths})
+        const COVERED_PATHS: &[&str] = &[${persistedFilesRust}, ${persistedDirsRust}, ${ignoredPathsRust}];
 
-        is_covered() {
-          local path="$1"
-          for p in "''${PERSISTED_FILES[@]}" "''${PERSISTED_DIRS[@]}" "''${IGNORABLE[@]}"; do
-            if [[ "$path" == "$p" || "$path" == "$p"/* ]]; then
-              return 0
-            fi
-          done
-          return 1
+        mod color {
+            pub const RED: &str = "\x1b[31m";
+            pub const YELLOW: &str = "\x1b[33m";
+            pub const GREEN: &str = "\x1b[32m";
+            pub const RESET: &str = "\x1b[0m";
         }
 
-        found_untracked=false
+        fn is_covered(path: &Path) -> bool {
+            let path_str = path.to_string_lossy();
+            COVERED_PATHS.iter().any(|&p| path_str == p || path_str.starts_with(&format!("{p}/")))
+        }
 
-        # Check /etc
-        etc_untracked=$(find /etc -type f ! -type l 2>/dev/null | while read -r f; do
-          if ! is_covered "$f"; then
-            echo "  $f"
-          fi
-        done)
+        fn walk_files(dir: &Path) -> impl Iterator<Item = std::path::PathBuf> + '_ {
+            fs::read_dir(dir).into_iter().flatten().flatten().flat_map(|e| {
+                let path = e.path();
+                let meta = fs::symlink_metadata(&path).ok();
+                match meta {
+                    Some(m) if m.is_file() => vec![path],
+                    Some(m) if m.is_dir() => walk_files(&path).collect(),
+                    _ => vec![],
+                }
+            })
+        }
 
-        if [[ -n "$etc_untracked" ]]; then
-          found_untracked=true
-          echo -e "''${YELLOW}=== Untracked files in /etc ===''${NC}"
-          echo "$etc_untracked"
-          echo ""
-        fi
+        fn human_size(bytes: u64) -> String {
+            const UNITS: &[(u64, &str)] = &[(1 << 30, "G"), (1 << 20, "M"), (1 << 10, "K")];
+            UNITS
+                .iter()
+                .find(|(threshold, _)| bytes >= *threshold)
+                .map(|(threshold, unit)| format!("{:.1}{unit}", bytes as f64 / *threshold as f64))
+                .unwrap_or_else(|| format!("{bytes}B"))
+        }
 
-        # Check /var/lib
-        varlib_untracked=$(find /var/lib -mindepth 1 -maxdepth 1 -type d 2>/dev/null | while read -r d; do
-          if ! is_covered "$d"; then
-            size=$(du -sh "$d" 2>/dev/null | cut -f1)
-            echo "  $d ($size)"
-          fi
-        done)
+        fn dir_size(path: &Path) -> u64 {
+            walk_files(path).filter_map(|p| fs::metadata(p).ok()).map(|m| m.len()).sum()
+        }
 
-        if [[ -n "$varlib_untracked" ]]; then
-          found_untracked=true
-          echo -e "''${YELLOW}=== Untracked directories in /var/lib ===''${NC}"
-          echo "$varlib_untracked"
-          echo ""
-        fi
+        fn main() -> ExitCode {
+            let etc_untracked: Vec<_> = walk_files(Path::new("/etc"))
+                .filter(|p| !is_covered(p))
+                .collect();
 
-        if $found_untracked; then
-          echo -e "''${RED}Untracked state found!''${NC} Add to the responsible module's impermanence config."
-          exit 1
-        else
-          echo -e "''${GREEN}All state accounted for.''${NC}"
-          exit 0
-        fi
+            let varlib_untracked: Vec<_> = fs::read_dir("/var/lib")
+                .into_iter()
+                .flatten()
+                .flatten()
+                .map(|e| e.path())
+                .filter(|p| p.is_dir() && !is_covered(p))
+                .map(|p| (human_size(dir_size(&p)), p))
+                .collect();
+
+            let has_untracked = !etc_untracked.is_empty() || !varlib_untracked.is_empty();
+
+            if !etc_untracked.is_empty() {
+                println!("{}=== Untracked files in /etc ==={}", color::YELLOW, color::RESET);
+                etc_untracked.iter().for_each(|f| println!("  {}", f.display()));
+                println!();
+            }
+
+            if !varlib_untracked.is_empty() {
+                println!("{}=== Untracked directories in /var/lib ==={}", color::YELLOW, color::RESET);
+                varlib_untracked.iter().for_each(|(size, p)| println!("  {} ({size})", p.display()));
+                println!();
+            }
+
+            if has_untracked {
+                println!("{}Untracked state found!{} Add to the responsible module's impermanence config.", color::RED, color::RESET);
+                ExitCode::FAILURE
+            } else {
+                println!("{}All state accounted for.{}", color::GREEN, color::RESET);
+                ExitCode::SUCCESS
+            }
+        }
       '';
     in
     {
