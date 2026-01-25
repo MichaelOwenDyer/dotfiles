@@ -5,7 +5,6 @@
 let
   name = "Michael Dyer";
   email = "michaelowendyer@gmail.com";
-  defaultHashedPassword = "$y$j9T$pSkVWxgO/9dyqt8MMHzaM0$RO5g8OOpFb4pdgMuDIVraPvsLMSvMTU2/y8JQWfmrs1";
   trustedSshKeys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINtKFTvyCJo4u7KstzHIZ/ZdBCfS5ukmItX75tC0aM5O michael@claptrap"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE1RmSKMqa9vAqyHjJzEmjFOJYV+qT/imHpXDmeWl6PI michael@rpi-3b"
@@ -16,17 +15,21 @@ in
 {
   # Extra NixOS configuration for any system michael is a user on
   flake.modules.nixos.michael =
-    { pkgs, lib, ... }:
+    { pkgs, config, ... }:
     {
       imports = with inputs.self.modules.nixos; [
         home-manager # Enable home-manager on this NixOS system
         fish-shell
       ];
 
+      # Decrypt the password hash at activation time before user creation
+      sops.secrets."michael-password".neededForUsers = true;
+
       users.users.michael = {
         isNormalUser = true;
         description = name;
-        hashedPassword = lib.mkDefault defaultHashedPassword;
+        # Password hash is read from the decrypted secret at /run/secrets/michael-password
+        hashedPasswordFile = config.sops.secrets."michael-password".path;
         shell = pkgs.fish;
         extraGroups = [
           "wheel"

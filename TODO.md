@@ -39,8 +39,10 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 
 ### High Priority
 
-- [ ] **Secrets management** - Hashed password is stored in git (`modules/users/michael/nixos.nix`)
-  - Implement `agenix` or `sops-nix` for encrypted secrets
+- [x] **Secrets management** - sops-nix for encrypted secrets (2026-01-25)
+  - User password hash now encrypted in `modules/settings/secrets/secrets.yaml`
+  - Host SSH keys used for decryption (no separate admin key needed)
+  - To add a new host: get its age key, add to `.sops.yaml`, run `sops updatekeys secrets.yaml`
 
 ### Low Priority
 

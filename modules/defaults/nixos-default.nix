@@ -10,6 +10,7 @@
     imports = with inputs.self.modules.nixos; [
       overlays
       nh
+      sops
     ];
 
     nixpkgs.config.allowUnfree = true;
