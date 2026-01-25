@@ -35,6 +35,7 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 
 - [ ] **Configure router with Nix** - Replace imperative router configuration with declarative NixOS setup
 - [ ] **Fix TV output requiring HDMI replug** - TV output stops working after being off or displaying something else for a while
+- [ ] **Re-add Windows 10 to rustbucket's boot menu** - Rustbucket is dual-boot, Windows boot entry disappeared at some point
 
 ---
 
@@ -50,7 +51,7 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 ### Low Priority
 
 - [ ] Add comments to uncommented modules for consistency
-- [ ] Rewrite `impermanence-diff` in Rust (bash script has output issues)
+- [x] Rewrite `impermanence-diff` in Rust (bash script has output issues) (2026-01-25)
 
 ---
 
@@ -69,6 +70,7 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 
 - [ ] [Vencord/Nixcord](https://github.com/KaylorBen/nixcord) - Discord client
 - [ ] [Rclone](https://wiki.nixos.org/wiki/Rclone) - Cloud storage sync
+- [ ] **Enable ollama server for local and remote use, integrate cursor-cli if possible** - Local AI services
 
 ### Architecture
 
