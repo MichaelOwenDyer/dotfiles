@@ -68,6 +68,9 @@
         }
 
         fn main() -> ExitCode {
+            use std::io::Write;
+            let stderr = std::io::stderr();
+
             let etc_untracked: Vec<_> = walk_files(Path::new("/etc"))
                 .filter(|p| !is_covered(p))
                 .collect();
@@ -84,22 +87,22 @@
             let has_untracked = !etc_untracked.is_empty() || !varlib_untracked.is_empty();
 
             if !etc_untracked.is_empty() {
-                println!("{}=== Untracked files in /etc ==={}", color::YELLOW, color::RESET);
-                etc_untracked.iter().for_each(|f| println!("  {}", f.display()));
-                println!();
+                let _ = writeln!(stderr.lock(), "{}=== Untracked files in /etc ==={}", color::YELLOW, color::RESET);
+                etc_untracked.iter().for_each(|f| { let _ = writeln!(stderr.lock(), "  {}", f.display()); });
+                let _ = writeln!(stderr.lock());
             }
 
             if !varlib_untracked.is_empty() {
-                println!("{}=== Untracked directories in /var/lib ==={}", color::YELLOW, color::RESET);
-                varlib_untracked.iter().for_each(|(size, p)| println!("  {} ({size})", p.display()));
-                println!();
+                let _ = writeln!(stderr.lock(), "{}=== Untracked directories in /var/lib ==={}", color::YELLOW, color::RESET);
+                varlib_untracked.iter().for_each(|(size, p)| { let _ = writeln!(stderr.lock(), "  {} ({size})", p.display()); });
+                let _ = writeln!(stderr.lock());
             }
 
             if has_untracked {
-                println!("{}Untracked state found!{} Add to the responsible module's impermanence config.", color::RED, color::RESET);
+                let _ = writeln!(stderr.lock(), "{}Untracked state found!{} Add to the responsible module's impermanence config.", color::RED, color::RESET);
                 ExitCode::FAILURE
             } else {
-                println!("{}All state accounted for.{}", color::GREEN, color::RESET);
+                let _ = writeln!(stderr.lock(), "{}All state accounted for.{}", color::GREEN, color::RESET);
                 ExitCode::SUCCESS
             }
         }
@@ -234,19 +237,10 @@
 
         # Post-rebuild activation script to warn about untracked state
         # Runs after other scripts via deps on "usrbinenv" (one of the last standard scripts)
+        # Output goes to stderr so nh displays it (like sops does)
         system.activationScripts.impermanence-check = {
           text = ''
-            echo ""
-            echo "=== Impermanence State Check ==="
-            if ${impermanence-diff}/bin/impermanence-diff; then
-              echo "=== Impermanence: OK ==="
-            else
-              echo ""
-              echo "WARNING: Untracked state detected!"
-              echo "Run 'impermanence-diff' for details."
-              echo "=== Impermanence: ATTENTION NEEDED ==="
-            fi
-            echo ""
+            ${impermanence-diff}/bin/impermanence-diff
           '';
           deps = [ "usrbinenv" ];
         };
