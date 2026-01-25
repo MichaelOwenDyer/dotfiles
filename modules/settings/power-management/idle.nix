@@ -6,7 +6,12 @@
   # Uses DMS lock screen and niri display power control.
 
   flake.modules.homeManager.idle =
-    { config, lib, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     let
       cfg = config.services.idle;
       lockCmd = "${pkgs.systemd}/bin/loginctl lock-session";
@@ -55,14 +60,12 @@
               timeout = cfg.displayTimeout;
               command = displayOff;
             })
-            ++
-            (lib.optional (cfg.lockTimeout > 0) {
+            ++ (lib.optional (cfg.lockTimeout > 0) {
               timeout = cfg.lockTimeout;
               command = lockCmd;
             });
           events = lib.mkIf cfg.lockBeforeSleep {
             before-sleep = lockCmd;
-            lock = lockCmd;
           };
           extraArgs = [ ];
         };
