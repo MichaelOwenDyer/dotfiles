@@ -67,6 +67,7 @@
               insert = "bar";
               select = "underline";
             };
+            scroll-lines = 1;
             line-number = "relative";
             cursorline = true;
             color-modes = true;
@@ -165,16 +166,10 @@
         languages.language = [
           {
             name = "nix";
-            auto-format = true;
             formatter.command = lib.getExe pkgs.nixfmt;
           }
           {
-            name = "rust";
-            auto-format = true;
-          }
-          {
             name = "typescript";
-            auto-format = true;
             formatter = {
               command = lib.getExe pkgs.nodePackages.prettier;
               args = [ "--parser" "typescript" ];
@@ -182,7 +177,6 @@
           }
           {
             name = "javascript";
-            auto-format = true;
             formatter = {
               command = lib.getExe pkgs.nodePackages.prettier;
               args = [ "--parser" "javascript" ];
@@ -190,7 +184,6 @@
           }
           {
             name = "json";
-            auto-format = true;
             formatter = {
               command = lib.getExe pkgs.nodePackages.prettier;
               args = [ "--parser" "json" ];
@@ -198,7 +191,6 @@
           }
           {
             name = "markdown";
-            auto-format = true;
             soft-wrap.enable = true;
             formatter = {
               command = lib.getExe pkgs.nodePackages.prettier;
@@ -207,7 +199,6 @@
           }
           {
             name = "toml";
-            auto-format = true;
             formatter.command = lib.getExe pkgs.taplo;
           }
         ];
