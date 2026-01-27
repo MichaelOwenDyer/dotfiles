@@ -16,6 +16,7 @@ in
         fish-shell
         ide-helix
         zen-browser
+        nethack
       ];
 
       home = {
