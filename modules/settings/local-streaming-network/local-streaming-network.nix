@@ -1,5 +1,4 @@
 {
-  inputs,
   ...
 }:
 {
@@ -117,11 +116,9 @@
         };
 
         # Impermanence: dnsmasq state is ephemeral
-        impermanence = lib.mkIf (config ? impermanence) {
-          ignoredPaths = [
-            "/etc/dnsmasq-conf.conf" # Generated config
-          ];
-        };
+        impermanence.ignoredPaths = [
+          "/etc/dnsmasq-conf.conf" # Generated config
+        ];
       };
     };
 }

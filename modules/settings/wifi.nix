@@ -5,7 +5,7 @@
   # WiFi with NetworkManager, iwd backend, and systemd-resolved
 
   flake.modules.nixos.wifi =
-    { config, lib, ... }:
+    { ... }:
     {
       networking.networkmanager = {
         enable = true;
@@ -41,12 +41,10 @@
       };
 
       # Impermanence: persist network connections and state
-      impermanence = lib.mkIf (config ? impermanence) {
-        persistedDirectories = [
-          "/etc/NetworkManager/system-connections" # Saved WiFi passwords
-          "/var/lib/NetworkManager"
-          "/var/lib/iwd"
-        ];
-      };
+      impermanence.persistedDirectories = [
+        "/etc/NetworkManager/system-connections" # Saved WiFi passwords
+        "/var/lib/NetworkManager"
+        "/var/lib/iwd"
+      ];
     };
 }

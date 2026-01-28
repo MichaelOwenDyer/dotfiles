@@ -5,7 +5,7 @@
   # Bluetooth with high-quality audio codecs
 
   flake.modules.nixos.bluetooth =
-    { config, lib, ... }:
+    { ... }:
     {
       hardware.bluetooth = {
         enable = true;
@@ -28,8 +28,6 @@
       };
 
       # Impermanence: explicitly persist paired device state
-      impermanence = lib.mkIf (config ? impermanence) {
-        persistedDirectories = [ "/var/lib/bluetooth" ];
-      };
+      impermanence.persistedDirectories = [ "/var/lib/bluetooth" ];
     };
 }

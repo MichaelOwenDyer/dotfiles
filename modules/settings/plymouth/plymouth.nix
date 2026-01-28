@@ -5,7 +5,7 @@
   # Plymouth boot splash - configurable theme
 
   flake.modules.nixos.plymouth =
-    { config, pkgs, lib, ... }:
+    { pkgs, lib, ... }:
     {
       boot.plymouth = {
         enable = true;
@@ -29,8 +29,6 @@
       ];
 
       # Impermanence: plymouth state is ephemeral
-      impermanence = lib.mkIf (config ? impermanence) {
-        ignoredPaths = [ "/var/lib/plymouth" ];
-      };
+      impermanence.ignoredPaths = [ "/var/lib/plymouth" ];
     };
 }

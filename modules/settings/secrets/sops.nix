@@ -13,7 +13,7 @@
       # When impermanence is enabled, SSH keys live in /persist and are bind-mounted.
       # sops-nix runs before bind mounts, so we point directly to /persist.
       sshKeyPath =
-        if config ? impermanence && config.impermanence.enable then
+        if config.impermanence.enable then
           "${config.impermanence.persistPath}/etc/ssh/ssh_host_ed25519_key"
         else
           "/etc/ssh/ssh_host_ed25519_key";

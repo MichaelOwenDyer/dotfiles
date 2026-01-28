@@ -8,11 +8,12 @@
   # https://github.com/nix-community/impermanence
   #
   # This module provides infrastructure only. Individual service modules
-  # should declare their own persistence needs using the pattern:
+  # should declare their own persistence needs directly:
   #
-  #   config = lib.mkIf (config ? impermanence) {
-  #     impermanence.persistedDirectories = [ "/var/lib/myservice" ];
-  #   };
+  # impermanence.persistedDirectories = [ "/var/lib/myservice" ];
+  #
+  # The options are imported in nixos-default so they can be used
+  # even when this module is not imported.
 
   flake.modules.nixos.impermanence =
     { config, pkgs, ... }:
@@ -25,7 +26,7 @@
       ignoredPathsRust = lib.concatMapStringsSep ", " (p: ''"${p}"'') cfg.ignoredPaths;
 
       # Script to check for untracked state (Rust implementation)
-      impermanence-diff = pkgs.writers.writeRustBin "impermanence-diff" {} ''
+      impermanence-diff = pkgs.writers.writeRustBin "impermanence-diff" { } ''
         use std::{fs, path::Path, process::ExitCode};
 
         const COVERED_PATHS: &[&str] = &[${persistedFilesRust}, ${persistedDirsRust}, ${ignoredPathsRust}];
@@ -111,17 +112,15 @@
     {
       imports = [ inputs.impermanence.nixosModules.impermanence ];
 
+      # Note: persistedFiles, persistedDirectories, and ignoredPaths are defined
+      # globally in ./options.nix so other modules can set them.
       options.impermanence = {
-        enable = lib.mkOption {
-          type = lib.types.bool;
-          default = true;
-          description = "Enable impermanence with Btrfs rollback.";
-        };
-
         persistPath = lib.mkOption {
           type = lib.types.str;
           default = "/persist";
-          description = "Path where persistent state is stored.";
+          description = ''
+            Path where persistent state is stored.
+          '';
         };
 
         wipeOnBoot = lib.mkOption {
@@ -133,27 +132,11 @@
             Enable this only after verifying all needed state is persisted.
           '';
         };
-
-        persistedFiles = lib.mkOption {
-          type = lib.types.listOf lib.types.str;
-          default = [ ];
-          description = "Files to persist across reboots.";
-        };
-
-        persistedDirectories = lib.mkOption {
-          type = lib.types.listOf lib.types.str;
-          default = [ ];
-          description = "Directories to persist across reboots.";
-        };
-
-        ignoredPaths = lib.mkOption {
-          type = lib.types.listOf lib.types.str;
-          default = [ ];
-          description = "Paths that are safe to lose (generated on boot, caches, etc).";
-        };
       };
 
-      config = lib.mkIf cfg.enable {
+      config = {
+        # Mark impermanence as enabled when this module is imported - can still be disabled if desired
+        impermanence.enable = lib.mkDefault true;
         # Universal files that should be persisted on all systems
         impermanence.persistedFiles = [
           "/etc/machine-id"

@@ -6,12 +6,14 @@
   # Default settings for all NixOS configurations
 
   flake.modules.nixos.default-settings =
-    { config, lib, ... }:
+    { lib, ... }:
     {
       imports = with inputs.self.modules.nixos; [
         overlays
         nh
         sops
+        # Enable modules to declare impermanence config regardless of whether impermanence is used
+        impermanence-options
       ];
 
       nixpkgs.config.allowUnfree = true;
@@ -65,21 +67,19 @@
       };
 
       # Impermanence: fwupd and systemd state
-      impermanence = lib.mkIf (config ? impermanence) {
-        persistedDirectories = [
-          "/var/lib/systemd/rfkill" # Radio kill switch state
-          "/var/lib/systemd/timers" # Persistent timer state
-          "/var/lib/systemd/timesync" # NTP state
-        ];
-        ignoredPaths = [
-          "/etc/fwupd" # fwupd config - regenerated
-          "/var/lib/fwupd" # Firmware cache - regenerated
-          "/var/lib/dnsmasq" # DNS cache
-          "/var/lib/nftables" # Firewall state - regenerated
-          "/var/lib/power-profiles-daemon"
-          "/var/lib/upower"
-          "/var/lib/udisks2"
-        ];
-      };
+      impermanence.persistedDirectories = [
+        "/var/lib/systemd/rfkill" # Radio kill switch state
+        "/var/lib/systemd/timers" # Persistent timer state
+        "/var/lib/systemd/timesync" # NTP state
+      ];
+      impermanence.ignoredPaths = [
+        "/etc/fwupd" # fwupd config - regenerated
+        "/var/lib/fwupd" # Firmware cache - regenerated
+        "/var/lib/dnsmasq" # DNS cache
+        "/var/lib/nftables" # Firewall state - regenerated
+        "/var/lib/power-profiles-daemon"
+        "/var/lib/upower"
+        "/var/lib/udisks2"
+      ];
     };
 }
