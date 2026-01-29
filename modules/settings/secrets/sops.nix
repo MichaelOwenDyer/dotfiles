@@ -1,6 +1,5 @@
 {
   inputs,
-  lib,
   ...
 }:
 {
@@ -8,7 +7,7 @@
   # https://github.com/Mic92/sops-nix
 
   flake.modules.nixos.sops =
-    { config, ... }:
+    { config, lib, pkgs, ... }:
     let
       # When impermanence is enabled, SSH keys live in /persist and are bind-mounted.
       # sops-nix runs before bind mounts, so we point directly to /persist.
@@ -18,7 +17,6 @@
         else
           "/etc/ssh/ssh_host_ed25519_key";
     in
-    { config, pkgs, ... }:
     {
       imports = [ inputs.sops-nix.nixosModules.sops ];
 
@@ -27,7 +25,7 @@
           lib.types.str
           lib.types.path
         ];
-        default = "/etc/ssh/ssh_host_ed25519_key";
+        default = sshKeyPath;
         description = "Path to the SSH private key used for decrypting secrets.";
       };
 
