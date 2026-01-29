@@ -47,12 +47,5 @@
 
       services.power-profiles-daemon.enable = lib.mkForce false; # Conflicts with TLP
       services.thermald.enable = true; # Thermal management for Intel CPUs
-
-      impermanence.ephemeralPaths = [
-        "/etc/UPower"
-        "/etc/UPower.conf"
-        "/var/lib/power-profiles-daemon"
-        "/var/lib/upower"
-      ];
     };
 }

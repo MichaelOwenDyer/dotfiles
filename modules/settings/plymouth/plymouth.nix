@@ -29,11 +29,7 @@
       ];
 
       impermanence.ephemeralPaths = [
-        "/etc/logo.png"
-        "/etc/plugins"
-        "/etc/plymouthd.conf"
-        "/etc/plymouthd.defaults"
-        "/etc/themes"
+        "/etc/plymouth"
         "/var/lib/plymouth"
       ];
     };

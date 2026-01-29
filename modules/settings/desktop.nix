@@ -38,6 +38,10 @@
         "/etc/geoclue"
         "/etc/fonts"
         "/etc/speech-dispatcher"
+        # Power management (UPower often pulled in by desktop deps)
+        "/etc/UPower"
+        "/var/lib/upower"
+        "/var/lib/power-profiles-daemon"
         # Storage/disk management
         "/etc/udisks2"
         "/etc/fuse.conf"

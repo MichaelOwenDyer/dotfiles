@@ -28,9 +28,6 @@
       };
 
       impermanence.persistedDirectories = [ "/var/lib/bluetooth" ];
-      impermanence.ephemeralPaths = [
-        "/etc/bluetooth"
-        "/etc/main.conf" # Bluetooth main config
-      ];
+      impermanence.ephemeralPaths = [ "/etc/bluetooth" ];
     };
 }

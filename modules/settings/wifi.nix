@@ -47,7 +47,8 @@
       ];
 
       impermanence.ephemeralPaths = [
-        "/etc/NetworkManager.conf" # Generated main config
+        "/etc/NetworkManager" # Generated config (system-connections persisted separately)
+        "/etc/iwd"
         "/etc/resolv.conf"
         "/etc/resolv.conf.bak"
         "/etc/resolvconf.conf"
