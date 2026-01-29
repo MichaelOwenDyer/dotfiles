@@ -34,6 +34,10 @@
           STEAM_EXTRA_COMPAT_TOOLS_PATHS = "$HOME/.steam/compatibilitytools.d";
         };
       };
+
+      impermanence.ephemeralPaths = [
+        "/etc/gamemode.ini" # Gamemode config - generated
+      ];
     };
 
   # Home Manager module for gaming - sets DISPLAY for Wayland graphical sessions

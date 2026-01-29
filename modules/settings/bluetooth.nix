@@ -27,7 +27,10 @@
         };
       };
 
-      # Impermanence: explicitly persist paired device state
       impermanence.persistedDirectories = [ "/var/lib/bluetooth" ];
+      impermanence.ephemeralPaths = [
+        "/etc/bluetooth"
+        "/etc/main.conf" # Bluetooth main config
+      ];
     };
 }

@@ -15,5 +15,10 @@
       pulse.enable = true;
       # jack.enable = true; # Uncomment for JACK applications
     };
+
+    impermanence.ephemeralPaths = [
+      "/etc/alsa"
+      "/etc/pipewire"
+    ];
   };
 }

@@ -31,5 +31,10 @@
         NIXOS_OZONE_WL = "1"; # Electron apps on Wayland
         WLR_NO_HARDWARE_CURSORS = "0";
       };
+
+      impermanence.ephemeralPaths = [
+        "/etc/nvidia" # Generated config
+        "/etc/egl" # EGL/OpenGL config
+      ];
     };
 }

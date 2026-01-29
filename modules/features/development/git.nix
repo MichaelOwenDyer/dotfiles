@@ -50,6 +50,7 @@ in
       enable = true;
       config = settings;
     };
+    impermanence.ephemeralPaths = [ "/etc/gitconfig" ];
   };
 
   flake.modules.darwin.git =

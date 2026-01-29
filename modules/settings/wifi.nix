@@ -40,11 +40,18 @@
         };
       };
 
-      # Impermanence: persist network connections and state
       impermanence.persistedDirectories = [
         "/etc/NetworkManager/system-connections" # Saved WiFi passwords
         "/var/lib/NetworkManager"
         "/var/lib/iwd"
+      ];
+
+      impermanence.ephemeralPaths = [
+        "/etc/NetworkManager.conf" # Generated main config
+        "/etc/resolv.conf"
+        "/etc/resolv.conf.bak"
+        "/etc/resolvconf.conf"
+        "/etc/dnsmasq-resolv.conf"
       ];
     };
 }

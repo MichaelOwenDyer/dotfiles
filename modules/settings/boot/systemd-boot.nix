@@ -31,5 +31,10 @@
           "udev.log_level=3"
         ];
       };
+
+      impermanence.ephemeralPaths = [
+        "/etc/kernel" # Kernel config/hooks
+        "/etc/grub.d" # GRUB config (even with systemd-boot, may be generated)
+      ];
     };
 }

@@ -101,6 +101,7 @@
 
   flake.modules.nixos.fish-shell = {
     programs.fish.enable = true;
+    impermanence.ephemeralPaths = [ "/etc/fish" ];
   };
 
   flake.modules.darwin.fish-shell = {

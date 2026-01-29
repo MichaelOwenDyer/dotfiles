@@ -12,5 +12,10 @@
         layout = "us";
         variant = "";
       };
+
+      impermanence.ephemeralPaths = [
+        "/etc/kbd" # Console fonts and keymaps
+        "/etc/vconsole.conf" # Console configuration
+      ];
     };
 }

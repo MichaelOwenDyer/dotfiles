@@ -28,7 +28,13 @@
         "udev.log_priority=3"
       ];
 
-      # Impermanence: plymouth state is ephemeral
-      impermanence.ephemeralPaths = [ "/var/lib/plymouth" ];
+      impermanence.ephemeralPaths = [
+        "/etc/logo.png"
+        "/etc/plugins"
+        "/etc/plymouthd.conf"
+        "/etc/plymouthd.defaults"
+        "/etc/themes"
+        "/var/lib/plymouth"
+      ];
     };
 }
