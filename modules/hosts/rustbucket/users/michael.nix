@@ -31,6 +31,9 @@
         development
       ];
 
+      # Enable yazi impermanence plugin since this host uses impermanence
+      programs.yazi.impermanence.enable = true;
+
       services.idle = {
         displayTimeout = 300;
         lockTimeout = 600;

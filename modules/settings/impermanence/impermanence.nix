@@ -25,6 +25,13 @@
       persistedDirsRust = lib.concatMapStringsSep ", " (d: ''"${d}"'') cfg.persistedDirectories;
       ignoredPathsRust = lib.concatMapStringsSep ", " (p: ''"${p}"'') cfg.ignoredPaths;
 
+      # Generate JSON for yazi plugin consumption
+      pathsJson = builtins.toJSON {
+        files = cfg.persistedFiles;
+        directories = cfg.persistedDirectories;
+        persistPath = cfg.persistPath;
+      };
+
       # Script to check for untracked state (Rust implementation)
       impermanence-diff = pkgs.writers.writeRustBin "impermanence-diff" { } ''
         use std::{fs, path::Path, process::ExitCode};
@@ -192,6 +199,9 @@
 
         # Make the diff script available system-wide
         environment.systemPackages = [ impermanence-diff ];
+
+        # Generate JSON file with persisted paths for tools like yazi
+        environment.etc."impermanence-paths.json".text = pathsJson;
 
         # Bootstrap: ensure persisted files exist in /persist and remove originals
         # so impermanence can create bind mounts. This runs before other activation scripts.
