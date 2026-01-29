@@ -49,7 +49,7 @@
         impermanence.persistedFiles = [
           (toString config.distributed-build.server.signingKeyPath)
         ];
-        impermanence.ignoredPaths = [
+        impermanence.ephemeralPaths = [
           "/var/lib/nixremote" # Empty home for build user
         ];
       };

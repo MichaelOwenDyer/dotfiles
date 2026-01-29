@@ -72,7 +72,7 @@
         "/var/lib/systemd/timers" # Persistent timer state
         "/var/lib/systemd/timesync" # NTP state
       ];
-      impermanence.ignoredPaths = [
+      impermanence.ephemeralPaths = [
         "/etc/fwupd" # fwupd config - regenerated
         "/var/lib/fwupd" # Firmware cache - regenerated
         "/var/lib/dnsmasq" # DNS cache

@@ -1,13 +1,6 @@
 { ... }:
 {
-  # Global impermanence options - should always be available regardless
-  # of whether the impermanence module is imported.
-  # This allows other modules to declare their persistence needs.
-  #
-  # When the impermanence module is imported, it consumes these options
-  # to configure actual persistence. When it's not imported, these options
-  # are simply ignored.
-
+  # Global impermanence options - available even when impermanence module isn't imported
   flake.modules.nixos.impermanence-options =
     { lib, ... }:
     {
@@ -15,25 +8,25 @@
         enable = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = "Whether to enable impermanence.";
+          description = "Enable impermanence.";
         };
 
         persistedFiles = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           default = [ ];
-          description = "Files to persist across reboots.";
+          description = "Files to persist.";
         };
 
         persistedDirectories = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           default = [ ];
-          description = "Directories to persist across reboots.";
+          description = "Directories to persist.";
         };
 
-        ignoredPaths = lib.mkOption {
+        ephemeralPaths = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           default = [ ];
-          description = "Paths that are safe to lose (generated on boot, caches, etc).";
+          description = "Paths acknowledged as ephemeral.";
         };
       };
     };

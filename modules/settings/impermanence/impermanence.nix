@@ -7,110 +7,291 @@
   # Impermanence - persist only explicitly declared state
   # https://github.com/nix-community/impermanence
   #
-  # This module provides infrastructure only. Individual service modules
-  # should declare their own persistence needs directly:
+  # Service modules declare persistence needs via: impermanence.persistedDirectories = [ ... ];
+  # Options defined in ./options.nix so they're available even when this module isn't imported.
   #
-  # impermanence.persistedDirectories = [ "/var/lib/myservice" ];
-  #
-  # The options are imported in nixos-default so they can be used
-  # even when this module is not imported.
+  # Status semantics: persisted (●), ephemeral (•), untracked (!), separate_mount (no icon)
+  # Parent dirs bubble up: untracked > persisted > ephemeral
 
   flake.modules.nixos.impermanence =
     { config, pkgs, ... }:
     let
       cfg = config.impermanence;
 
-      # Generate Rust arrays from the NixOS configuration
+      # Real mount points (not /, virtual fs, or bind mounts) - survive root rollback
+      separateMounts = lib.pipe config.fileSystems [
+        (lib.filterAttrs (
+          path: fs:
+          path != "/"
+          && fs.fsType != "tmpfs"
+          && fs.fsType != "proc"
+          && fs.fsType != "sysfs"
+          && fs.fsType != "devtmpfs"
+          && fs.fsType != "devpts"
+          && fs.fsType != "cgroup"
+          && fs.fsType != "cgroup2"
+          && fs.fsType != "securityfs"
+          && fs.fsType != "debugfs"
+          && fs.fsType != "configfs"
+          && fs.fsType != "fusectl"
+          && fs.fsType != "hugetlbfs"
+          && fs.fsType != "mqueue"
+          && fs.fsType != "pstore"
+          && fs.fsType != "efivarfs"
+          && fs.fsType != "bpf"
+          && fs.fsType != "autofs"
+          && fs.fsType != "fuse.portal"
+          && !(lib.any (opt: opt == "bind" || lib.hasPrefix "bind," opt) (fs.options or [ ]))
+        ))
+        builtins.attrNames
+        (builtins.sort (a: b: a < b))
+      ];
+
       persistedFilesRust = lib.concatMapStringsSep ", " (f: ''"${f}"'') cfg.persistedFiles;
       persistedDirsRust = lib.concatMapStringsSep ", " (d: ''"${d}"'') cfg.persistedDirectories;
-      ignoredPathsRust = lib.concatMapStringsSep ", " (p: ''"${p}"'') cfg.ignoredPaths;
+      ephemeralPathsRust = lib.concatMapStringsSep ", " (p: ''"${p}"'') cfg.ephemeralPaths;
+      separateMountsRust = lib.concatMapStringsSep ", " (m: ''"${m}"'') separateMounts;
 
-      # Generate JSON for yazi plugin consumption
       pathsJson = builtins.toJSON {
-        files = cfg.persistedFiles;
-        directories = cfg.persistedDirectories;
-        persistPath = cfg.persistPath;
+        persist = { path = cfg.persistPath; files = cfg.persistedFiles; directories = cfg.persistedDirectories; };
+        ephemeral = cfg.ephemeralPaths;
+        separateMounts = separateMounts;
       };
 
-      # Script to check for untracked state (Rust implementation)
       impermanence-diff = pkgs.writers.writeRustBin "impermanence-diff" { } ''
-        use std::{fs, path::Path, process::ExitCode};
+        use std::{env, fs, path::Path, process::ExitCode};
 
-        const COVERED_PATHS: &[&str] = &[${persistedFilesRust}, ${persistedDirsRust}, ${ignoredPathsRust}];
+        const PERSISTED_FILES: &[&str] = &[${persistedFilesRust}];
+        const PERSISTED_DIRS: &[&str] = &[${persistedDirsRust}];
+        const EPHEMERAL_PATHS: &[&str] = &[${ephemeralPathsRust}];
+        const SEPARATE_MOUNTS: &[&str] = &[${separateMountsRust}];
 
         mod color {
             pub const RED: &str = "\x1b[31m";
             pub const YELLOW: &str = "\x1b[33m";
             pub const GREEN: &str = "\x1b[32m";
+            pub const CYAN: &str = "\x1b[36m";
+            pub const DIM: &str = "\x1b[2m";
             pub const RESET: &str = "\x1b[0m";
         }
 
-        fn is_covered(path: &Path) -> bool {
-            let path_str = path.to_string_lossy();
-            COVERED_PATHS.iter().any(|&p| path_str == p || path_str.starts_with(&format!("{p}/")))
+        #[derive(Clone, Copy, PartialEq)]
+        enum Status { Persisted, Ephemeral, SeparateMount, Untracked }
+        fn get_simple_status(path: &Path) -> Option<Status> {
+            let s = path.to_string_lossy();
+            // Check if on a separate mount
+            for &m in SEPARATE_MOUNTS {
+                if s == m || s.starts_with(&format!("{m}/")) { return Some(Status::SeparateMount); }
+            }
+            // Check if path is or is under a persisted path
+            for &p in PERSISTED_FILES.iter().chain(PERSISTED_DIRS.iter()) {
+                if s == p || s.starts_with(&format!("{p}/")) { return Some(Status::Persisted); }
+            }
+            // Check if path is or is under an ephemeral path
+            for &p in EPHEMERAL_PATHS {
+                if s == p || s.starts_with(&format!("{p}/")) { return Some(Status::Ephemeral); }
+            }
+            // Check if this is a parent of any configured path
+            let has_configured_children = PERSISTED_FILES.iter()
+                .chain(PERSISTED_DIRS.iter())
+                .chain(EPHEMERAL_PATHS.iter())
+                .any(|&p| p.starts_with(&format!("{s}/")));
+
+            if has_configured_children {
+                None // Needs scanning
+            } else {
+                Some(Status::Untracked)
+            }
         }
 
-        fn walk_files(dir: &Path) -> impl Iterator<Item = std::path::PathBuf> + '_ {
-            fs::read_dir(dir).into_iter().flatten().flatten().flat_map(|e| {
-                let path = e.path();
-                let meta = fs::symlink_metadata(&path).ok();
-                match meta {
-                    Some(m) if m.is_file() => vec![path],
-                    Some(m) if m.is_dir() => walk_files(&path).collect(),
-                    _ => vec![],
+        fn scan_directory_status(dir: &Path) -> Status {
+            let mut has_persisted = false;
+            if let Ok(entries) = fs::read_dir(dir) {
+                for entry in entries.flatten() {
+                    let path = entry.path();
+                    let status = get_simple_status(&path).unwrap_or_else(||
+                        if path.is_dir() { scan_directory_status(&path) } else { Status::Untracked }
+                    );
+                    match status {
+                        Status::Untracked => return Status::Untracked,
+                        Status::Persisted => has_persisted = true,
+                        _ => {}
+                    }
                 }
-            })
+            }
+            if has_persisted { Status::Persisted } else { Status::Ephemeral }
         }
 
-        fn human_size(bytes: u64) -> String {
-            const UNITS: &[(u64, &str)] = &[(1 << 30, "G"), (1 << 20, "M"), (1 << 10, "K")];
-            UNITS
-                .iter()
-                .find(|(threshold, _)| bytes >= *threshold)
-                .map(|(threshold, unit)| format!("{:.1}{unit}", bytes as f64 / *threshold as f64))
-                .unwrap_or_else(|| format!("{bytes}B"))
+        fn get_status(path: &Path) -> Status {
+            get_simple_status(path).unwrap_or_else(||
+                if path.is_dir() { scan_directory_status(path) } else { Status::Untracked }
+            )
         }
 
-        fn dir_size(path: &Path) -> u64 {
-            walk_files(path).filter_map(|p| fs::metadata(p).ok()).map(|m| m.len()).sum()
+        fn walk(dir: &Path) -> Vec<std::path::PathBuf> {
+            let mut out = Vec::new();
+            if let Ok(entries) = fs::read_dir(dir) {
+                for e in entries.flatten() {
+                    let p = e.path();
+                    if get_status(&p) == Status::SeparateMount { continue; }
+                    if let Ok(m) = fs::symlink_metadata(&p) {
+                        if m.is_file() || m.is_symlink() { out.push(p); }
+                        else if m.is_dir() { out.extend(walk(&p)); }
+                    }
+                }
+            }
+            out
+        }
+
+        fn human_size(b: u64) -> String {
+            const U: &[(u64, &str)] = &[(1<<30,"G"),(1<<20,"M"),(1<<10,"K")];
+            U.iter().find(|(t,_)| b >= *t)
+                .map(|(t,u)| format!("{:.1}{u}", b as f64 / *t as f64))
+                .unwrap_or_else(|| format!("{b}B"))
+        }
+
+        fn dir_size(p: &Path) -> u64 {
+            walk(p).iter().filter_map(|p| fs::metadata(p).ok()).map(|m| m.len()).sum()
         }
 
         fn main() -> ExitCode {
             use std::io::Write;
-            let stderr = std::io::stderr();
+            let args: Vec<_> = env::args().collect();
+            let verbose = args.iter().any(|a| a == "-v" || a == "--verbose");
+            let show_all = args.iter().any(|a| a == "-a" || a == "--all");
+            let help = args.iter().any(|a| a == "-h" || a == "--help");
 
-            let etc_untracked: Vec<_> = walk_files(Path::new("/etc"))
-                .filter(|p| !is_covered(p))
+            if help {
+                eprintln!("Usage: impermanence-diff [OPTIONS]");
+                eprintln!();
+                eprintln!("Check for untracked state on the root filesystem.");
+                eprintln!();
+                eprintln!("Options:");
+                eprintln!("  -v, --verbose  Show all paths with their status");
+                eprintln!("  -a, --all      Show configuration summary");
+                eprintln!("  -h, --help     Show this help");
+                return ExitCode::SUCCESS;
+            }
+
+            let out = std::io::stderr();
+
+            // Show config summary with --all
+            if show_all {
+                let _ = writeln!(out.lock(), "{}{}Impermanence Configuration{}", color::BOLD, color::CYAN, color::RESET);
+                let _ = writeln!(out.lock(), "{}Mounts (outside scope):{} {}", color::DIM, color::RESET,
+                    SEPARATE_MOUNTS.iter().map(|s| s.to_string()).collect::<Vec<_>>().join(" "));
+                let _ = writeln!(out.lock(), "{}Persisted files:{} {}", color::DIM, color::RESET, PERSISTED_FILES.len());
+                let _ = writeln!(out.lock(), "{}Persisted dirs:{} {}", color::DIM, color::RESET, PERSISTED_DIRS.len());
+                let _ = writeln!(out.lock(), "{}Ephemeral paths:{} {}", color::DIM, color::RESET, EPHEMERAL_PATHS.len());
+                let _ = writeln!(out.lock());
+            }
+
+            // Counts from configuration (not runtime)
+            let n_mounts = SEPARATE_MOUNTS.len();
+            let n_persisted = PERSISTED_FILES.len() + PERSISTED_DIRS.len();
+            let n_ephemeral = EPHEMERAL_PATHS.len();
+
+            // Collect all top-level paths on root filesystem for scanning
+            let root_entries: Vec<_> = fs::read_dir("/").into_iter().flatten().flatten()
+                .map(|e| e.path())
+                .filter(|p| {
+                    let n = p.file_name().and_then(|n| n.to_str()).unwrap_or("");
+                    !["proc", "sys", "dev", "run"].contains(&n) && p.exists()
+                })
                 .collect();
 
-            let varlib_untracked: Vec<_> = fs::read_dir("/var/lib")
-                .into_iter()
-                .flatten()
-                .flatten()
+            // Collect untracked top-level paths
+            let mut untracked: Vec<(String, std::path::PathBuf)> = Vec::new();
+
+            if verbose {
+                let _ = writeln!(out.lock(), "{}Root filesystem contents:{}", color::DIM, color::RESET);
+                for entry in &root_entries {
+                    let status = get_status(entry);
+                    // ● persisted, • ephemeral, ! untracked, (nothing) separate mount
+                    let (icon, col) = match status {
+                        Status::Persisted => ("●", color::CYAN),
+                        Status::Ephemeral => ("•", color::DIM),
+                        Status::Untracked => ("!", color::RED),
+                        Status::SeparateMount => (" ", color::RESET),
+                    };
+                    let _ = writeln!(out.lock(), "  {}{} {}{}", col, icon, entry.display(), color::RESET);
+                }
+                let _ = writeln!(out.lock());
+            }
+
+            // Find untracked top-level entries
+            for entry in &root_entries {
+                let status = get_status(entry);
+                if status == Status::Untracked {
+                    let name = entry.file_name().and_then(|n| n.to_str()).unwrap_or("");
+                    if !["etc", "var"].contains(&name) {
+                        let sz = if entry.is_dir() { dir_size(entry) } else {
+                            fs::metadata(entry).map(|m| m.len()).unwrap_or(0)
+                        };
+                        untracked.push((human_size(sz), entry.clone()));
+                    }
+                }
+            }
+
+            // Scan /etc and /var deeper
+            let etc_untracked: Vec<_> = walk(Path::new("/etc")).into_iter()
+                .filter(|p| get_status(p) == Status::Untracked).collect();
+
+            let var_untracked: Vec<_> = fs::read_dir("/var").into_iter().flatten().flatten()
                 .map(|e| e.path())
-                .filter(|p| p.is_dir() && !is_covered(p))
+                .filter(|p| p.is_dir() && get_status(p) != Status::SeparateMount)
+                .flat_map(|sub| {
+                    if sub == Path::new("/var/lib") {
+                        fs::read_dir(&sub).into_iter().flatten().flatten()
+                            .map(|e| e.path())
+                            .filter(|p| p.is_dir() && get_status(p) == Status::Untracked)
+                            .collect::<Vec<_>>()
+                    } else if get_status(&sub) == Status::Untracked {
+                        vec![sub]
+                    } else { vec![] }
+                })
                 .map(|p| (human_size(dir_size(&p)), p))
                 .collect();
 
-            let has_untracked = !etc_untracked.is_empty() || !varlib_untracked.is_empty();
+            let total_untracked = etc_untracked.len() + var_untracked.len() + untracked.len();
 
-            if !etc_untracked.is_empty() {
-                let _ = writeln!(stderr.lock(), "{}=== Untracked files in /etc ==={}", color::YELLOW, color::RESET);
-                etc_untracked.iter().for_each(|f| { let _ = writeln!(stderr.lock(), "  {}", f.display()); });
-                let _ = writeln!(stderr.lock());
+            // Compact output - matching yazi plugin icons
+            // ● persisted, • ephemeral, ! untracked, (nothing) separate mount
+            let _ = write!(out.lock(), "impermanence: ");
+            let _ = write!(out.lock(), "{} mounts  ", n_mounts);
+            let _ = write!(out.lock(), "{}●{} {} persisted  ", color::CYAN, color::RESET, n_persisted);
+            let _ = write!(out.lock(), "{}•{} {} ephemeral  ", color::DIM, color::RESET, n_ephemeral);
+            if total_untracked > 0 {
+                let _ = write!(out.lock(), "{}!{} {} untracked", color::RED, color::RESET, total_untracked);
+            } else {
+                let _ = write!(out.lock(), "{}✓{}", color::GREEN, color::RESET);
             }
+            let _ = writeln!(out.lock());
 
-            if !varlib_untracked.is_empty() {
-                let _ = writeln!(stderr.lock(), "{}=== Untracked directories in /var/lib ==={}", color::YELLOW, color::RESET);
-                varlib_untracked.iter().for_each(|(size, p)| { let _ = writeln!(stderr.lock(), "  {} ({size})", p.display()); });
-                let _ = writeln!(stderr.lock());
-            }
-
-            if has_untracked {
-                let _ = writeln!(stderr.lock(), "{}Untracked state found!{} Add to the responsible module's impermanence config.", color::RED, color::RESET);
+            // Show untracked details
+            if total_untracked > 0 {
+                if !etc_untracked.is_empty() {
+                    let _ = writeln!(out.lock(), "{}⚠ /etc ({} files):{} {}",
+                        color::YELLOW, etc_untracked.len(), color::RESET,
+                        if verbose || etc_untracked.len() <= 5 {
+                            etc_untracked.iter().map(|p| p.file_name().and_then(|n| n.to_str()).unwrap_or("?")).collect::<Vec<_>>().join(" ")
+                        } else {
+                            format!("{} ... (use -v to see all)", etc_untracked.iter().take(3).map(|p| p.file_name().and_then(|n| n.to_str()).unwrap_or("?")).collect::<Vec<_>>().join(" "))
+                        });
+                }
+                if !var_untracked.is_empty() {
+                    let _ = writeln!(out.lock(), "{}⚠ /var ({}):{} {}",
+                        color::YELLOW, var_untracked.len(), color::RESET,
+                        var_untracked.iter().map(|(sz,p)| format!("{}({})", p.file_name().and_then(|n| n.to_str()).unwrap_or("?"), sz)).collect::<Vec<_>>().join(" "));
+                }
+                if !untracked.is_empty() {
+                    let _ = writeln!(out.lock(), "{}⚠ / ({}):{} {}",
+                        color::YELLOW, untracked.len(), color::RESET,
+                        untracked.iter().map(|(sz,p)| format!("{}({})", p.file_name().and_then(|n| n.to_str()).unwrap_or("?"), sz)).collect::<Vec<_>>().join(" "));
+                }
+                let _ = writeln!(out.lock(), "{}Add to persistedDirectories or ephemeralPaths{}", color::DIM, color::RESET);
                 ExitCode::FAILURE
             } else {
-                let _ = writeln!(stderr.lock(), "{}All state accounted for.{}", color::GREEN, color::RESET);
                 ExitCode::SUCCESS
             }
         }
@@ -119,45 +300,28 @@
     {
       imports = [ inputs.impermanence.nixosModules.impermanence ];
 
-      # Note: persistedFiles, persistedDirectories, and ignoredPaths are defined
-      # globally in ./options.nix so other modules can set them.
       options.impermanence = {
         persistPath = lib.mkOption {
           type = lib.types.str;
           default = "/persist";
-          description = ''
-            Path where persistent state is stored.
-          '';
+          description = "Path for persistent state.";
         };
 
         wipeOnBoot = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = ''
-            Whether to automatically wipe root on boot.
-            When false, impermanence is configured but root is not wiped.
-            Enable this only after verifying all needed state is persisted.
-          '';
+          description = "Wipe root on boot (enable after verifying persistence).";
         };
       };
 
       config = {
-        # Mark impermanence as enabled when this module is imported - can still be disabled if desired
         impermanence.enable = lib.mkDefault true;
-        # Universal files that should be persisted on all systems
-        impermanence.persistedFiles = [
-          "/etc/machine-id"
-          "/etc/adjtime"
-        ];
+        impermanence.persistedFiles = [ "/etc/machine-id" "/etc/adjtime" ];
+        impermanence.persistedDirectories = [ "/var/lib/nixos" ];
 
-        # Universal directories - nixos uid/gid state
-        impermanence.persistedDirectories = [
-          "/var/lib/nixos"
-        ];
-
-        # Paths generated by NixOS activation or safe to lose
-        impermanence.ignoredPaths = [
-          # /etc - generated by NixOS activation
+        # NixOS-generated paths that are regenerated on boot
+        impermanence.ephemeralPaths = [
+          # /etc files
           "/etc/NIXOS"
           "/etc/.clean"
           "/etc/.updated"
@@ -170,55 +334,105 @@
           "/etc/sudoers"
           "/etc/resolv.conf"
           "/etc/resolv.conf.bak"
-          "/etc/kernel/entry-token"
+          "/etc/impermanence-paths.json"
+          "/etc/bash_logout"
+          "/etc/bashrc"
+          "/etc/dnsmasq-resolv.conf"
+          "/etc/fstab"
+          "/etc/fuse.conf"
+          "/etc/gai.conf"
+          "/etc/gamemode.ini"
+          "/etc/gitconfig"
+          "/etc/host.conf"
+          "/etc/hostname"
+          "/etc/hosts"
+          "/etc/inputrc"
+          "/etc/ipsec.secrets"
+          "/etc/issue"
+          "/etc/locale.conf"
+          "/etc/localtime"
+          "/etc/login.defs"
+          "/etc/lsb-release"
+          "/etc/man_db.conf"
+          "/etc/mtab"
+          "/etc/netgroup"
+          "/etc/nscd.conf"
+          "/etc/nsswitch.conf"
+          "/etc/os-release"
+          "/etc/profile"
+          "/etc/protocols"
+          "/etc/resolvconf.conf"
+          "/etc/rpc"
+          "/etc/services"
+          "/etc/set-environment"
+          "/etc/shells"
+          "/etc/vconsole.conf"
+          "/etc/zoneinfo"
+          # /etc directories - generated by NixOS
+          "/etc/NetworkManager"
+          "/etc/UPower"
+          "/etc/X11"
+          "/etc/alsa"
+          "/etc/binfmt.d"
+          "/etc/bluetooth"
+          "/etc/dbus-1"
+          "/etc/default"
+          "/etc/egl"
+          "/etc/fail2ban"
+          "/etc/fish"
+          "/etc/fonts"
+          "/etc/geoclue"
+          "/etc/grub.d"
+          "/etc/iwd"
+          "/etc/kbd"
+          "/etc/kernel"
+          "/etc/libblockdev"
+          "/etc/lvm"
+          "/etc/modprobe.d"
+          "/etc/modules-load.d"
+          "/etc/nix"
           "/etc/nixos"
-          # /var/lib/systemd - we persist specific subdirs, ignore the rest
-          "/var/lib/systemd"
-          # /var/lib - caches and regenerable state
-          "/var/lib/AccountsService"
-          "/var/lib/lastlog"
-          "/var/lib/logrotate.status"
-          "/var/lib/misc"
-          "/var/lib/machines"
-          "/var/lib/portables"
-          "/var/lib/private"
-          # Other ephemeral locations
-          "/var/cache"
-          "/root"
-          "/srv"
-          "/tmp"
-          "/var/tmp"
+          "/etc/nvidia"
+          "/etc/pam"
+          "/etc/pam.d"
+          "/etc/pipewire"
+          "/etc/pki"
+          "/etc/plymouth"
+          "/etc/polkit-1"
+          "/etc/profiles"
+          "/etc/speech-dispatcher"
+          "/etc/ssl"
+          "/etc/static"
+          "/etc/sysctl.d"
+          "/etc/systemd"
+          "/etc/terminfo"
+          "/etc/tmpfiles.d"
+          "/etc/udev"
+          "/etc/udisks2"
+          "/etc/xdg"
+          # /var
+          "/var/.updated" "/var/cache" "/var/db" "/var/empty" "/var/lock" "/var/run" "/var/spool" "/var/tmp"
+          "/var/lib/AccountsService" "/var/lib/lastlog" "/var/lib/logrotate.status"
+          "/var/lib/machines" "/var/lib/misc" "/var/lib/portables" "/var/lib/private" "/var/lib/systemd"
+          # Top-level (NixOS shims/empty mount points)
+          "/bin" "/lib64" "/usr" "/mnt" "/root" "/srv" "/tmp"
         ];
 
-        # Configure the impermanence module
-        environment.persistence.${cfg.persistPath} = {
-          hideMounts = true;
-          files = cfg.persistedFiles;
-          directories = cfg.persistedDirectories;
-        };
-
-        # Make the diff script available system-wide
+        environment.persistence.${cfg.persistPath} = { hideMounts = true; files = cfg.persistedFiles; directories = cfg.persistedDirectories; };
         environment.systemPackages = [ impermanence-diff ];
-
-        # Generate JSON file with persisted paths for tools like yazi
         environment.etc."impermanence-paths.json".text = pathsJson;
 
-        # Bootstrap: ensure persisted files exist in /persist and remove originals
-        # so impermanence can create bind mounts. This runs before other activation scripts.
+        # Bootstrap: copy files to /persist and remove originals for bind mounts
         system.activationScripts.impermanence-bootstrap = {
           text = ''
             echo "=== Impermanence Bootstrap ==="
             ${lib.concatMapStringsSep "\n" (file: ''
-              # If file exists at original location but not in persist, copy it
               if [[ -e "${file}" && ! -L "${file}" && ! -e "${cfg.persistPath}${file}" ]]; then
                 echo "Copying ${file} -> ${cfg.persistPath}${file}"
                 mkdir -p "$(dirname "${cfg.persistPath}${file}")"
                 cp -a "${file}" "${cfg.persistPath}${file}"
               fi
-              # Remove original file (if not already a symlink/mount) so bind mount can be created
-              if [[ -e "${file}" && ! -L "${file}" ]] && mountpoint -q "${file}" 2>/dev/null; then
-                : # Already a mount point, leave it alone
-              elif [[ -f "${file}" && ! -L "${file}" && -e "${cfg.persistPath}${file}" ]]; then
+              if [[ -f "${file}" && ! -L "${file}" && -e "${cfg.persistPath}${file}" ]] && ! mountpoint -q "${file}" 2>/dev/null; then
                 echo "Removing ${file} to allow bind mount"
                 rm -f "${file}"
               fi
@@ -228,42 +442,22 @@
           deps = [ ];
         };
 
-        # Post-rebuild activation script to warn about untracked state
-        # Runs after other scripts via deps on "usrbinenv" (one of the last standard scripts)
-        # Output goes to stderr so nh displays it (like sops does)
         system.activationScripts.impermanence-check = {
-          text = ''
-            ${impermanence-diff}/bin/impermanence-diff
-          '';
+          text = "${impermanence-diff}/bin/impermanence-diff";
           deps = [ "usrbinenv" ];
         };
 
-        # Btrfs rollback on boot (only if wipeOnBoot is enabled)
         boot.initrd.systemd.services.rollback = lib.mkIf cfg.wipeOnBoot {
-          description = "Rollback root filesystem to blank snapshot";
+          description = "Rollback root to blank snapshot";
           wantedBy = [ "initrd.target" ];
           before = [ "sysroot.mount" ];
           unitConfig.DefaultDependencies = "no";
           serviceConfig.Type = "oneshot";
           script = ''
-            mkdir -p /mnt
-            mount -o subvol=/ /dev/disk/by-label/NIXOS /mnt
-
-            # Keep a backup of the old root
-            if [[ -e /mnt/@root ]]; then
-              timestamp=$(date +%Y%m%d-%H%M%S)
-              mv /mnt/@root /mnt/@root-old-$timestamp
-            fi
-
-            # Delete old backups, keep last 3
-            for old in $(ls -1d /mnt/@root-old-* 2>/dev/null | sort -r | tail -n +4); do
-              btrfs subvolume delete "$old"
-            done
-
-            # Create fresh root from blank snapshot
-            btrfs subvolume snapshot /mnt/@root-blank /mnt/@root
-
-            umount /mnt
+            mkdir -p /mnt && mount -o subvol=/ /dev/disk/by-label/NIXOS /mnt
+            [[ -e /mnt/@root ]] && mv /mnt/@root /mnt/@root-old-$(date +%Y%m%d-%H%M%S)
+            for old in $(ls -1d /mnt/@root-old-* 2>/dev/null | sort -r | tail -n +4); do btrfs subvolume delete "$old"; done
+            btrfs subvolume snapshot /mnt/@root-blank /mnt/@root && umount /mnt
           '';
         };
       };

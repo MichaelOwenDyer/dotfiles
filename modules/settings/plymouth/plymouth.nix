@@ -29,6 +29,6 @@
       ];
 
       # Impermanence: plymouth state is ephemeral
-      impermanence.ignoredPaths = [ "/var/lib/plymouth" ];
+      impermanence.ephemeralPaths = [ "/var/lib/plymouth" ];
     };
 }

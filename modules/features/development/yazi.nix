@@ -25,40 +25,52 @@
       options.programs.yazi.impermanence = {
         enable = lib.mkEnableOption "yazi impermanence plugin";
 
-        marker = lib.mkOption {
+        persistedMarker = lib.mkOption {
           type = lib.types.str;
-          default = " 💾";
-          description = "Marker shown for persisted items";
+          default = "●";
+          description = "Marker for persisted items";
         };
 
         ephemeralMarker = lib.mkOption {
           type = lib.types.str;
-          default = "";
-          description = "Marker shown for ephemeral items (empty = don't show)";
+          default = "•";
+          description = "Marker for ephemeral items";
         };
 
-        color = lib.mkOption {
+        untrackedMarker = lib.mkOption {
           type = lib.types.str;
-          default = "#83a598";
-          description = "Color for persisted marker (gruvbox aqua)";
+          default = "!";
+          description = "Marker for untracked items";
+        };
+
+        persistedColor = lib.mkOption {
+          type = lib.types.str;
+          default = "cyan";
+          description = "Color for persisted marker";
         };
 
         ephemeralColor = lib.mkOption {
           type = lib.types.str;
-          default = "#cc241d";
-          description = "Color for ephemeral marker (gruvbox red)";
+          default = "darkgray";
+          description = "Color for ephemeral marker";
+        };
+
+        untrackedColor = lib.mkOption {
+          type = lib.types.str;
+          default = "red";
+          description = "Color for untracked marker";
         };
 
         showHeader = lib.mkOption {
           type = lib.types.bool;
           default = true;
-          description = "Show persistence indicator in header";
+          description = "Show indicator in header";
         };
 
         showLinemode = lib.mkOption {
           type = lib.types.bool;
           default = true;
-          description = "Show persistence indicator per file";
+          description = "Show indicator per file";
         };
       };
 
@@ -127,23 +139,20 @@
               }
             ];
           };
-          initLua =
-            ''
-              require("git"):setup()
-            ''
-            + lib.optionalString cfg.impermanence.enable ''
-              -- Setup impermanence plugin to show persistence status
-              require("impermanence"):setup({
-                marker = "${cfg.impermanence.marker}",
-                ephemeral_marker = "${cfg.impermanence.ephemeralMarker}",
-                color = "${cfg.impermanence.color}",
-                ephemeral_color = "${cfg.impermanence.ephemeralColor}",
-                show_header = ${lib.boolToString cfg.impermanence.showHeader},
-                show_linemode = ${lib.boolToString cfg.impermanence.showLinemode},
-                header_order = 500,
-                linemode_order = 500,
-              })
-            '';
+          initLua = ''
+            require("git"):setup()
+          '' + lib.optionalString cfg.impermanence.enable ''
+            require("impermanence"):setup({
+              persisted_marker = "${cfg.impermanence.persistedMarker}",
+              ephemeral_marker = "${cfg.impermanence.ephemeralMarker}",
+              untracked_marker = "${cfg.impermanence.untrackedMarker}",
+              persisted_color = "${cfg.impermanence.persistedColor}",
+              ephemeral_color = "${cfg.impermanence.ephemeralColor}",
+              untracked_color = "${cfg.impermanence.untrackedColor}",
+              show_header = ${lib.boolToString cfg.impermanence.showHeader},
+              show_linemode = ${lib.boolToString cfg.impermanence.showLinemode},
+            })
+          '';
           plugins =
             {
               inherit (pkgs.yaziPlugins)

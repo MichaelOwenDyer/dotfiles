@@ -116,7 +116,7 @@
         };
 
         # Impermanence: dnsmasq state is ephemeral
-        impermanence.ignoredPaths = [
+        impermanence.ephemeralPaths = [
           "/etc/dnsmasq-conf.conf" # Generated config
         ];
       };
