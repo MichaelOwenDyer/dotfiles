@@ -18,6 +18,7 @@
         else
           "/etc/ssh/ssh_host_ed25519_key";
     in
+    { config, pkgs, ... }:
     {
       imports = [ inputs.sops-nix.nixosModules.sops ];
 
@@ -26,8 +27,8 @@
           lib.types.str
           lib.types.path
         ];
-        default = sshKeyPath;
-        description = "Path to the age-compatible private key for decrypting secrets and editing with sops CLI.";
+        default = "/etc/ssh/ssh_host_ed25519_key";
+        description = "Path to the SSH private key used for decrypting secrets.";
       };
 
       config = {
@@ -36,8 +37,14 @@
           age.sshKeyPaths = [ config.sops.ageKeyFile ];
         };
 
-        # Set SOPS_AGE_SSH_KEY so `sops` CLI uses the same key for editing
-        environment.variables.SOPS_AGE_SSH_KEY = toString config.sops.ageKeyFile;
+        environment.systemPackages = with pkgs; [
+          sops
+          ssh-to-age
+          (writeShellScriptBin "sops-edit" ''
+            export SOPS_AGE_KEY=$(${ssh-to-age}/bin/ssh-to-age -private-key < ~/.ssh/id_ed25519)
+            exec ${sops}/bin/sops "''${1:-${./secrets.yaml}}"
+          '')
+        ];
       };
     };
 }
