@@ -22,6 +22,7 @@
         distributed-build-server
         local-streaming-network
         impermanence
+        tailscale
         michael-rustbucket
       ];
 

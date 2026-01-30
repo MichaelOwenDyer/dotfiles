@@ -16,6 +16,7 @@
         niri
         dank-material-shell
         gnome-keyring
+        tailscale
         plymouth
         ssh
         distributed-build-client
