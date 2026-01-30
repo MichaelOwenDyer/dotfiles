@@ -14,7 +14,7 @@
         host-ip = "192.168.0.1";
         systems = [ "x86_64-linux" ];
         maxJobs = 8; # i7-4790K: 4 cores / 8 threads
-        speedFactor = 2;
+        speedFactor = 1;
         supportedFeatures = [
           "nixos-test"
           "benchmark"
