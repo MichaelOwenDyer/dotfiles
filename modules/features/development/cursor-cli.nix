@@ -8,6 +8,9 @@
       environment.systemPackages = with pkgs; [
         cursor-cli
       ];
+      environment.shellAliases = {
+        agent = "cursor-agent";
+      };
     };
 
   flake.modules.darwin.cursor-cli =
@@ -16,6 +19,9 @@
       environment.systemPackages = with pkgs; [
         cursor-cli
       ];
+      environment.shellAliases = {
+        agent = "cursor-agent";
+      };
     };
 
   flake.modules.homeManager.cursor-cli =
@@ -24,5 +30,8 @@
       home.packages = with pkgs; [
         cursor-cli
       ];
+      home.shellAliases = {
+        agent = "cursor-agent";
+      };
     };
 }
