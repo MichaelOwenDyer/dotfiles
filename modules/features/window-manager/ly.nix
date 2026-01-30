@@ -10,6 +10,7 @@
       services.displayManager.ly.enable = true;
 
       # Impermanence: persist last selected user/session
-      impermanence.persistedDirectories = [ "/etc/ly" ];
+      impermanence.persistedFiles = [ "/etc/ly/save.txt" ];
+      impermanence.ephemeralPaths = [ "/etc/ly/config.ini" ];
     };
 }
