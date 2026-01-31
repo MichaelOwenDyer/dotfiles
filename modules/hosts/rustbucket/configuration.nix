@@ -44,7 +44,8 @@
       };
 
       distributed-build.server = with inputs.self.lib.distributedBuild; {
-        authorizedKeys = [ clientKeys.claptrap clientKeys.rpi-3b ];
+        sshUser = "nixremote";
+        authorizedClients = [ clients.claptrap.rootSshKey.pub clients.rpi-3b.rootSshKey.pub ];
         signingKeyPath = "/etc/nix/cache-priv-key.pem";
       };
 

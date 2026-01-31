@@ -25,7 +25,7 @@
           description = "SSH public keys authorized to log in as distributed-build.server.sshUser";
         };
         signingKeyPath = lib.mkOption {
-          type = lib.nullOr (lib.types.oneOf [ lib.types.path lib.types.str ]);
+          type = lib.types.nullOr (lib.types.oneOf [ lib.types.path lib.types.str ]);
           default = null;
           description = ''
             Set this to make this build server also serve precompiled binaries from its own store.
