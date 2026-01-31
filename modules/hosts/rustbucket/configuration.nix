@@ -23,6 +23,7 @@
         local-streaming-network
         impermanence
         tailscale
+        adguardhome
         michael-rustbucket
       ];
 

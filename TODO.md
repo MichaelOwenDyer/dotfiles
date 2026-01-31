@@ -31,6 +31,22 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 - [x] **Configure Niri displays per-host** - Separate output modules for claptrap/rustbucket
 - [ ] **Investigate DMS plugins** - Review available plugins in registry
 
+### AdGuard Home
+
+- [ ] **Migrate AdGuard Home to rpi-3b** - Currently running on rustbucket as temporary solution
+  - On rpi-3b: Enable DHCP server (single interface, dedicated device)
+  - On rpi-3b: Pi handles both DNS and DHCP for home network
+  - Disable router's DHCP, let Pi manage it
+  - Better client identification when DHCP + DNS on same device
+- [ ] **Configure router DNS to point to AdGuard Home** - Until rpi-3b migration
+  - Set router's DNS server to rustbucket (192.168.0.1)
+  - Router keeps DHCP for now (AdGuard Home DHCP conflicts with rustbucket's multi-interface setup)
+- [ ] **Tune AdGuard Home settings** - Evaluate and declare preferred config
+  - Upstream DNS (DoH/DoT providers)
+  - DNSSEC, caching settings
+  - Filter lists
+  - Set `mutableSettings = false` once config is finalized
+
 ### Other
 
 - [ ] **Configure router with Nix** - Replace imperative router configuration with declarative NixOS setup
