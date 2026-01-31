@@ -44,7 +44,7 @@
       };
 
       distributed-build.server = with inputs.self.lib.distributedBuild; {
-        authorizedKeys = [ clientKeys.claptrap ];
+        authorizedKeys = [ clientKeys.claptrap clientKeys.rpi-3b ];
         signingKeyPath = "/etc/nix/cache-priv-key.pem";
       };
 

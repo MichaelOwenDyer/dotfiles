@@ -15,7 +15,7 @@
         locale
         security-defaults
         bash-shell
-        # nh
+        nh
         sops
       ];
 
