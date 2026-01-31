@@ -13,6 +13,7 @@
         rpi-3b-hardware
         michael-rpi-3b
         ssh
+        distributed-build-client
       ];
 
       networking.hostName = "rpi-3b";
@@ -20,6 +21,11 @@
       # Use the extlinux boot loader
       boot.loader.grub.enable = false;
       boot.loader.generic-extlinux-compatible.enable = true;
+
+      distributed-build.client = with inputs.self.lib.distributedBuild; {
+        publicKey = clientKeys.rpi-3b;
+        builders = [ builders.rustbucket ];
+      };
 
       networking = {
         networkmanager.enable = true;

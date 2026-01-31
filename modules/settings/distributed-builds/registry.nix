@@ -7,6 +7,7 @@
   flake.lib.distributedBuild = {
     clientKeys = {
       claptrap = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHQ0T01LHYpwEHrUPz7MAzVAj0QPP2BDyiKdSlL38Yp8 root@claptrap";
+      rpi-3b = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPA5GhdKSh9IlD5ro8VXFIwHbfSPpwv6rv8Ugczd3nRx root@nixos";
     };
     builders = {
       rustbucket = {
