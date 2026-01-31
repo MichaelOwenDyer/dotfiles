@@ -6,20 +6,33 @@
   # Servers import this and configure their settings in their configuration.nix
 
   flake.modules.nixos.distributed-build-server =
-    { lib, config, ... }:
+    { lib, config, pkgs, ... }:
+    let
+      cfg = config.distributed-build.server;
+    in
     {
       options.distributed-build.server = {
-        authorizedKeys = lib.mkOption {
+        sshUser = lib.mkOption {
+          type = lib.types.str;
+          default = "nixremote";
+          description = ''
+            The name of the user which clients log in as to perform remote builds.
+          '';
+        };
+        authorizedClients = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           default = [ ];
-          description = "SSH public keys authorized to connect as nixremote";
+          description = "SSH public keys authorized to log in as distributed-build.server.sshUser";
         };
         signingKeyPath = lib.mkOption {
-          type = lib.types.path;
+          type = lib.nullOr (lib.types.oneOf [ lib.types.path lib.types.str ]);
           default = null;
           description = ''
-            Path to private key for signing builds.
-            After changing this run nix store sign --all -k path/to/key to retroactively sign build artifacts.
+            Set this to make this build server also serve precompiled binaries from its own store.
+            This requires the binaries to be cryptographically signed by the builder.
+            Configure the path to that private key here.
+            This will additionally configure all clients using this remote builder to use the builder as a binary cache (substituter).
+            IMPORTANT: After changing this, run `nix store sign --all -k <signingKeyPath>` to retroactively sign build artifacts.
           '';
         };
       };
@@ -27,30 +40,29 @@
       config = {
         users.users.nixremote = {
           isSystemUser = true;
-          group = "nixremote";
-          home = "/var/lib/nixremote";
+          group = cfg.sshUser;
+          home = "/var/lib/${cfg.sshUser}";
           createHome = true;
-          shell = "/run/current-system/sw/bin/bash";
-          openssh.authorizedKeys.keys = config.distributed-build.server.authorizedKeys;
+          shell = "${pkgs.bash}/bin/bash";
+          openssh.authorizedKeys.keys = cfg.authorizedClients;
         };
 
-        users.groups.nixremote = { };
+        users.groups.${cfg.sshUser} = { };
         nix = {
-          settings.trusted-users = [ "nixremote" ];
+          settings.trusted-users = [ cfg.sshUser ];
           extraOptions = ''
-            secret-key-files = ${config.distributed-build.server.signingKeyPath}
+            secret-key-files = ${cfg.signingKeyPath}
           '';
         };
 
         # Ensure SSH is enabled on the server
         services.openssh.enable = true;
 
-        # Impermanence: persist signing key, ignore empty build user home
         impermanence.persistedFiles = [
-          (toString config.distributed-build.server.signingKeyPath)
+          (toString cfg.signingKeyPath) # Ensure signing key is persisted across boots
         ];
         impermanence.ephemeralPaths = [
-          "/var/lib/nixremote" # Empty home for build user
+          "/var/lib/${cfg.sshUser}" # Home is regenerated at every boot
         ];
       };
     };

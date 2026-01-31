@@ -23,28 +23,28 @@
       boot.loader.generic-extlinux-compatible.enable = true;
 
       distributed-build.client = with inputs.self.lib.distributedBuild; {
-        publicKey = clientKeys.rpi-3b;
+        rootSshKey = clients.rpi-3b.rootSshKey;
         builders = [ builders.rustbucket ];
       };
 
       networking = {
         networkmanager.enable = true;
-        defaultGateway = {
-          interface = "enu1u1";
-          address = "192.168.0.254";
-        };
-        nameservers = [
-          "1.1.1.1"
-          "8.8.8.8"
-        ];
-        interfaces.enu1u1 = {
-          ipv4.addresses = [
-            {
-              address = "192.168.0.253";
-              prefixLength = 24;
-            }
-          ];
-        };
+        # defaultGateway = {
+        #   interface = "enu1u1";
+        #   address = "192.168.0.254";
+        # };
+        # nameservers = [
+        #   "1.1.1.1"
+        #   "8.8.8.8"
+        # ];
+        # interfaces.enu1u1 = {
+        #   ipv4.addresses = [
+        #     {
+        #       address = "192.168.0.253";
+        #       prefixLength = 24;
+        #     }
+        #   ];
+        # };
       };
 
       system.stateVersion = "25.11";
