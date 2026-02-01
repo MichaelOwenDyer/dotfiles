@@ -14,6 +14,8 @@
         michael-rpi-3b
         ssh
         distributed-build-client
+        tailscale
+        adguardhome
       ];
 
       networking.hostName = "rpi-3b";
