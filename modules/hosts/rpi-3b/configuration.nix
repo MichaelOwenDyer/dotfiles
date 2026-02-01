@@ -20,6 +20,9 @@
 
       networking.hostName = "rpi-3b";
 
+      # Disable documentation to speed up build times
+      documentation.man.generateCaches = false;
+
       # Use the extlinux boot loader
       boot.loader.grub.enable = false;
       boot.loader.generic-extlinux-compatible.enable = true;

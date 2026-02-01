@@ -49,6 +49,8 @@
         signingKeyPath = "/etc/nix/cache-priv-key.pem";
       };
 
+      services.adguardhome.settings.dns.bind-hosts = [ "192.168.0.253" ];
+
       # Enable aarch64 emulation via QEMU for building rpi-3b packages
       boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
