@@ -45,7 +45,7 @@
         gitui
         ide-helix
         yazi
-        # nh
+        nh
       ];
 
       home.stateVersion = "25.11";
