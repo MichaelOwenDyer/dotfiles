@@ -27,6 +27,11 @@
         builders = [ builders.rustbucket ];
       };
 
+      # Allow remote deployment from rustbucket
+      users.users.root.openssh.authorizedKeys.keys = [
+        inputs.self.lib.sshKeys."michael@rustbucket".pub
+      ];
+
       networking = {
         networkmanager.enable = true;
         # defaultGateway = {

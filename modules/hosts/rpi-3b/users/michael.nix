@@ -6,11 +6,7 @@
   flake.modules.nixos.michael-rpi-3b =
     { pkgs, ... }:
     let
-      trustedSshKeys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINtKFTvyCJo4u7KstzHIZ/ZdBCfS5ukmItX75tC0aM5O michael@claptrap"
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHvS0a2EKa9kxQ1DK3JMS6UVYOXnOvlTFQzukp9U/M4n michael@rustbucket"
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAaQ4EQjxoG3L5kMu5wK1eE1w6V4y1lw3/ynJfd/0Nis michael.dyer@JGFQQXM192"
-      ];
+      sshKeys = inputs.self.lib.sshKeys;
     in
     {
       imports = with inputs.self.modules.nixos; [ home-manager fish-shell ];
@@ -32,7 +28,11 @@
           "podman"
           "docker"
         ];
-        openssh.authorizedKeys.keys = trustedSshKeys;
+        openssh.authorizedKeys.keys = with sshKeys; [
+          "michael@claptrap".pub
+          "michael@rustbucket".pub
+          "michael@mac".pub
+        ];
       };
     };
 

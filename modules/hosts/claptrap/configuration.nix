@@ -26,7 +26,7 @@
       networking.hostName = "claptrap";
 
       distributed-build.client = with inputs.self.lib.distributedBuild; {
-        publicKey = clientKeys.claptrap;
+        rootSshKey = clients.claptrap.rootSshKey;
         builders = [ builders.rustbucket ];
       };
 

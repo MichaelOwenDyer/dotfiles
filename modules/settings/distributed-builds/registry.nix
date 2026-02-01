@@ -1,22 +1,17 @@
 {
+  inputs,
   ...
 }:
 {
   # Central registry for distributed builds
 
-  flake.lib.distributedBuild = {
+  flake.lib.distributedBuild = with inputs.self.lib; {
     clients = {
       claptrap = {
-        rootSshKey = {
-          pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHQ0T01LHYpwEHrUPz7MAzVAj0QPP2BDyiKdSlL38Yp8 root@claptrap";
-          privatePath = "/root/.ssh/nixremote"; # Expect the corresponding private key to be available here
-        };
+        rootSshKey = sshKeys."root@claptrap";
       };
       rpi-3b = {
-        rootSshKey = {
-          pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAPQY1jga8pE59ErPEGTt5Rz0GjwGKJq8svjeWWnqeSc root@rpi-3b";
-          privatePath = "/root/.ssh/nixremote";
-        };
+        rootSshKey = sshKeys."root@rpi-3b";
       };
     };
     builders = {

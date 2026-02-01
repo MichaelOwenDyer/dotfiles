@@ -1,17 +1,8 @@
 {
   inputs,
+  lib,
   ...
 }:
-let
-  name = "Michael Dyer";
-  email = "michaelowendyer@gmail.com";
-  trustedSshKeys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINtKFTvyCJo4u7KstzHIZ/ZdBCfS5ukmItX75tC0aM5O michael@claptrap"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE1RmSKMqa9vAqyHjJzEmjFOJYV+qT/imHpXDmeWl6PI michael@rpi-3b"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHvS0a2EKa9kxQ1DK3JMS6UVYOXnOvlTFQzukp9U/M4n michael@rustbucket"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAaQ4EQjxoG3L5kMu5wK1eE1w6V4y1lw3/ynJfd/0Nis michael.dyer@JGFQQXM192"
-  ];
-in
 {
   # Extra NixOS configuration for any system michael is a user on
   flake.modules.nixos.michael =
@@ -27,7 +18,7 @@ in
 
       users.users.michael = {
         isNormalUser = true;
-        description = name;
+        description = "Michael Dyer";
         # Password hash is read from the decrypted secret at /run/secrets/michael-password
         hashedPasswordFile = config.sops.secrets."michael-password".path;
         shell = pkgs.fish;
@@ -40,7 +31,12 @@ in
           "podman"
           "docker"
         ];
-        openssh.authorizedKeys.keys = trustedSshKeys;
+        openssh.authorizedKeys.keys = with inputs.self.lib; [
+          sshKeys."michael@rustbucket".pub
+          sshKeys."michael@claptrap".pub
+          sshKeys."michael@rpi-3b".pub
+          sshKeys."michael@mac".pub
+        ];
       };
     };
 }
