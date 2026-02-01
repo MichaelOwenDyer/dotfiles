@@ -5,9 +5,6 @@
 {
   flake.modules.nixos.michael-rpi-3b =
     { pkgs, ... }:
-    let
-      sshKeys = inputs.self.lib.sshKeys;
-    in
     {
       imports = with inputs.self.modules.nixos; [ home-manager fish-shell ];
 
@@ -28,10 +25,10 @@
           "podman"
           "docker"
         ];
-        openssh.authorizedKeys.keys = with sshKeys; [
-          "michael@claptrap".pub
-          "michael@rustbucket".pub
-          "michael@mac".pub
+        openssh.authorizedKeys.keys = with inputs.self.lib; [
+          sshKeys."michael@claptrap".pub
+          sshKeys."michael@rustbucket".pub
+          sshKeys."michael@mac".pub
         ];
       };
     };
