@@ -23,7 +23,7 @@
       rustbucket = {
         hostName = "rustbucket";
         host-ip = "192.168.0.1";
-        systems = [ "x86_64-linux" ];
+        systems = [ "x86_64-linux" "aarch64-linux" ];
         maxJobs = 8; # i7-4790K: 4 cores / 8 threads
         speedFactor = 1;
         protocol = "ssh-ng";

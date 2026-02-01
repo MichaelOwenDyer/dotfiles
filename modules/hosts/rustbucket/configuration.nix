@@ -49,6 +49,9 @@
         signingKeyPath = "/etc/nix/cache-priv-key.pem";
       };
 
+      # Enable aarch64 emulation via QEMU for building rpi-3b packages
+      boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
       # Performance mode for gaming desktop
       powerManagement.cpuFreqGovernor = "performance";
 
