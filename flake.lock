@@ -293,26 +293,6 @@
         "type": "github"
       }
     },
-    "nh": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1769714568,
-        "narHash": "sha256-IdaBS+aCuEAI2HoGcF5E4mGfHAwiIaUiHopqvx4gq1k=",
-        "owner": "nix-community",
-        "repo": "nh",
-        "rev": "e0eedfbc5e655b1c03f4466ad827c44e0e4582ee",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nh",
-        "type": "github"
-      }
-    },
     "niri-flake": {
       "inputs": {
         "niri-stable": "niri-stable",
@@ -566,7 +546,6 @@
         "home-manager": "home-manager",
         "impermanence": "impermanence",
         "import-tree": "import-tree",
-        "nh": "nh",
         "niri-flake": "niri-flake",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs_2",

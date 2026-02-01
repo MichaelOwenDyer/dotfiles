@@ -27,10 +27,6 @@
       url = "github:nix-community/impermanence";
     };
     import-tree.url = "github:vic/import-tree";
-    nh = {
-      inputs.nixpkgs.follows = "nixpkgs";
-      url = "github:nix-community/nh";
-    };
     niri-flake.url = "github:sodiboo/niri-flake";
     nix-darwin = {
       inputs.nixpkgs.follows = "nixpkgs";
