@@ -47,6 +47,23 @@ Tracking improvements, bugfixes, and planned features for this configuration.
   - Filter lists
   - Set `mutableSettings = false` once config is finalized
 
+### IPv6
+
+- [ ] **Investigate and enable IPv6 on home network**
+  - **Current state**: No global IPv6 addresses on any host. Only link-local (`fe80::`) and ULA (`fd*`) addresses present.
+  - **Likely cause**: Router (M-Net fiber) is probably receiving IPv6 from ISP but not delegating prefixes to LAN.
+  - **Router settings to check**:
+    - IPv6 / DHCPv6 enabled
+    - Prefix Delegation (PD) enabled
+    - Router Advertisement (RA) enabled
+  - **How to verify when working**: `ip -6 addr show scope global` should show `2001:` or `2a02:` addresses; `curl -6 ifconfig.me` should return your public IPv6
+  - **Potential benefits once working**:
+    - Direct connectivity between home devices without NAT
+    - Could bypass Tailscale for home-to-home connections (lower latency)
+    - Future-proofing as IPv4 becomes scarcer
+  - **Note**: Tailscale still valuable for remote access and when away from home. IPv6 is nice-to-have, not essential given current Tailscale setup works well.
+  - **Data already in place**: `hosts-registry.nix` already has Tailscale IPv6 addresses (`fd7a:115c:a1e0::*`) and streaming network IPv6 prefix (`fdc9:1a4b:53e1:50::`). Once router IPv6 is fixed, can add global addresses.
+
 ### Other
 
 - [ ] **Configure router with Nix** - Replace imperative router configuration with declarative NixOS setup
@@ -67,6 +84,8 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 ### Low Priority
 
 - [ ] Add comments to uncommented modules for consistency
+- [ ] **Migrate to keys-registry** - Replace `sshKeys` usages with `keys.ssh.*` and remove legacy compat layer
+- [ ] **Enable keys-deployment** - Wire up hosts to deploy keys from sops at boot
 - [x] Rewrite `impermanence-diff` in Rust (bash script has output issues) (2026-01-25)
 
 ---
