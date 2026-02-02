@@ -36,4 +36,12 @@
         ];
       };
     };
+
+  flake.modules.darwin.tailscale =
+    { pkgs, ... }:
+    {
+      services.tailscale = {
+        enable = true;
+      };
+    };
 }

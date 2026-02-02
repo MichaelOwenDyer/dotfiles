@@ -10,11 +10,19 @@
 
     nixpkgs.config.allowUnfree = true;
 
-    # Let Determinate Nix handle the nix installation
-    nix.enable = false;
-    nix.extraOptions = ''
-      warn-dirty = false
-    '';
+    nix = {
+      # Let Determinate Nix handle the nix installation
+      # TODO: These settings are not currently being applied!
+      enable = false;
+      settings = {
+        warn-dirty = false;
+        experimental-features = [
+          "nix-command"
+          "flakes"
+          "pipe-operators"
+        ];
+      };
+    };
 
     # Create /etc/zshrc that loads the nix-darwin environment
     programs.zsh.enable = true;

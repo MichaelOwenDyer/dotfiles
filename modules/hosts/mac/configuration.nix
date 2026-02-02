@@ -11,6 +11,7 @@
       imports = with inputs.self.modules.darwin; [
         default-settings
         macos-disconnect-on-sleep
+        tailscale
         michael-mac
       ];
 
