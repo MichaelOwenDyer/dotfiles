@@ -8,6 +8,9 @@
   flake.modules.nixos.default-settings =
     { lib, ... }:
     {
+      # Set git revision for `nixos-rebuild list-generations`
+      system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
+
       imports = with inputs.self.modules.nixos; [
         impermanence-options # Enable modules to declare impermanence config
         overlays
