@@ -30,5 +30,8 @@
       pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAPQY1jga8pE59ErPEGTt5Rz0GjwGKJq8svjeWWnqeSc root@rpi-3b";
       privatePath = "/root/.ssh/nixremote";
     };
+    "michael@phone" = {
+      pub = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBL3MxiYU5PIzSCwLkOklV2Ofo4l0AvR9ve61j+UnbSVKZCjthTsegWp+OBpmEOP5VLzfZAw2bIUNcej98U92jp4=";
+    };
   };
 }

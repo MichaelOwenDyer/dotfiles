@@ -19,7 +19,6 @@
       users.users.michael = {
         isNormalUser = true;
         description = "Michael Dyer";
-        # Password hash is read from the decrypted secret at /run/secrets/michael-password
         hashedPasswordFile = config.sops.secrets."michael-password".path;
         shell = pkgs.fish;
         extraGroups = [
@@ -36,6 +35,7 @@
           sshKeys."michael@claptrap".pub
           sshKeys."michael@rpi-3b".pub
           sshKeys."michael@mac".pub
+          sshKeys."michael@phone".pub
         ];
       };
     };
