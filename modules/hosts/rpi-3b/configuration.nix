@@ -37,6 +37,8 @@
         inputs.self.lib.sshKeys."michael@rustbucket".pub
       ];
 
+      services.adguardhome.settings.dns.bind_hosts = [ "192.168.0.253" ];
+
       networking = {
         networkmanager.enable = true;
         # defaultGateway = {

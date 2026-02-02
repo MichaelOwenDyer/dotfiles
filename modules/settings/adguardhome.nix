@@ -26,7 +26,7 @@
 
         settings = {
           dns = {
-            bind_hosts = [ "192.168.0.253" ]; # Set this in host configuration
+            # bind_hosts = [ "192.168.0.253" ]; # Set this in host configuration
 
             # Required for immutable settings to work
             bootstrap_dns = [

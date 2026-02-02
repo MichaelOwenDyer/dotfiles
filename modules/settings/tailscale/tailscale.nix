@@ -34,17 +34,6 @@
         impermanence.persistedDirectories = [
           "/var/lib/tailscale"
         ];
-
-        # Note: Tailscale Serve/Funnel configuration is done via CLI:
-        #   tailscale serve https / http://127.0.0.1:18789
-        #   tailscale funnel 443 on
-        #
-        # This could be automated with a systemd service, but the CLI
-        # approach is more flexible and allows runtime changes.
-        #
-        # For clawdbot specifically, the gateway can auto-configure
-        # Tailscale Serve/Funnel via its config:
-        #   gateway.tailscale.mode = "serve" | "funnel"
       };
     };
 }

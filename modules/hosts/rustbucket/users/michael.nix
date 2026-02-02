@@ -29,6 +29,8 @@
         ide-cursor
         zen-browser
         development
+        gaming
+        # openclaw
       ];
 
       # Enable yazi impermanence plugin since this host uses impermanence
@@ -38,6 +40,8 @@
         displayTimeout = 300;
         lockTimeout = 600;
       };
+
+      # openclaw.telegram.allowedChatIds = [ inputs.self.lib.openclaw.telegramUserIds.michael ];
 
       home.stateVersion = "24.11";
     };
