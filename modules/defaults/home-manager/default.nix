@@ -5,11 +5,15 @@
 {
   # Default settings needed for all homeManagerConfigurations
 
-  flake.modules.homeManager.default-settings = {
-    programs.home-manager.enable = true;
+  flake.modules.homeManager.default-settings =
+    { ... }:
+    {
+      imports = [ inputs.self.modules.homeManager.ssh-client-hosts ];
 
-    home.sessionVariables = {
-      NIXPKGS_ALLOW_UNFREE = "1";
+      programs.home-manager.enable = true;
+
+      home.sessionVariables = {
+        NIXPKGS_ALLOW_UNFREE = "1";
+      };
     };
-  };
 }
