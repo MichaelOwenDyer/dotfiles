@@ -11,7 +11,8 @@
       imports = with inputs.self.modules.darwin; [
         home-manager # Add home-manager to this system
         # michael # TODO: use common michael settings when available
-        _1password
+        macos-disconnect-on-sleep
+        tailscale
       ];
 
       home-manager.users."michael.dyer" = {
@@ -34,9 +35,7 @@
       imports = with inputs.self.modules.homeManager; [
         # michael # TODO: use common michael settings when available
         default-settings
-        orbstack
-        cli
-        cursor-cli
+        work
       ];
 
       programs.git.settings.user = {
