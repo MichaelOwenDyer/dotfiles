@@ -3,7 +3,7 @@
   ...
 }:
 {
-  # Gaming PC configuration (MSI Z97A Gaming 7, i7 4790K, 1660 Ti)
+  # Gaming PC / build server (MSI Z97A Gaming 7, i7 4790K, 1660 Ti)
 
   flake.modules.nixos.rustbucket =
     { ... }:
@@ -19,6 +19,7 @@
         gnome-keyring
         plymouth
         ssh
+        ssh-client-hosts
         distributed-build-server
         local-streaming-network
         impermanence
@@ -29,43 +30,31 @@
 
       networking.hostName = "rustbucket";
 
-      # Local streaming network configuration
-      localStreaming = {
-        enable = true;
-        wifiInterface = "wlan0";
-        wifiDefaultGateway = "192.168.0.254";
-        streamingInterface = "enp4s0";
-        streamingIpv4Addr = "192.168.50.1";
-        streamingIpv6Addr = "fdc9:1a4b:53e1:50::1";
-        upstreamDnsServers = [
-          "8.8.8.8"
-          "4.4.4.4"
-        ];
-      };
+      streaming.gateway =
+        let rustbucket = inputs.self.lib.hosts.rustbucket;
+        in {
+          enable = true;
+          upstreamInterface = rustbucket.networks.home.interface;
+          interface = rustbucket.networks.streaming.interface;
+          ipv4Address = rustbucket.networks.streaming.ipv4;
+        };
 
-      distributed-build.server = with inputs.self.lib.distributedBuild; {
+      distributed-build-server = {
         sshUser = "nixremote";
-        authorizedClients = [ clients.claptrap.rootSshKey.pub clients.rpi-3b.rootSshKey.pub ];
+        authorizedClients = with inputs.self.lib.distributedBuild.clients; [
+          claptrap.rootSshKey.pub
+          rpi-3b.rootSshKey.pub
+        ];
         signingKeyPath = "/etc/nix/cache-priv-key.pem";
       };
 
-      # Enable aarch64 emulation via QEMU for building rpi-3b packages
       boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
-      # Performance mode for gaming desktop
-      powerManagement.cpuFreqGovernor = "performance";
-
-      # Optimize nix store after each build
-      nix.settings.auto-optimise-store = true;
-
-      # Passwordless sudo for convenience on personal gaming machine
-      security.sudo.wheelNeedsPassword = false;
-
-      # Longer boot menu timeout for dual-boot selection
       boot.loader.timeout = 15;
 
-      # Impermanence - wipe root on every boot
-      # Persistence is configured by individual modules (wifi, bluetooth, ssh, etc.)
+      powerManagement.cpuFreqGovernor = "performance";
+      nix.settings.auto-optimise-store = true;
+      security.sudo.wheelNeedsPassword = false;
+
       impermanence.wipeOnBoot = true;
 
       system.stateVersion = "24.11";

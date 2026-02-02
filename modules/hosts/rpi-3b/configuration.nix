@@ -3,7 +3,7 @@
   ...
 }:
 {
-  # Raspberry Pi 3B configuration
+  # Raspberry Pi 3B (AdGuard Home DNS server)
 
   flake.modules.nixos.rpi-3b =
     { ... }:
@@ -13,51 +13,35 @@
         rpi-3b-hardware
         michael-rpi-3b
         ssh
+        ssh-client-hosts
         distributed-build-client
         tailscale
         adguardhome
       ];
 
       networking.hostName = "rpi-3b";
+      networking.networkmanager.enable = true;
 
-      # Disable documentation to speed up build times
-      documentation.man.generateCaches = false;
-
-      # Use the extlinux boot loader
       boot.loader.grub.enable = false;
       boot.loader.generic-extlinux-compatible.enable = true;
 
-      distributed-build.client = with inputs.self.lib.distributedBuild; {
-        rootSshKey = clients.rpi-3b.rootSshKey;
-        builders = [ builders.rustbucket ];
+      documentation.man.generateCaches = false;
+
+      distributed-build-client = {
+        rootSshKey = inputs.self.lib.distributedBuild.clients.rpi-3b.rootSshKey;
+        builders = with inputs.self.lib.distributedBuild.builders; [
+          rustbucket-home
+          rustbucket-tailscale
+        ];
       };
 
-      # Allow remote deployment from rustbucket
       users.users.root.openssh.authorizedKeys.keys = [
         inputs.self.lib.sshKeys."michael@rustbucket".pub
       ];
 
-      services.adguardhome.settings.dns.bind_hosts = [ "192.168.0.253" ];
-
-      networking = {
-        networkmanager.enable = true;
-        # defaultGateway = {
-        #   interface = "enu1u1";
-        #   address = "192.168.0.254";
-        # };
-        # nameservers = [
-        #   "1.1.1.1"
-        #   "8.8.8.8"
-        # ];
-        # interfaces.enu1u1 = {
-        #   ipv4.addresses = [
-        #     {
-        #       address = "192.168.0.253";
-        #       prefixLength = 24;
-        #     }
-        #   ];
-        # };
-      };
+      services.adguardhome.settings.dns.bind_hosts = [
+        inputs.self.lib.hosts.rpi-3b.networks.home.ipv4
+      ];
 
       system.stateVersion = "25.11";
     };

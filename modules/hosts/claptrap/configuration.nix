@@ -3,7 +3,7 @@
   ...
 }:
 {
-  # Dell XPS 13 9360 laptop configuration
+  # Dell XPS 13 9360 laptop
 
   flake.modules.nixos.claptrap =
     { ... }:
@@ -19,18 +19,27 @@
         tailscale
         plymouth
         ssh
+        ssh-client-hosts
         distributed-build-client
         michael-claptrap
       ];
 
       networking.hostName = "claptrap";
 
-      distributed-build.client = with inputs.self.lib.distributedBuild; {
-        rootSshKey = clients.claptrap.rootSshKey;
-        builders = [ builders.rustbucket ];
+      distributed-build-client = {
+        rootSshKey = inputs.self.lib.distributedBuild.clients.claptrap.rootSshKey;
+        builders = with inputs.self.lib.distributedBuild.builders; [
+          rustbucket-streaming
+          rustbucket-home
+          rustbucket-tailscale
+        ];
       };
 
       programs.zoom-us.enable = true;
+
+      users.users.root.openssh.authorizedKeys.keys = [
+        inputs.self.lib.sshKeys."michael@rustbucket".pub
+      ];
 
       system.stateVersion = "24.11";
     };
