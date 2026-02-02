@@ -1,61 +1,57 @@
 {
+  inputs,
   ...
 }:
 {
-  # Local network game streaming configuration
-  # This is a complex feature that requires host-specific configuration
-  # The actual network settings should be configured in the host feature
+  # Streaming network gateway - dedicated low-latency subnet for game streaming
 
   flake.modules.nixos.local-streaming-network =
+    { pkgs, lib, config, ... }:
+    let
+      cfg = config.streaming.gateway;
+      net = inputs.self.lib.networks;
+    in
     {
-      pkgs,
-      lib,
-      config,
-      ...
-    }:
-    {
-      # Define options for configurable parameters
-      options.localStreaming = {
-        enable = lib.mkOption {
-          type = lib.types.bool;
-          default = true; # Importing the module enables it automatically, but it can be disabled without un-importing it
-          description = "local streaming network";
-        };
-        wifiInterface = lib.mkOption {
+      options.streaming.gateway = {
+        enable = lib.mkEnableOption "streaming network gateway";
+        upstreamInterface = lib.mkOption {
           type = lib.types.str;
-          description = "WiFi interface name";
         };
-        wifiDefaultGateway = lib.mkOption {
+        upstreamGateway = lib.mkOption {
           type = lib.types.str;
-          description = "Default gateway IP for WiFi";
+          default = net.home.gateway;
         };
-        streamingInterface = lib.mkOption {
+        interface = lib.mkOption {
           type = lib.types.str;
-          description = "Ethernet interface for streaming";
         };
-        streamingIpv4Addr = lib.mkOption {
+        ipv4Address = lib.mkOption {
           type = lib.types.str;
-          description = "IPv4 address for streaming interface";
+          default = net.streaming.gateway;
         };
-        streamingIpv6Addr = lib.mkOption {
+        ipv6Address = lib.mkOption {
           type = lib.types.str;
-          description = "IPv6 address for streaming interface";
+          default = "${net.streaming.ipv6Prefix}::1";
         };
-        upstreamDnsServers = lib.mkOption {
+        dhcp.rangeStart = lib.mkOption {
+          type = lib.types.str;
+          default = net.streaming.dhcp.rangeStart;
+        };
+        dhcp.rangeEnd = lib.mkOption {
+          type = lib.types.str;
+          default = net.streaming.dhcp.rangeEnd;
+        };
+        dhcp.leaseTime = lib.mkOption {
+          type = lib.types.str;
+          default = net.streaming.dhcp.leaseTime;
+        };
+        upstreamDns = lib.mkOption {
           type = lib.types.listOf lib.types.str;
-          default = [
-            "8.8.8.8"
-            "4.4.4.4"
-          ];
-          description = "Upstream DNS servers";
+          default = net.streaming.upstreamDns;
         };
       };
 
-      config = lib.mkIf config.localStreaming.enable {
-        environment.systemPackages = with pkgs; [
-          tcpdump
-          iperf3
-        ];
+      config = lib.mkIf cfg.enable {
+        environment.systemPackages = with pkgs; [ tcpdump iperf3 ];
 
         boot.kernel.sysctl = {
           "net.ipv4.ip_forward" = 1;
@@ -64,61 +60,45 @@
         };
 
         networking = {
-          firewall.trustedInterfaces = [ config.localStreaming.streamingInterface ];
-          defaultGateway = {
-            interface = config.localStreaming.wifiInterface;
-            address = config.localStreaming.wifiDefaultGateway;
-          };
-          interfaces.${config.localStreaming.streamingInterface} = {
-            ipv4.addresses = [
-              {
-                address = config.localStreaming.streamingIpv4Addr;
-                prefixLength = 24;
-              }
-            ];
-            ipv6.addresses = [
-              {
-                address = config.localStreaming.streamingIpv6Addr;
-                prefixLength = 64;
-              }
-            ];
+          firewall.trustedInterfaces = [ cfg.interface ];
+          defaultGateway = { interface = cfg.upstreamInterface; address = cfg.upstreamGateway; };
+          interfaces.${cfg.interface} = {
+            ipv4.addresses = [{ address = cfg.ipv4Address; prefixLength = net.streaming.prefixLength; }];
+            ipv6.addresses = [{ address = cfg.ipv6Address; prefixLength = 64; }];
           };
           nat = {
             enable = true;
-            internalInterfaces = [ config.localStreaming.streamingInterface ];
-            externalInterface = config.localStreaming.wifiInterface;
+            internalInterfaces = [ cfg.interface ];
+            externalInterface = cfg.upstreamInterface;
           };
         };
 
         services.dnsmasq = {
           enable = true;
           settings = {
-            interface = config.localStreaming.streamingInterface;
+            interface = cfg.interface;
             bind-interfaces = true;
             dhcp-range = [
-              "192.168.50.100,192.168.50.200,12h"
-              "fdc9:1a4b:53e1:50::,ra-stateless,12h"
+              "${cfg.dhcp.rangeStart},${cfg.dhcp.rangeEnd},${cfg.dhcp.leaseTime}"
+              "${net.streaming.ipv6Prefix}::,ra-stateless,${cfg.dhcp.leaseTime}"
             ];
             dhcp-option = [
-              "option:router,${config.localStreaming.streamingIpv4Addr}"
-              "option:dns-server,${config.localStreaming.streamingIpv4Addr}"
-              "option6:dns-server,[fdc9:1a4b:53e1:50::1]"
+              "option:router,${cfg.ipv4Address}"
+              "option:dns-server,${cfg.ipv4Address}"
+              "option6:dns-server,[${cfg.ipv6Address}]"
             ];
             no-resolv = true;
-            server = config.localStreaming.upstreamDnsServers;
+            server = cfg.upstreamDns;
           };
         };
 
         systemd.services.dnsmasq = {
-          requires = [ "sys-subsystem-net-devices-${config.localStreaming.streamingInterface}.device" ];
-          after = [ "sys-subsystem-net-devices-${config.localStreaming.streamingInterface}.device" ];
+          requires = [ "sys-subsystem-net-devices-${cfg.interface}.device" ];
+          after = [ "sys-subsystem-net-devices-${cfg.interface}.device" ];
           wantedBy = [ "network-online.target" ];
         };
 
-        # Impermanence: dnsmasq state is ephemeral
-        impermanence.ephemeralPaths = [
-          "/etc/dnsmasq-conf.conf" # Generated config
-        ];
+        impermanence.ephemeralPaths = [ "/etc/dnsmasq-conf.conf" ];
       };
     };
 }
