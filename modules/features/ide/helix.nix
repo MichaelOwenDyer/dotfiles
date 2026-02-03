@@ -54,7 +54,6 @@
           nixfmt
 
           # Markdown
-          marksman
           markdown-oxide
         ];
 

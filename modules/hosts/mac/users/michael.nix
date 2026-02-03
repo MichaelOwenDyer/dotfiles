@@ -48,10 +48,6 @@
         mos
         scroll-reverser
         hours
-        nodejs_24
-        pnpm_9
-        maven
-        gradle_9
       ];
 
       home = {
