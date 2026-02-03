@@ -18,6 +18,7 @@
         cli
         cursor-cli
         orbstack
+        bruno
       ];
 
       home.packages = with pkgs; [
