@@ -1,5 +1,4 @@
 {
-  inputs,
   ...
 }:
 {
@@ -42,6 +41,37 @@
         };
 
         functions = {
+          # Custom prompt that always shows hostname
+          fish_prompt = ''
+            set -l last_status $status
+            set -l normal (set_color normal)
+            set -l cyan (set_color cyan)
+            set -l green (set_color green)
+            set -l red (set_color red)
+            set -l yellow (set_color yellow)
+
+            # Hostname in cyan
+            echo -n -s $cyan (hostname -s) $normal ':'
+
+            # Current directory in green
+            echo -n -s $green (prompt_pwd) $normal
+
+            # Git branch if in a repo
+            if git rev-parse --git-dir >/dev/null 2>&1
+              set -l branch (git branch --show-current 2>/dev/null)
+              if test -n "$branch"
+                echo -n -s ' ' $yellow '(' $branch ')' $normal
+              end
+            end
+
+            # Prompt character (red if last command failed)
+            if test $last_status -eq 0
+              echo -n -s ' ' $green '❯' $normal ' '
+            else
+              echo -n -s ' ' $red '❯' $normal ' '
+            end
+          '';
+
           mkcd = ''
             function mkcd --description "Create directory and cd into it"
               mkdir -p $argv[1] && cd $argv[1]
@@ -84,15 +114,6 @@
           { name = "sponge"; src = sponge.src; } # Remove failed commands from history
           { name = "sudope"; src = plugin-sudope.src; } # Esc-Esc to prefix with sudo
           { name = "git"; src = plugin-git.src; }
-          {
-            name = "eclm";
-            src = pkgs.fetchFromGitHub {
-              owner = "oh-my-fish";
-              repo = "theme-eclm";
-              rev = "185c84a41947142d75c68da9bc6c59bcd32757e7";
-              sha256 = "OBku4wwMROu3HQXkaM26qhL0SIEtz8ShypuLcpbxp78=";
-            };
-          }
           { name = "colored-man-pages"; src = colored-man-pages.src; }
           { name = "done"; src = done.src; } # Notify when long commands finish
         ];
