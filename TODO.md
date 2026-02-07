@@ -30,6 +30,12 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 - [x] **Configure lock screen and idle** - Unify with DMS lock screen features, make screen turn off automatically and lock
 - [x] **Configure Niri displays per-host** - Separate output modules for claptrap/rustbucket
 - [ ] **Investigate DMS plugins** - Review available plugins in registry
+- [ ] **Swap column between monitors keybind** - WIP in stash, needs fixing
+  - Goal: `Shift+Mod+Alt+H/L` swaps focused column with adjacent monitor's focused column
+  - Should preserve column positions (source takes target's position and vice versa)
+  - Should be no-op if no monitor in target direction
+  - Should work from overview
+  - Stash: `git stash list` → "WIP: niri swap column between monitors keybinds"
 
 ### AdGuard Home
 
@@ -67,7 +73,9 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 ### Other
 
 - [ ] **Configure router with Nix** - Replace imperative router configuration with declarative NixOS setup
-- [ ] **Fix TV output requiring HDMI replug** - TV output stops working after being off or displaying something else for a while
+- [x] **Fix TV output requiring HDMI replug** - TV output stops working after being off or displaying something else for a while (2026-02-07)
+  - Root cause: TV firmware doesn't properly respond to DPMS wake signals (common HDMI/TV issue)
+  - Workaround: `Ctrl+Shift+Mod+P` keybind powers off monitors then simulates input to force re-handshake
 - [ ] **Re-add Windows 10 to rustbucket's boot menu** - Rustbucket is dual-boot, Windows boot entry disappeared at some point
 
 ---

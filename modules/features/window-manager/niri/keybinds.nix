@@ -318,6 +318,14 @@
 
         # Power off monitors
         "Shift+Mod+P".action.power-off-monitors = [ ];
+
+        # Wake monitors (power-off then simulate input to force HDMI re-handshake)
+        # Useful for TVs that don't wake properly from DPMS
+        "Ctrl+Shift+Mod+P".action.spawn = [
+          "sh"
+          "-c"
+          "niri msg action power-off-monitors; sleep 0.5; wtype -k Escape"
+        ];
       };
     };
 }
