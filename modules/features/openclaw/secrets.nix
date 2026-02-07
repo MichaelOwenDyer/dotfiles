@@ -9,7 +9,7 @@
   #   telegram-bot-api-key: "123456:ABC..."
 
   flake.modules.nixos.openclaw-secrets =
-    { ... }:
+    { config, ... }:
     {
       config = {
         # Secrets readable by michael since openclaw runs as a Home Manager user service
@@ -24,6 +24,14 @@
             mode = "0400";
           };
         };
+
+        # Create environment file template that injects the API key
+        sops.templates."openclaw-env" = {
+          owner = "michael";
+          content = ''
+            ANTHROPIC_API_KEY=${config.sops.placeholder."anthropic-api-key"}
+          '';
+        };
       };
     };
 
@@ -34,9 +42,8 @@
       config = lib.mkIf config.openclaw.enable {
         openclaw.telegram.botTokenFile = lib.mkDefault osConfig.sops.secrets."telegram-bot-api-key".path;
 
-        # Anthropic API key is set via environment variable
-        # The upstream module reads ANTHROPIC_API_KEY from the environment
-        systemd.user.services.openclaw-gateway.Service.Environment = [ "ANTHROPIC_API_KEY_FILE=${osConfig.sops.secrets."anthropic-api-key".path}" ];
+        # Anthropic API key is set via environment variable loaded from sops template
+        systemd.user.services.openclaw-gateway.Service.EnvironmentFile = osConfig.sops.templates."openclaw-env".path;
       };
     };
 

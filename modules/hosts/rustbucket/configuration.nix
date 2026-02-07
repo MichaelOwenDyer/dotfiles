@@ -25,7 +25,7 @@
         impermanence
         michael-rustbucket
         tailscale
-        # openclaw
+        openclaw
       ];
 
       networking.hostName = "rustbucket";
