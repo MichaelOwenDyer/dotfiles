@@ -26,6 +26,7 @@
 
         settings = {
           theme = "Catppuccin Mocha";
+          working-directory = "~/.dotfiles";
 
           font-family = "JetBrainsMono Nerd Font";
           font-size = 12;
