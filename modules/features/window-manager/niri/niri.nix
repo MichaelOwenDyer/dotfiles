@@ -22,7 +22,7 @@
   # Niri scrolling window manager - Home Manager module
   # Composes input, appearance, and keybind configurations
   flake.modules.homeManager.niri =
-    { ... }:
+    { pkgs, ... }:
     {
       imports = with inputs.self.modules.homeManager; [
         niri-input
@@ -33,6 +33,16 @@
       home.sessionVariables = {
         NIXOS_OZONE_WL = "1";
         GTK_USE_PORTAL = "1";
+      };
+
+      # Cursor theme configuration
+      # Ensures cursor changes based on context (text beam, pointer hand, etc.)
+      home.pointerCursor = {
+        name = "Adwaita";
+        package = pkgs.adwaita-icon-theme;
+        size = 24;
+        gtk.enable = true;
+        x11.enable = true;
       };
 
       programs.niri.settings = {
