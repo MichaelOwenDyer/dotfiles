@@ -25,8 +25,6 @@
         niri-outputs-rustbucket
         dank-material-shell
         idle
-        ide-vscode
-        ide-cursor
         zen-browser
         development
         gaming
