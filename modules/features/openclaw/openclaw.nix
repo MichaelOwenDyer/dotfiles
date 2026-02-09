@@ -113,6 +113,15 @@
           description = "List of plugin sources to enable.";
           example = ''[ { source = "github:openclaw/nix-steipete-tools?dir=tools/summarize"; } ]'';
         };
+
+        model = lib.mkOption {
+          type = lib.types.str;
+          default = "anthropic/claude-sonnet-4-5";
+          description = ''
+            Primary model to use.
+            Examples: anthropic/claude-3-5-haiku-latest, anthropic/claude-sonnet-4-5, anthropic/claude-opus-4
+          '';
+        };
       };
 
       config =
@@ -148,6 +157,7 @@
             agents.defaults = {
               maxConcurrent = 4;
               subagents.maxConcurrent = 8;
+              model.primary = cfg.model;
             };
 
             messages.ackReactionScope = "group-mentions";
