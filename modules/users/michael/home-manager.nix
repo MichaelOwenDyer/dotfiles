@@ -35,12 +35,12 @@ in
       };
 
       # Thunderbird
-      programs.thunderbird = {
-        enable = true;
-        profiles.michael = {
-          isDefault = true;
-          search.default = "google";
-        };
-      };
+      # programs.thunderbird = {
+      #   enable = true;
+      #   profiles.michael = {
+      #     isDefault = true;
+      #     search.default = "google";
+      #   };
+      # };
     };
 }
