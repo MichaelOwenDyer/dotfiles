@@ -169,7 +169,7 @@
 
             config = openclawConfig;
 
-            plugins = cfg.plugins;
+            customPlugins = cfg.plugins;
 
             # Workaround for upstream nix-openclaw bugs:
             # 1. cfg.systemd only has 'enable' but instance expects 'unitName' too
