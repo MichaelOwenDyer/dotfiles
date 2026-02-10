@@ -15,6 +15,10 @@
         # package = pkgs.niri-stable;
       };
 
+      # xwayland-satellite for X11 app compatibility (Steam, etc.)
+      # Niri 25.08+ auto-spawns xwayland-satellite on-demand when X11 clients connect
+      environment.systemPackages = [ pkgs.xwayland-satellite ];
+
       # Use GTK portal as default for Wayland
       xdg.portal.config.common.default = [ "gtk" ];
     };
@@ -51,10 +55,12 @@
           {
             # Export Wayland environment to D-Bus and systemd
             # Required for portals, gnome-keyring, and other session services
+            # DISPLAY is needed for XWayland apps like Steam
             argv = [
               "dbus-update-activation-environment"
               "--systemd"
               "WAYLAND_DISPLAY"
+              "DISPLAY"
               "XDG_CURRENT_DESKTOP=niri"
               "XDG_SESSION_TYPE=wayland"
             ];

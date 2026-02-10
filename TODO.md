@@ -111,7 +111,7 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 
 ### Applications
 
-- [ ] [Vencord/Nixcord](https://github.com/KaylorBen/nixcord) - Discord client
+- [x] **Discord via Vesktop** - Discord client with Vencord built-in, native Wayland support (2026-02-10)
 - [ ] [Rclone](https://wiki.nixos.org/wiki/Rclone) - Cloud storage sync
 - [ ] **Enable ollama server for local and remote use, integrate cursor-cli if possible** - Local AI services
 
@@ -124,6 +124,12 @@ Tracking improvements, bugfixes, and planned features for this configuration.
   - Persistence declared per-module using `lib.mkIf (config ? impermanence)` pattern
   - `impermanence-diff` script to audit untracked state
   - Bootstrap script auto-copies files to `/persist` on first activation
+- [ ] **Home directory impermanence** - Extend impermanence to user home directories
+  - Declare persistent paths in home-manager modules (e.g., `.config/vesktop`, `.mozilla`, etc.)
+  - Wipe `$HOME` on boot similar to root filesystem
+  - Would require home-manager impermanence module integration
+  - Benefits: truly reproducible user environment, clear separation of state vs config
+  - Challenges: many apps store state in non-obvious locations, need thorough audit
 - [ ] **Custom module options** - e.g., `options.my.development.enable`
 - [ ] **Roles abstraction** - `workstation`, `server`, `gaming` presets
 

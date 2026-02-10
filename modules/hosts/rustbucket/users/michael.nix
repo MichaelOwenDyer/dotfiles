@@ -29,6 +29,7 @@
         development
         gaming
         openclaw
+        discord
       ];
 
       # Enable yazi impermanence plugin since this host uses impermanence
