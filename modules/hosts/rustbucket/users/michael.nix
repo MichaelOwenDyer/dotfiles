@@ -25,7 +25,6 @@
         niri-outputs-rustbucket
         dank-material-shell
         idle
-        zen-browser
         development
         gaming
         openclaw

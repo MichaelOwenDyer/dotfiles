@@ -7,7 +7,10 @@
   flake.modules.nixos.niri =
     { pkgs, ... }:
     {
-      imports = [ inputs.self.modules.nixos.niri-module ];
+      imports = [
+        inputs.self.modules.nixos.niri-module
+        inputs.self.modules.nixos.niri-session-manager
+      ];
 
       programs.niri = {
         enable = true;
@@ -32,6 +35,7 @@
         niri-input
         niri-appearance
         niri-keybinds
+        niri-session-manager
       ];
 
       home.sessionVariables = {

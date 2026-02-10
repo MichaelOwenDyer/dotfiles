@@ -28,6 +28,14 @@
     };
     import-tree.url = "github:vic/import-tree";
     niri-flake.url = "github:sodiboo/niri-flake";
+    niri-session-manager = {
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        systems.follows = "systems";
+        treefmt-nix.follows = "";
+      };
+      url = "github:MTeaHead/niri-session-manager";
+    };
     nix-darwin = {
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:LnL7/nix-darwin";

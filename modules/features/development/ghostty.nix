@@ -20,6 +20,9 @@
   flake.modules.homeManager.ghostty =
     { pkgs, ... }:
     {
+      # Ghostty uses a non-standard app ID
+      programs.niri.session-manager.appMappings."com.mitchellh.ghostty" = [ "ghostty" ];
+
       programs.ghostty = {
         enable = true;
         package = if pkgs.stdenv.isDarwin then pkgs.ghostty-bin else pkgs.ghostty;

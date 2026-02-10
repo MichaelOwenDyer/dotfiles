@@ -334,6 +334,30 @@
         "type": "github"
       }
     },
+    "niri-session-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ],
+        "treefmt-nix": []
+      },
+      "locked": {
+        "lastModified": 1753450115,
+        "narHash": "sha256-5itrK5V9ZHGKIjKODTcneAanvs021Bk0CBJxBYRPaMs=",
+        "owner": "MTeaHead",
+        "repo": "niri-session-manager",
+        "rev": "2d9ae35bb654ad0cdc5f646e5fee446bf3af083c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MTeaHead",
+        "repo": "niri-session-manager",
+        "type": "github"
+      }
+    },
     "niri-stable": {
       "flake": false,
       "locked": {
@@ -624,6 +648,7 @@
         "impermanence": "impermanence",
         "import-tree": "import-tree",
         "niri-flake": "niri-flake",
+        "niri-session-manager": "niri-session-manager",
         "nix-darwin": "nix-darwin",
         "nix-openclaw": "nix-openclaw",
         "nixpkgs": "nixpkgs_3",
