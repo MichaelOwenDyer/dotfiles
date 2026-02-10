@@ -34,6 +34,9 @@ in
         inherit name email;
       };
 
+      # Ghostty: open in dotfiles directory
+      programs.ghostty.settings.working-directory = "/home/michael/.dotfiles";
+
       # Thunderbird
       # programs.thunderbird = {
       #   enable = true;
