@@ -32,6 +32,12 @@
         quit: Some(( code: Char('q'), modifiers: ( bits: 0,),)),
         exit_popup: Some(( code: Esc, modifiers: ( bits: 0,),)),
       '';
+      theme = ''
+        (
+          selection_bg: Some("Black"),
+          cmdbar_bg: Some("Reset"),
+        )
+      '';
     };
   };
 }

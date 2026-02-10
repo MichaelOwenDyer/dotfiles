@@ -47,7 +47,6 @@
       imports = with inputs.self.modules.homeManager; [
         nh
         git
-        gitui
         bat
         fzf
         yazi
