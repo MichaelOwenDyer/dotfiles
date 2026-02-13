@@ -20,10 +20,6 @@
           "root"
           "@wheel"
         ];
-
-        # Disable the global flake registry for faster commands and explicit dependencies
-        flake-registry = "";
-        use-registries = false;
       };
 
       nix.extraOptions = ''
