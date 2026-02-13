@@ -70,7 +70,8 @@
           "nofail"
           "uid=1000"
           "gid=100"
-          "umask=002"
+          "dmask=0002"
+          "fmask=0002"
           "windows_names"
         ];
       };
@@ -106,6 +107,22 @@
       };
 
       swapDevices = [ ];
+
+      # Windows boot entry for dual-boot
+      boot.loader.systemd-boot.windows."10" = {
+        title = "Windows 10";
+        efiDeviceHandle = "HD1d65535a1";
+      };
+
+      # Redirect Steam compatdata from NTFS to btrfs
+      # NTFS with windows_names can't create Proton's dosdevices symlinks (c:, d:)
+      # Game files stay on NTFS (shared with Windows), prefixes live on btrfs
+      systemd.tmpfiles.rules = [
+        "d /home/michael/.local/share/Steam/steamapps/compatdata-ssd1 0755 michael users -"
+        "L+ /mnt/steam_libraries/ssd1/SteamLibrary/steamapps/compatdata - - - - /home/michael/.local/share/Steam/steamapps/compatdata-ssd1"
+        "d /home/michael/.local/share/Steam/steamapps/compatdata-hdd 0755 michael users -"
+        "L+ /mnt/steam_libraries/hdd/SteamLibrary/steamapps/compatdata - - - - /home/michael/.local/share/Steam/steamapps/compatdata-hdd"
+      ];
 
       hardware.enableAllFirmware = true;
       hardware.cpu.intel.updateMicrocode = true;

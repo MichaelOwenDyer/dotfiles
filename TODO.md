@@ -76,7 +76,13 @@ Tracking improvements, bugfixes, and planned features for this configuration.
 - [x] **Fix TV output requiring HDMI replug** - TV output stops working after being off or displaying something else for a while (2026-02-07)
   - Root cause: TV firmware doesn't properly respond to DPMS wake signals (common HDMI/TV issue)
   - Workaround: `Ctrl+Shift+Mod+P` keybind powers off monitors then simulates input to force re-handshake
-- [ ] **Re-add Windows 10 to rustbucket's boot menu** - Rustbucket is dual-boot, Windows boot entry disappeared at some point
+- [x] **Re-add Windows 10 to rustbucket's boot menu** - Rustbucket is dual-boot, Windows boot entry disappeared at some point (2026-02-13)
+  - Used EDK2 UEFI Shell to find Windows EFI handle (`HD1d65535a1`)
+  - Added `boot.loader.systemd-boot.windows."10"` entry in `hardware.nix`
+- [x] **Fix HDD Steam library permissions** - `/mnt/steam_libraries/hdd` root showed 0555 (read-only) (2026-02-13)
+  - Fixed NTFS permissions from Windows with `icacls`
+  - Moved Steam library from `Program Files (x86)/SteamLibrary` to `/mnt/steam_libraries/hdd/SteamLibrary`
+  - Added `systemd.tmpfiles.rules` for compatdata symlinks (Proton needs btrfs for dosdevices)
 
 ---
 
