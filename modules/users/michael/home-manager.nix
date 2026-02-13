@@ -14,8 +14,10 @@ in
       imports = with inputs.self.modules.homeManager; [
         cli
         fish-shell
+        nushell
         ide-helix
         zen-browser
+        loupe
         nethack
       ];
 
