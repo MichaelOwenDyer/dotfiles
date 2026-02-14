@@ -57,7 +57,14 @@
       currentHost = osConfig.networking.hostName or "";
 
       mkMatchBlocks = name: host:
-        let base = { user = "michael"; }; in
+        let
+          base = {
+            user = "michael";
+            controlPath = "~/.ssh/sockets/%r@%h-%p";
+            controlMaster = "auto";
+            controlPersist = "10m";
+          };
+        in
         lib.optionalAttrs (host.networks.tailscale.ipv4 or null != null) {
           ${name} = base // { hostname = host.networks.tailscale.ipv4; };
           "${name}-tailscale" = base // { hostname = host.networks.tailscale.ipv4; };
@@ -75,9 +82,6 @@
       programs.ssh = {
         enable = true;
         matchBlocks = lib.foldl' (acc: n: acc // mkMatchBlocks n hosts.${n}) { } (lib.attrNames otherHosts);
-        controlPath = "~/.ssh/sockets/%r@%h-%p";
-        controlMaster = "auto";
-        controlPersist = "10m";
       };
       home.file.".ssh/sockets/.keep".text = "";
     };
