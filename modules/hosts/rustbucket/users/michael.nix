@@ -27,7 +27,6 @@
         idle
         development
         gaming
-        openclaw
         discord
       ];
 
@@ -39,10 +38,9 @@
         lockTimeout = 600;
       };
 
-      openclaw = {
-        enable = false;
-        telegram.allowedChatIds = [ inputs.self.lib.openclaw.telegramUserIds.michael ];
-      };
+      # openclaw = {
+      #   telegram.allowedChatIds = [ inputs.self.lib.openclaw.telegramUserIds.michael ];
+      # };
 
       home.stateVersion = "24.11";
     };

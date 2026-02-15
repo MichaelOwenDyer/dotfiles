@@ -25,7 +25,6 @@
         impermanence
         michael-rustbucket
         tailscale
-        openclaw
       ];
 
       networking.hostName = "rustbucket";
@@ -47,8 +46,6 @@
         ];
         signingKeyPath = "/etc/nix/cache-priv-key.pem";
       };
-
-      openclaw.enable = false;
 
       boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
       boot.loader.timeout = 15;
