@@ -8,7 +8,7 @@
     { lib, pkgs, ... }:
     {
       boot = {
-        kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+        kernelPackages = lib.mkDefault pkgs.linuxPackages;
 
         loader = {
           timeout = lib.mkDefault 0; # Skip menu by default, press key to show
