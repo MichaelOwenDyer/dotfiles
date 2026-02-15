@@ -3,7 +3,7 @@
 }:
 {
   flake.modules.nixos.rustbucket-hardware =
-    { ... }:
+    { pkgs, ... }:
     {
       boot.initrd.availableKernelModules = [
         "xhci_pci"
@@ -107,6 +107,28 @@
       };
 
       swapDevices = [ ];
+
+      # Fix NTFS dirty flag before mounting (e.g. after power loss)
+      # Runs ntfsfix -d to clear dirty bit and check filesystem
+      systemd.services.ntfsfix-steam-drives = {
+        description = "Fix NTFS dirty flag on Steam library drives";
+        before = [
+          "mnt-steam_libraries-ssd1.mount"
+          "mnt-steam_libraries-hdd.mount"
+        ];
+        requiredBy = [
+          "mnt-steam_libraries-ssd1.mount"
+          "mnt-steam_libraries-hdd.mount"
+        ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = pkgs.writeShellScript "ntfsfix-steam-drives" ''
+            ${pkgs.ntfs3g}/bin/ntfsfix -d /dev/disk/by-uuid/FADAB218DAB1D15D || true
+            ${pkgs.ntfs3g}/bin/ntfsfix -d /dev/disk/by-uuid/7EAEA85CAEA80EA9 || true
+          '';
+        };
+      };
 
       # Windows boot entry for dual-boot
       boot.loader.systemd-boot.windows."10" = {
