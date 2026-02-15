@@ -8,12 +8,11 @@
   flake.modules.homeManager.default-settings =
     { ... }:
     {
-      imports = [ inputs.self.modules.homeManager.ssh-client-hosts ];
+      imports = with inputs.self.modules.homeManager; [
+        nix-settings
+        ssh-client-hosts
+      ];
 
       programs.home-manager.enable = true;
-
-      home.sessionVariables = {
-        NIXPKGS_ALLOW_UNFREE = "1";
-      };
     };
 }

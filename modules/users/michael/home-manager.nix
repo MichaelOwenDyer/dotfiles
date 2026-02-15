@@ -12,6 +12,7 @@ in
     { lib, ... }:
     {
       imports = with inputs.self.modules.homeManager; [
+        default-settings
         cli
         fish-shell
         nushell
