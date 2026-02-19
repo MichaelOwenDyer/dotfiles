@@ -13,16 +13,15 @@
         gitui
         direnv
         ghostty
-        zoxide
         fzf
         jujutsu
         nix-lang
         cursor-cli
         shell-alias-cd-zoxide
-        shell-alias-ls-eza
-        shell-alias-cat-bat
-        shell-alias-find-fd
-        shell-alias-grep-rg
+        eza
+        bat
+        fd
+        ripgrep
       ];
 
       home.packages = with pkgs; [

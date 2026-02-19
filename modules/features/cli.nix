@@ -17,9 +17,9 @@
         ide-helix
         nix-lang
         shell-alias-cd-zoxide
-        shell-alias-find-fd
-        shell-alias-grep-rg
-        shell-alias-ls-eza
+        fd
+        ripgrep
+        eza
       ];
     };
 
@@ -35,9 +35,9 @@
         ide-helix
         nix-lang
         shell-alias-cd-zoxide
-        shell-alias-find-fd
-        shell-alias-grep-rg
-        shell-alias-ls-eza
+        fd
+        ripgrep
+        eza
       ];
     };
 
@@ -53,9 +53,9 @@
         ide-helix
         nix-lang
         shell-alias-cd-zoxide
-        shell-alias-find-fd
-        shell-alias-grep-rg
-        shell-alias-ls-eza
+        fd
+        ripgrep
+        eza
       ];
 
       home.packages = with pkgs; [
