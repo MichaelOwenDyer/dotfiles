@@ -27,11 +27,11 @@
           ${touch} ${stateDir}/bt-restore
         fi
 
-        # Wi-Fi
+        # Wi-Fi (only disconnect if wifi-disconnect file exists)
         WIFI_INT=$(${networksetup} -listallhardwareports | ${awk} '/Hardware Port: Wi-Fi/{getline; print $2}')
         if [ -n "$WIFI_INT" ]; then
           status=$(${networksetup} -getairportpower "$WIFI_INT")
-          if [[ "$status" == *"On"* ]] && [ ! -e ${stateDir}/wifi-keep ]; then
+          if [[ "$status" == *"On"* ]] && [ -e ${stateDir}/wifi-disconnect ]; then
             ${networksetup} -setairportpower "$WIFI_INT" off
             ${touch} ${stateDir}/wifi-restore
           fi
@@ -70,15 +70,20 @@
         };
       };
 
-      # Shell aliases (cleaned up)
+      # Shell aliases
       environment.interactiveShellInit = ''
-        _toggle_state() {
-          local file="${stateDir}/$1"; mkdir -p "${stateDir}"
-          if [ -e "$file" ]; then rm "$file"; echo "✅ $2 will DISCONNECT on sleep.";
-          else touch "$file"; echo "🚀 $2 will STAY CONNECTED."; fi
+        # Bluetooth: default disconnects, toggle to keep connected
+        bt-keep() {
+          local file="${stateDir}/bt-keep"; mkdir -p "${stateDir}"
+          if [ -e "$file" ]; then rm "$file"; echo "Bluetooth will DISCONNECT on sleep."
+          else touch "$file"; echo "Bluetooth will STAY CONNECTED."; fi
         }
-        wifi-keep() { _toggle_state "wifi-keep" "Wi-Fi"; }
-        bt-keep()   { _toggle_state "bt-keep" "Bluetooth"; }
+        # Wi-Fi: default stays connected, toggle to disconnect
+        wifi-disconnect() {
+          local file="${stateDir}/wifi-disconnect"; mkdir -p "${stateDir}"
+          if [ -e "$file" ]; then rm "$file"; echo "Wi-Fi will STAY CONNECTED."
+          else touch "$file"; echo "Wi-Fi will DISCONNECT on sleep."; fi
+        }
       '';
     };
 }

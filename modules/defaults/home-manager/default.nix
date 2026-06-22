@@ -9,7 +9,6 @@
     { ... }:
     {
       imports = with inputs.self.modules.homeManager; [
-        nix-settings
         ssh-client-hosts
       ];
 
