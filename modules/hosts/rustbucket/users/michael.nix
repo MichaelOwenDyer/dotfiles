@@ -38,10 +38,6 @@
         lockTimeout = 600;
       };
 
-      # openclaw = {
-      #   telegram.allowedChatIds = [ inputs.self.lib.openclaw.telegramUserIds.michael ];
-      # };
-
       home.stateVersion = "24.11";
     };
 }
