@@ -82,7 +82,7 @@
       programs.ssh = {
         enable = true;
         enableDefaultConfig = false;
-        matchBlocks = lib.foldl' (acc: n: acc // mkMatchBlocks n hosts.${n}) { } (lib.attrNames otherHosts);
+        settings = lib.foldl' (acc: n: acc // mkMatchBlocks n hosts.${n}) { } (lib.attrNames otherHosts);
       };
       home.file.".ssh/sockets/.keep".text = "";
     };

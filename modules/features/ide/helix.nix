@@ -33,7 +33,7 @@
           # Web
           typescript-language-server
           vscode-langservers-extracted # HTML, CSS, JSON, ESLint
-          nodePackages.prettier
+          prettier
 
           # Rust
           rust-analyzer
@@ -170,21 +170,21 @@
           {
             name = "typescript";
             formatter = {
-              command = lib.getExe pkgs.nodePackages.prettier;
+              command = lib.getExe pkgs.prettier;
               args = [ "--parser" "typescript" ];
             };
           }
           {
             name = "javascript";
             formatter = {
-              command = lib.getExe pkgs.nodePackages.prettier;
+              command = lib.getExe pkgs.prettier;
               args = [ "--parser" "javascript" ];
             };
           }
           {
             name = "json";
             formatter = {
-              command = lib.getExe pkgs.nodePackages.prettier;
+              command = lib.getExe pkgs.prettier;
               args = [ "--parser" "json" ];
             };
           }
@@ -192,7 +192,7 @@
             name = "markdown";
             soft-wrap.enable = true;
             formatter = {
-              command = lib.getExe pkgs.nodePackages.prettier;
+              command = lib.getExe pkgs.prettier;
               args = [ "--parser" "markdown" ];
             };
           }
