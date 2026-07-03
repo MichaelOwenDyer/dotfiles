@@ -4,11 +4,15 @@
 }:
 {
   flake.modules.darwin.work =
-    { ... }:
+    { pkgs, ... }:
     {
-      imports = with inputs.self.modules.darwin; [
-        _1password
-      ];
+      homebrew.casks = [
+       "orbstack"
+       "1password"
+       "bruno"
+       "slack"
+       "jetbrains-toolbox"
+     ];
     };
 
   flake.modules.homeManager.work =
@@ -19,12 +23,12 @@
         github-copilot-cli
         cursor-cli
         claude-code-cli
-        orbstack
-        bruno
       ];
 
       home.packages = with pkgs; [
         nodejs_24
+        gh
+        witr
       ];
     };
 }

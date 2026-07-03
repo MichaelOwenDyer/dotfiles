@@ -26,6 +26,12 @@
       };
 
       system.primaryUser = "michael.dyer";
+
+      homebrew.casks = [
+        "rustdesk"
+        "arc"
+        "vlc"
+      ];
     };
 
   # Host-specific home-manager configuration for michael on mac
@@ -36,19 +42,14 @@
         # michael # TODO: use common michael settings when available
         default-settings
         work
+        nethack
+        typst
       ];
 
       programs.git.settings.user = {
         name = "Michael Dyer";
         email = "michael.dyer@check24.de";
       };
-
-      home.packages = with pkgs; [
-        alt-tab-macos
-        mos
-        scroll-reverser
-        hours
-      ];
 
       home = {
         username = "michael.dyer";

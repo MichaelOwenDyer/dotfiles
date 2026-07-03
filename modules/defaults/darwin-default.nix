@@ -56,5 +56,20 @@
       };
       screensaver.askForPasswordDelay = 10;
     };
+
+    homebrew = {
+      enable = true;
+      onActivation.autoUpdate = true;
+      onActivation.upgrade = true;
+
+      # Cleans up any homebrew formulas/casks not explicitly declared
+      onActivation.cleanup = "zap";
+
+      casks = [
+        "alt-tab"
+        "mos"
+        "scroll-reverser"
+      ];
+    };
   };
 }
