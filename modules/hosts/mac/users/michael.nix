@@ -28,9 +28,12 @@
       system.primaryUser = "michael.dyer";
 
       homebrew.casks = [
-        "rustdesk"
         "arc"
+        "google-chrome"
+        "rustdesk"
         "vlc"
+        "whatsapp"
+        "dolphin"
       ];
     };
 
