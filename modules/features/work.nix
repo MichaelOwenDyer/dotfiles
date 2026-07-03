@@ -16,7 +16,9 @@
     {
       imports = with inputs.self.modules.homeManager; [
         cli
+        github-copilot-cli
         cursor-cli
+        claude-code-cli
         orbstack
         bruno
       ];
