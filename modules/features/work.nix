@@ -4,7 +4,7 @@
 }:
 {
   flake.modules.darwin.work =
-    { pkgs, ... }:
+    { ... }:
     {
       homebrew.casks = [
        "orbstack"

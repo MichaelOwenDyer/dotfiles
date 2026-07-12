@@ -34,6 +34,7 @@
         "vlc"
         "whatsapp"
         "dolphin"
+        "discord"
       ];
     };
 

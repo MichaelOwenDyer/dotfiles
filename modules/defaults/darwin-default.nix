@@ -59,11 +59,12 @@
 
     homebrew = {
       enable = true;
-      onActivation.autoUpdate = true;
-      onActivation.upgrade = true;
+      # Disable automatic updates and upgrades for idempotent activations
+      onActivation.autoUpdate = false;
+      onActivation.upgrade = false;
 
       # Cleans up any homebrew formulas/casks not explicitly declared
-      onActivation.cleanup = "zap";
+      onActivation.cleanup = "uninstall";
 
       casks = [
         "alt-tab"
