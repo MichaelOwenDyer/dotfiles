@@ -26,6 +26,7 @@
       ];
 
       home.packages = with pkgs; [
+        openssh
         nodejs_24
         gh
         witr
