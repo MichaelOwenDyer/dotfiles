@@ -52,7 +52,7 @@
 
       programs.git.settings.user = {
         name = "Michael Dyer";
-        email = "michael.dyer@check24.de";
+        email = "michaelowendyer@gmail.com";
       };
 
       home = {
