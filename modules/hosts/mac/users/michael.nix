@@ -35,12 +35,13 @@
         "whatsapp"
         "dolphin"
         "discord"
+        "zotero"
       ];
     };
 
   # Host-specific home-manager configuration for michael on mac
   flake.modules.homeManager.michael-mac =
-    { pkgs, ... }:
+    { ... }:
     {
       imports = with inputs.self.modules.homeManager; [
         # michael # TODO: use common michael settings when available
