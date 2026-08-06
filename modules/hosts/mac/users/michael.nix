@@ -36,6 +36,7 @@
         "dolphin"
         "discord"
         "zotero"
+        "ausweisapp"
       ];
     };
 
