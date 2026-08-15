@@ -38,11 +38,15 @@
         "zotero"
         "ausweisapp"
       ];
+
+      homebrew.brews = [
+        "z3"
+      ];
     };
 
   # Host-specific home-manager configuration for michael on mac
   flake.modules.homeManager.michael-mac =
-    { ... }:
+    { pkgs, ... }:
     {
       imports = with inputs.self.modules.homeManager; [
         # michael # TODO: use common michael settings when available
@@ -61,6 +65,9 @@
         username = "michael.dyer";
         homeDirectory = "/Users/michael.dyer";
         stateVersion = "26.05";
+        packages = with pkgs; [
+          poppler
+        ];
       };
     };
 }
