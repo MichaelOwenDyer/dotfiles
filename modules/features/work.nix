@@ -45,15 +45,15 @@
             - name: host-test-db-01
               local_port: 3307
               remote_host: host-test-db-01.kredite.check24.de
-              remote_port: 3306
+              remote_port: 6446
             - name: host-prod-db-01
               local_port: 3309
               remote_host: host-prod-db-01.kredite.check24.de
-              remote_port: 3306
+              remote_port: 6447
             - name: host-prod-db-02
               local_port: 3310
               remote_host: host-prod-db-02.kredite.check24.de
-              remote_port: 3306
+              remote_port: 6647
         '';
 
         "db-importer.yaml".text = ''
