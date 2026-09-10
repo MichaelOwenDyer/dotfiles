@@ -21,7 +21,6 @@
         ssh
         ssh-client-hosts
         distributed-build-server
-        local-streaming-network
         impermanence
         michael-rustbucket
         tailscale
@@ -29,14 +28,14 @@
 
       networking.hostName = "rustbucket";
 
-      streaming.gateway =
-        let rustbucket = inputs.self.lib.hosts.rustbucket;
-        in {
-          enable = true;
-          upstreamInterface = rustbucket.networks.home.interface;
-          interface = rustbucket.networks.streaming.interface;
-          ipv4Address = rustbucket.networks.streaming.ipv4;
-        };
+      # streaming.gateway =
+      #   let rustbucket = inputs.self.lib.hosts.rustbucket;
+      #   in {
+      #     enable = true;
+      #     upstreamInterface = rustbucket.networks.home.interface;
+      #     interface = rustbucket.networks.streaming.interface;
+      #     ipv4Address = rustbucket.networks.streaming.ipv4;
+      #   };
 
       distributed-build-server = {
         sshUser = "nixremote";

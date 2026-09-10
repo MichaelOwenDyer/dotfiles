@@ -50,7 +50,5 @@
       ];
 
       system.stateVersion = "24.11";
-
-      services.speechd.enable = false;
     };
 }

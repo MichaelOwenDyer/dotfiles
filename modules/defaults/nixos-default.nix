@@ -34,6 +34,8 @@
       # Firmware updates via fwupd
       services.fwupd.enable = lib.mkDefault true;
 
+      services.speechd.enable = false;
+
       # Increase inotify limits for IDEs and build tools watching large projects
       boot.kernel.sysctl = {
         "fs.inotify.max_user_watches" = 524288;
