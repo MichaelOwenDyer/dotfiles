@@ -1,20 +1,12 @@
 {
-  inputs,
   ...
 }:
 {
   flake-file.inputs = {
     zen-browser = {
-      url = "github:MichaelOwenDyer/zen-browser-flake";
+      url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
     };
-  };
-
-  flake.modules.nixos.overlays = {
-    nixpkgs.overlays = [
-      (final: _prev: {
-        zen-browser = inputs.zen-browser.packages.${final.stdenv.hostPlatform.system}.default;
-      })
-    ];
   };
 }
