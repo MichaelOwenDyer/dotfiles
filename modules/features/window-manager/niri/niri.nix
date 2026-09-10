@@ -46,6 +46,7 @@
       # Cursor theme configuration
       # Ensures cursor changes based on context (text beam, pointer hand, etc.)
       home.pointerCursor = {
+        enable = true;
         name = "Adwaita";
         package = pkgs.adwaita-icon-theme;
         size = 24;
