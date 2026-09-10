@@ -14,6 +14,8 @@
         else "/etc/ssh/ssh_host_ed25519_key";
     in
     {
+      key = "modules/settings/secrets/sops.nix";
+
       imports = [ inputs.sops-nix.nixosModules.sops ];
 
       options.sops.ageKeyFile = lib.mkOption {

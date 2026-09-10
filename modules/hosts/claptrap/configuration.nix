@@ -3,10 +3,14 @@
   ...
 }:
 {
-  # Dell XPS 13 9360 laptop
+  # Dell XPS 13 9360 laptop (temporarily also acting as single-arm router)
 
   flake.modules.nixos.claptrap =
     { ... }:
+    let
+      wifiInterface = "wlp58s0";
+      tailscaleInterface = "tailscale0";
+    in
     {
       imports = with inputs.self.modules.nixos; [
         claptrap-hardware
@@ -22,9 +26,13 @@
         ssh-client-hosts
         distributed-build-client
         michael-claptrap
+        router
       ];
 
       networking.hostName = "claptrap";
+
+      router.trunkInterface = "enp0s20f0u2";
+      router.trustedInterfaces = [ wifiInterface tailscaleInterface ];
 
       distributed-build-client = {
         rootSshKey = inputs.self.lib.distributedBuild.clients.claptrap.rootSshKey;
@@ -42,5 +50,7 @@
       ];
 
       system.stateVersion = "24.11";
+
+      services.speechd.enable = false;
     };
 }
