@@ -16,8 +16,8 @@
       };
 
       # Hibernate after 20 minutes of sleep
-      systemd.sleep.extraConfig = ''
-        HibernateDelaySec=20min
-      '';
+      systemd.sleep.settings.Sleep = {
+        HibernateDelaySec = "20min";
+      };
     };
 }

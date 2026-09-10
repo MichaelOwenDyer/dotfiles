@@ -21,8 +21,8 @@
     {
       imports = with inputs.self.modules.homeManager; [
         michael
-        ide-vscode
-        ide-cursor
+#        ide-vscode
+#        ide-cursor
         niri
         niri-outputs-claptrap
         dank-material-shell

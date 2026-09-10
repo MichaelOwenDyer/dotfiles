@@ -14,7 +14,7 @@
 
       programs.niri = {
         enable = true;
-        package = pkgs.niri-unstable; # Use unstable version - breakages expected
+        package = pkgs.niri;
         # package = pkgs.niri-stable;
       };
 

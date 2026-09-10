@@ -114,6 +114,16 @@
       };
       build = null;
     };
+
+    router = {
+      hostName = "router";
+      system = "x86_64-linux";
+      networks = {
+        home = { ipv4 = "192.168.1.254"; interface = "lan"; };
+        tailscale = { ipv4 = null; ipv6 = null; };
+      };
+      build = null;
+    };
   };
 
   flake.lib.hostsLib = {

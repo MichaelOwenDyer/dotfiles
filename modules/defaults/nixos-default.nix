@@ -8,6 +8,8 @@
   flake.modules.nixos.default-settings =
     { lib, ... }:
     {
+      key = "modules/defaults/nixos-default.nix";
+
       # Set git revision for `nixos-rebuild list-generations`
       system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
 
