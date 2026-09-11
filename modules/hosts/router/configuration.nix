@@ -50,6 +50,8 @@
           "net.ipv4.ip_forward" = 1;
           "net.ipv6.conf.all.forwarding" = true;
           "net.ipv4.ip_nonlocal_bind" = 1;
+          "net.ipv4.conf.all.rp_filter" = 2;
+          "net.ipv4.conf.default.rp_filter" = 2;
         };
 
         # Disable legacy NixOS network scripts completely
@@ -88,7 +90,8 @@
               tunnelConfig = {
                 Mode = "ipip6";
                 Remote = tunnelRemote;
-                Local = "any";
+                # Prevent the DSTOPT extension header from being added
+                EncapsulationLimit = "none";
               };
             };
           };
@@ -99,7 +102,11 @@
             "10-trunk" = {
               matchConfig.Name = cfg.trunkInterface;
               vlan = [ lanInterface wanInterface ];
-              networkConfig.LinkLocalAddressing = "no";
+              networkConfig = {
+                LinkLocalAddressing = "no";
+                DHCP = "no";
+                IPv6AcceptRA = false;
+              };
             };
 
             # LAN interface -> Static IP for local network
@@ -127,10 +134,14 @@
                 IPv6AcceptRA = true;
                 DHCP = "ipv6";
                 DHCPPrefixDelegation = true;
+                Tunnel = tunnelInterface;
               };
               dhcpV6Config = {
                 WithoutRA = "solicit";
                 PrefixDelegationHint = "::/56";
+              };
+              ipv6AcceptRAConfig = {
+                RouteMetric = 10;
               };
             };
 
@@ -206,6 +217,9 @@
               chain forward {
                 type filter hook forward priority filter; policy drop;
 
+                meta nfproto ipv4 tcp flags syn / syn,ack tcp option maxseg size set ${toString (tunnelMtu - 20 - 20)}
+                meta nfproto ipv6 tcp flags syn / syn,ack tcp option maxseg size set ${toString (tunnelMtu - 20)}
+
                 ct state established,related accept
 
                 # LAN -> tunnel (IPv4 internet)
@@ -238,6 +252,7 @@
             bind-interfaces = true;
             dhcp-range = [ dhcpRange ];
             dhcp-option = [
+              "3,${lanAddress}"
               "6,${lanAddress}"
             ];
           };
@@ -257,6 +272,34 @@
               bindsTo = wanDevice;
               after = wanDevice;
               wantedBy = lib.mkForce wanDevice;
+            };
+            ds-lite-dynamic-bind = {
+              description = "Dynamically bind DS-Lite tunnel to ppp0 IPv6 address";
+              after = [ "systemd-networkd.service" ];
+              wantedBy = [ "multi-user.target" ];
+              path = [ pkgs.iproute2 pkgs.gawk pkgs.gnugrep ];
+              script = ''
+                update_tunnel() {
+                  # Extract the live global IPv6 address from ppp0
+                  local ip=$(ip -6 addr show dev ppp0 scope global -tentative -deprecated | grep -w inet6 | awk '{print $2}' | cut -d/ -f1 | head -n1)
+                  if [ -n "$ip" ]; then
+                    echo "Binding ds-lite local address to $ip"
+                    ip -6 tunnel change ds-lite local "$ip"
+                  fi
+                }
+    
+                # 1. Run once on startup to catch an already-established link
+                update_tunnel
+    
+                # 2. Block and watch for any future IP changes (M-net prefix rotation)
+                ip monitor address dev ppp0 | while read -r line; do
+                  update_tunnel
+                done
+              '';
+              serviceConfig = {
+                Restart = "always";
+                RestartSec = "5s";
+              };
             };
           };
 
