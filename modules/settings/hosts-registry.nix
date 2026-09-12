@@ -74,7 +74,7 @@
     };
 
     mr3000x = {
-      hostName = "MR3000X";
+      hostName = "mr3000x";
       system = null;
       networks = {
         home = { ipv4 = "192.168.1.2"; interface = null; mac = "08:8a:f1:05:ec:1c"; };
@@ -107,7 +107,7 @@
     };
 
     phone = {
-      hostName = "Michael's Nothing-Phone-4a";
+      hostName = "michaels-nothing-phone-4a";
       networks = {
         home = { ipv4 = "192.168.1.15"; interface = null; mac = "82:29:bc:59:7d:3b"; };
         tailscale = { ipv4 = "100.103.19.121"; ipv6 = "fd7a:115c:a1e0::ec01:138c"; };
@@ -115,14 +115,14 @@
     };
 
     beste-s25 = {
-      hostName = "Beste's S25";
+      hostName = "bestes-s25";
       networks = {
         home = { ipv4 = "192.168.1.20"; interface = null; mac = "d6:13:66:c8:87:ba"; };
       };
     };
 
     idil-laptop = {
-      hostName = "Idil's Laptop";
+      hostName = "idils-laptop";
       networks = {
         home = { ipv4 = "192.168.1.21"; interface = null; mac = "7c:b5:66:b7:95:30"; };
       };
