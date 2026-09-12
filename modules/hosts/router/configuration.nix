@@ -46,6 +46,26 @@
       ];
 
       config = {
+        services.logind.settings.Login = lib.mkForce {
+          HandleLidSwitch = "ignore";
+          HandleLidSwitchExternalPower = "ignore";
+          HandleLidSwitchDocked = "ignore";
+          IdleAction = "ignore";
+        };
+
+        systemd.targets = {
+          sleep.enable = false;
+          suspend.enable = false;
+          hibernate.enable = false;
+          hybrid-sleep.enable = false;
+          suspend-then-hibernate.enable = false;
+        };
+
+        networking.networkmanager.enable = lib.mkForce false;
+        networking.wireless.enable = lib.mkForce false;
+        networking.wireless.iwd.enable = lib.mkForce false;
+        networking.useDHCP = lib.mkForce false;
+
         boot.kernel.sysctl = {
           "net.ipv4.ip_forward" = 1;
           "net.ipv6.conf.all.forwarding" = true;
@@ -53,16 +73,12 @@
           "net.ipv4.conf.all.rp_filter" = 2;
           "net.ipv4.conf.default.rp_filter" = 2;
         };
-
-        # Disable legacy NixOS network scripts completely
-        networking.useDHCP = false;
+        
         networking.useNetworkd = true;
-
         systemd.network = {
           enable = true;
           wait-online.enable = false;
 
-          # 1. Define Virtual Devices (VLANs & Tunnels)
           netdevs = {
             "20-${lanInterface}" = {
               netdevConfig = {
@@ -96,9 +112,7 @@
             };
           };
 
-          # 2. Map Devices to Physical Hardware and IP Logic
           networks = {
-            # Trunk physical interface -> Spawn VLANs
             "10-trunk" = {
               matchConfig.Name = cfg.trunkInterface;
               vlan = [ lanInterface wanInterface ];
@@ -109,7 +123,6 @@
               };
             };
 
-            # LAN interface -> Static IP for local network
             "20-${lanInterface}" = {
               matchConfig.Name = lanInterface;
               address = [ "${lanAddress}/${toString lanPrefixLength}" ];
@@ -121,13 +134,11 @@
               };
             };
 
-            # WAN interface -> L2 only (Base for PPPoE, no IP needed)
             "20-${wanInterface}" = {
               matchConfig.Name = wanInterface;
               networkConfig.LinkLocalAddressing = "no";
             };
 
-            # PPPoE interface -> Request IPv6 Prefix from M-net
             "30-ppp0" = {
               matchConfig.Name = "ppp0";
               networkConfig = {
@@ -145,7 +156,6 @@
               };
             };
 
-            # DS-Lite tunnel -> Route all IPv4 internet traffic
             "40-${tunnelInterface}" = {
               matchConfig.Name = tunnelInterface;
               address = [ "192.0.0.2/29" ];
@@ -181,68 +191,100 @@
             '';
           };
         };
+        systemd.services.pppd-mnet = let wanDevice = [ "sys-subsystem-net-devices-${wanInterface}.device" ]; in {
+          bindsTo = wanDevice;
+          after = wanDevice;
+          wantedBy = lib.mkForce wanDevice;
+        };
+
+        systemd.services.ds-lite-dynamic-bind = {
+          description = "Dynamically bind DS-Lite tunnel to ppp0 IPv6 address";
+          after = [ "systemd-networkd.service" ];
+          wantedBy = [ "multi-user.target" ];
+          path = [ pkgs.iproute2 pkgs.gawk pkgs.gnugrep ];
+          script = ''
+            update_tunnel() {
+              # Extract the live global IPv6 address from ppp0
+              local ip=$(ip -6 addr show dev ppp0 scope global -tentative -deprecated | grep -w inet6 | awk '{print $2}' | cut -d/ -f1 | head -n1)
+              if [ -n "$ip" ]; then
+                echo "Binding ds-lite local address to $ip"
+                ip -6 tunnel change ds-lite local "$ip"
+              fi
+            }
+
+            # 1. Run once on startup to catch an already-established link
+            update_tunnel
+
+            # 2. Block and watch for any future IP changes (M-net prefix rotation)
+            ip monitor address dev ppp0 | while read -r line; do
+              update_tunnel
+            done
+          '';
+          serviceConfig = {
+            Restart = "always";
+            RestartSec = "5s";
+          };
+        };
 
         networking.firewall.enable = false;
-        networking.nftables = {
-          enable = true;
-          ruleset = ''
-            table inet filter {
-              chain input {
-                type filter hook input priority filter; policy drop;
+        networking.nftables.enable = true;
+        networking.nftables.ruleset = ''
+          table inet filter {
+            chain input {
+              type filter hook input priority filter; policy drop;
 
-                iifname "lo" accept
-                ${trustedRules}
-                ct state established,related accept
+              iifname "lo" accept
+              ${trustedRules}
+              ct state established,related accept
 
-                # ICMPv6 (RA, NS/NA, echo) — required for IPv6 operation
-                ip6 nexthdr icmpv6 accept
+              # ICMPv6 (RA, NS/NA, echo) — required for IPv6 operation
+              ip6 nexthdr icmpv6 accept
 
-                # Accept DHCPv6 replies from M-net
-                iifname "ppp0" udp dport 546 accept comment "DHCPv6 client"
+              # Accept DHCPv6 replies from M-net
+              iifname "ppp0" udp dport 546 accept comment "DHCPv6 client"
 
-                # Accept incoming DS-Lite encapsulated IPv4 packets
-                ip6 nexthdr 4 accept comment "Allow IPv4-in-IPv6 encapsulation"
+              # Accept incoming DS-Lite encapsulated IPv4 packets
+              ip6 nexthdr 4 accept comment "Allow IPv4-in-IPv6 encapsulation"
 
-                # ICMPv4 echo
-                ip protocol icmp icmp type echo-request accept
+              # ICMPv4 echo
+              ip protocol icmp icmp type echo-request accept
 
-                # LAN-facing services
-                iifname "${lanInterface}" udp dport 67 accept comment "DHCP"
-                iifname "${lanInterface}" tcp dport 53 accept comment "DNS/AdGuard"
-                iifname "${lanInterface}" udp dport 53 accept comment "DNS/AdGuard"
-                iifname "${lanInterface}" tcp dport 3000 accept comment "AdGuard web UI"
-                iifname "${lanInterface}" tcp dport 22 accept comment "SSH"
-              }
-
-              chain forward {
-                type filter hook forward priority filter; policy drop;
-
-                meta nfproto ipv4 tcp flags syn / syn,ack tcp option maxseg size set ${toString (tunnelMtu - 20 - 20)}
-                meta nfproto ipv6 tcp flags syn / syn,ack tcp option maxseg size set ${toString (tunnelMtu - 20)}
-
-                ct state established,related accept
-
-                # LAN -> tunnel (IPv4 internet)
-                iifname "${lanInterface}" oifname "${tunnelInterface}" accept
-
-                # LAN -> WAN (IPv6 internet)
-                iifname "${lanInterface}" oifname "ppp0" accept
-              }
-
-              chain output {
-                type filter hook output priority filter; policy accept;
-              }
+              # LAN-facing services
+              iifname "${lanInterface}" udp dport 67 accept comment "DHCP"
+              iifname "${lanInterface}" tcp dport 53 accept comment "DNS/AdGuard"
+              iifname "${lanInterface}" udp dport 53 accept comment "DNS/AdGuard"
+              iifname "${lanInterface}" tcp dport 3000 accept comment "AdGuard web UI"
+              iifname "${lanInterface}" tcp dport 22 accept comment "SSH"
             }
 
-            table ip nat {
-              chain postrouting {
-                type nat hook postrouting priority srcnat; policy accept;
+            chain forward {
+              type filter hook forward priority filter; policy drop;
 
-                oifname "${tunnelInterface}" masquerade
-              }
+              meta nfproto ipv4 tcp flags syn / syn,ack tcp option maxseg size set ${toString (tunnelMtu - 20 - 20)}
+              meta nfproto ipv6 tcp flags syn / syn,ack tcp option maxseg size set ${toString (tunnelMtu - 20)}
+
+              ct state established,related accept
+
+              # LAN -> tunnel (IPv4 internet)
+              iifname "${lanInterface}" oifname "${tunnelInterface}" accept
+
+              # LAN -> WAN (IPv6 internet)
+              iifname "${lanInterface}" oifname "ppp0" accept
             }
-          '';
-        };
+
+            chain output {
+              type filter hook output priority filter; policy accept;
+            }
+          }
+
+          table ip nat {
+            chain postrouting {
+              type nat hook postrouting priority srcnat; policy accept;
+
+              oifname "${tunnelInterface}" masquerade
+            }
+          }
+        '';
 
         services.dnsmasq = {
           enable = true;
@@ -257,63 +299,15 @@
             ];
           };
         };
-
-        systemd.services =
-          let
-            wanDevice = [ "sys-subsystem-net-devices-${wanInterface}.device" ];
-            lanDevice = [ "sys-subsystem-net-devices-${lanInterface}.device" ];
-          in {
-            dnsmasq = {
-              bindsTo = lanDevice;
-              after = lanDevice;
-              wantedBy = lib.mkForce lanDevice;
-            };
-            pppd-mnet = {
-              bindsTo = wanDevice;
-              after = wanDevice;
-              wantedBy = lib.mkForce wanDevice;
-            };
-            ds-lite-dynamic-bind = {
-              description = "Dynamically bind DS-Lite tunnel to ppp0 IPv6 address";
-              after = [ "systemd-networkd.service" ];
-              wantedBy = [ "multi-user.target" ];
-              path = [ pkgs.iproute2 pkgs.gawk pkgs.gnugrep ];
-              script = ''
-                update_tunnel() {
-                  # Extract the live global IPv6 address from ppp0
-                  local ip=$(ip -6 addr show dev ppp0 scope global -tentative -deprecated | grep -w inet6 | awk '{print $2}' | cut -d/ -f1 | head -n1)
-                  if [ -n "$ip" ]; then
-                    echo "Binding ds-lite local address to $ip"
-                    ip -6 tunnel change ds-lite local "$ip"
-                  fi
-                }
-    
-                # 1. Run once on startup to catch an already-established link
-                update_tunnel
-    
-                # 2. Block and watch for any future IP changes (M-net prefix rotation)
-                ip monitor address dev ppp0 | while read -r line; do
-                  update_tunnel
-                done
-              '';
-              serviceConfig = {
-                Restart = "always";
-                RestartSec = "5s";
-              };
-            };
-          };
+        systemd.services.dnsmasq = let lanDevice = [ "sys-subsystem-net-devices-${lanInterface}.device" ]; in {
+          bindsTo = lanDevice;
+          after = lanDevice;
+          wantedBy = lib.mkForce lanDevice;
+        };
 
         services.adguardhome.settings.dns.bind_hosts = [ lanAddress ];
 
-        environment.systemPackages = with pkgs; [
-          tcpdump
-          iperf3
-          ethtool
-        ];
-
-        users.users.root.openssh.authorizedKeys.keys = [
-          inputs.self.lib.sshKeys."michael@rustbucket".pub
-        ];
+        environment.systemPackages = with pkgs; [ tcpdump ];        
       };
     };
 }
