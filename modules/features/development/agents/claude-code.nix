@@ -7,6 +7,7 @@
     {
       environment.systemPackages = with pkgs; [
         claude-code
+        mcp-nixos
       ];
     };
 
@@ -15,6 +16,7 @@
     {
       environment.systemPackages = with pkgs; [
         claude-code
+        mcp-nixos
       ];
     };
 
@@ -23,6 +25,7 @@
     {
       home.packages = with pkgs; [
         claude-code
+        mcp-nixos
       ];
     };
 }
