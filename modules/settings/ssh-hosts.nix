@@ -38,7 +38,7 @@
             ${baseConfig}
         '';
 
-      otherHosts = lib.filterAttrs (n: h: n != config.networking.hostName && h.system != null) hosts;
+      otherHosts = lib.filterAttrs (n: h: n != config.networking.hostName && h.system or null != null) hosts;
     in
     {
       programs.ssh.extraConfig = lib.concatStrings (lib.mapAttrsToList mkHostConfig otherHosts);
@@ -76,7 +76,7 @@
           "${name}-streaming" = base // { hostname = host.networks.streaming.ipv4; };
         };
 
-      otherHosts = lib.filterAttrs (n: h: n != currentHost && h.system != null) hosts;
+      otherHosts = lib.filterAttrs (n: h: n != currentHost && h.system or null != null) hosts;
     in
     {
       programs.ssh = {

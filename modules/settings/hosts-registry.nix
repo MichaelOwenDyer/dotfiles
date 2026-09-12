@@ -5,10 +5,15 @@
 
   flake.lib.networks = {
     home = {
-      subnet = "192.168.0.0/24";
-      gateway = "192.168.0.254";
+      subnet = "192.168.1.0/24";
+      gateway = "192.168.1.1";
       prefixLength = 24;
-      dns = [ "192.168.0.253" ]; # rpi-3b AdGuard
+      dns = [ "192.168.1.1" ];
+      dhcp = {
+        rangeStart = "192.168.1.100";
+        rangeEnd = "192.168.1.200";
+        leaseTime = "24h";
+      };
     };
     streaming = {
       subnet = "192.168.50.0/24";
@@ -39,7 +44,7 @@
       hostName = "rustbucket";
       system = "x86_64-linux";
       networks = {
-        home = { ipv4 = "192.168.0.1"; interface = "wlan0"; };
+        home = { ipv4 = "192.168.1.10"; interface = "wlan0"; mac = "e8:62:be:b9:c0:6c"; };
         streaming = { ipv4 = "192.168.50.1"; interface = "enp4s0"; isGateway = true; };
         tailscale = { ipv4 = "100.115.183.8"; ipv6 = "fd7a:115c:a1e0::c401:b77e"; };
       };
@@ -56,8 +61,7 @@
       hostName = "claptrap";
       system = "x86_64-linux";
       networks = {
-        home = { ipv4 = null; interface = "wlp58s0"; };
-        streaming = { ipv4 = null; interface = "enp57s0u1u1"; };
+        home = { ipv4 = "192.168.1.11"; interface = "enp0s20f0u2"; mac = "00:e0:4c:0a:69:b6"; };
         tailscale = { ipv4 = "100.100.245.15"; ipv6 = "fd7a:115c:a1e0::f601:f51d"; };
       };
       build = {
@@ -69,20 +73,19 @@
       };
     };
 
-    rpi-3b = {
-      hostName = "rpi-3b";
-      system = "aarch64-linux";
+    mr3000x = {
+      hostName = "MR3000X";
+      system = null;
       networks = {
-        home = { ipv4 = "192.168.0.253"; interface = "enu1u1"; };
-        streaming = { ipv4 = null; interface = null; };
-        tailscale = { ipv4 = "100.125.219.23"; ipv6 = "fd7a:115c:a1e0::2f37:db17"; };
+        home = { ipv4 = "192.168.1.2"; interface = null; mac = "08:8a:f1:05:ec:1c"; };
       };
-      build = {
-        maxJobs = 4;
-        speedFactor = 1;
-        supportedSystems = [ "aarch64-linux" ];
-        supportedFeatures = [ ];
-        signingKey = null;
+    };
+
+    switch = {
+      hostName = "switch";
+      system = null;
+      networks = {
+        home = { ipv4 = "192.168.1.3"; interface = null; mac = "cc:ba:bd:07:43:1d"; };
       };
     };
 
@@ -91,8 +94,7 @@
       tailscaleHostName = "jgfqqxm192";
       system = "aarch64-darwin";
       networks = {
-        home = { ipv4 = null; interface = "en0"; };
-        streaming = { ipv4 = null; interface = null; };
+        home = { ipv4 = "192.168.1.12"; interface = "en0"; mac = "80:a9:97:3c:54:8c"; };
         tailscale = { ipv4 = "100.111.69.23"; ipv6 = "fd7a:115c:a1e0::4d37:4517"; };
       };
       build = {
@@ -105,24 +107,49 @@
     };
 
     phone = {
-      hostName = "samsung-sm-g780f";
-      system = null;
+      hostName = "Michael's Nothing-Phone-4a";
       networks = {
-        home = { ipv4 = null; interface = null; };
-        streaming = { ipv4 = null; interface = null; };
+        home = { ipv4 = "192.168.1.15"; interface = null; mac = "82:29:bc:59:7d:3b"; };
         tailscale = { ipv4 = "100.103.19.121"; ipv6 = "fd7a:115c:a1e0::ec01:138c"; };
       };
-      build = null;
+    };
+
+    beste-s25 = {
+      hostName = "Beste's S25";
+      networks = {
+        home = { ipv4 = "192.168.1.20"; interface = null; mac = "d6:13:66:c8:87:ba"; };
+      };
+    };
+
+    idil-laptop = {
+      hostName = "Idil's Laptop";
+      networks = {
+        home = { ipv4 = "192.168.1.21"; interface = null; mac = "7c:b5:66:b7:95:30"; };
+      };
+    };
+
+    rpi-3b = {
+      hostName = "rpi-3b";
+      system = "aarch64-linux";
+      networks = {
+        home = { ipv4 = "192.168.1.253"; interface = "enu1u1"; mac = null; };
+        tailscale = { ipv4 = "100.125.219.23"; ipv6 = "fd7a:115c:a1e0::2f37:db17"; };
+      };
+      build = {
+        maxJobs = 4;
+        speedFactor = 1;
+        supportedSystems = [ "aarch64-linux" ];
+        supportedFeatures = [ ];
+        signingKey = null;
+      };
     };
 
     router = {
       hostName = "router";
       system = "x86_64-linux";
       networks = {
-        home = { ipv4 = "192.168.1.254"; interface = "lan"; };
-        tailscale = { ipv4 = null; ipv6 = null; };
+        home = { ipv4 = "192.168.1.1"; interface = "lan"; mac = null; };
       };
-      build = null;
     };
   };
 
