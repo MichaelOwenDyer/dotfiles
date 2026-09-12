@@ -7,9 +7,13 @@
   # Pure systemd-networkd stack (PPPoE -> DS-Lite ipip6)
 
   flake.modules.nixos.router =
-    { pkgs, lib, config, ... }:
+    {
+      pkgs,
+      lib,
+      config,
+      ...
+    }:
     let
-      cfg = config.router;
       lanVlanId = 10;
       wanVlanId = 40;
       lanInterface = "lan";
@@ -17,13 +21,9 @@
       tunnelInterface = "ds-lite";
       tunnelRemote = "2001:a60:0:2::ffff";
       tunnelMtu = 1452; # Adjusted for PPPoE (1500 - 8 - 40)
-      lanAddress = "192.168.1.1";
-      lanPrefixLength = 24;
-      dhcpRange = "192.168.1.100,192.168.1.200,24h";
-      
-      trustedRules = lib.concatMapStringsSep "\n        "
-        (iface: "iifname \"${iface}\" accept")
-        cfg.trustedInterfaces;
+      netHome = inputs.self.lib.networks.home;
+      lanAddress = inputs.self.lib.hosts.router.networks.home.ipv4;
+      lanPrefixLength = netHome.prefixLength;
     in
     {
       options.router = {
@@ -73,7 +73,7 @@
           "net.ipv4.conf.all.rp_filter" = 2;
           "net.ipv4.conf.default.rp_filter" = 2;
         };
-        
+
         networking.useNetworkd = true;
         systemd.network = {
           enable = true;
@@ -87,7 +87,7 @@
               };
               vlanConfig.Id = lanVlanId;
             };
-            
+
             "20-${wanInterface}" = {
               netdevConfig = {
                 Name = wanInterface;
@@ -96,7 +96,7 @@
               };
               vlanConfig.Id = wanVlanId;
             };
-            
+
             "40-${tunnelInterface}" = {
               netdevConfig = {
                 Name = tunnelInterface;
@@ -114,8 +114,11 @@
 
           networks = {
             "10-trunk" = {
-              matchConfig.Name = cfg.trunkInterface;
-              vlan = [ lanInterface wanInterface ];
+              matchConfig.Name = config.router.trunkInterface;
+              vlan = [
+                lanInterface
+                wanInterface
+              ];
               networkConfig = {
                 LinkLocalAddressing = "no";
                 DHCP = "no";
@@ -159,9 +162,11 @@
             "40-${tunnelInterface}" = {
               matchConfig.Name = tunnelInterface;
               address = [ "192.0.0.2/29" ];
-              routes = [{
-                Destination = "0.0.0.0/0";
-              }];
+              routes = [
+                {
+                  Destination = "0.0.0.0/0";
+                }
+              ];
               linkConfig.MTUBytes = toString tunnelMtu;
             };
           };
@@ -191,17 +196,25 @@
             '';
           };
         };
-        systemd.services.pppd-mnet = let wanDevice = [ "sys-subsystem-net-devices-${wanInterface}.device" ]; in {
-          bindsTo = wanDevice;
-          after = wanDevice;
-          wantedBy = lib.mkForce wanDevice;
-        };
+        systemd.services.pppd-mnet =
+          let
+            wanDevice = [ "sys-subsystem-net-devices-${wanInterface}.device" ];
+          in
+          {
+            bindsTo = wanDevice;
+            after = wanDevice;
+            wantedBy = lib.mkForce wanDevice;
+          };
 
         systemd.services.ds-lite-dynamic-bind = {
           description = "Dynamically bind DS-Lite tunnel to ppp0 IPv6 address";
           after = [ "systemd-networkd.service" ];
           wantedBy = [ "multi-user.target" ];
-          path = [ pkgs.iproute2 pkgs.gawk pkgs.gnugrep ];
+          path = [
+            pkgs.iproute2
+            pkgs.gawk
+            pkgs.gnugrep
+          ];
           script = ''
             update_tunnel() {
               # Extract the live global IPv6 address from ppp0
@@ -228,63 +241,70 @@
 
         networking.firewall.enable = false;
         networking.nftables.enable = true;
-        networking.nftables.ruleset = ''
-          table inet filter {
-            chain input {
-              type filter hook input priority filter; policy drop;
 
-              iifname "lo" accept
-              ${trustedRules}
-              ct state established,related accept
+        networking.nftables.ruleset =
+          let
+            trustedRules =
+              config.router.trustedInterfaces
+              |> lib.concatMapStringsSep "\n        " (iface: "iifname \"${iface}\" accept");
+          in
+          ''
+            table inet filter {
+              chain input {
+                type filter hook input priority filter; policy drop;
 
-              # ICMPv6 (RA, NS/NA, echo) — required for IPv6 operation
-              ip6 nexthdr icmpv6 accept
+                iifname "lo" accept
+                ${trustedRules}
+                ct state established,related accept
 
-              # Accept DHCPv6 replies from M-net
-              iifname "ppp0" udp dport 546 accept comment "DHCPv6 client"
+                # ICMPv6 (RA, NS/NA, echo) — required for IPv6 operation
+                ip6 nexthdr icmpv6 accept
 
-              # Accept incoming DS-Lite encapsulated IPv4 packets
-              ip6 nexthdr 4 accept comment "Allow IPv4-in-IPv6 encapsulation"
+                # Accept DHCPv6 replies from M-net
+                iifname "ppp0" udp dport 546 accept comment "DHCPv6 client"
 
-              # ICMPv4 echo
-              ip protocol icmp icmp type echo-request accept
+                # Accept incoming DS-Lite encapsulated IPv4 packets
+                ip6 nexthdr 4 accept comment "Allow IPv4-in-IPv6 encapsulation"
 
-              # LAN-facing services
-              iifname "${lanInterface}" udp dport 67 accept comment "DHCP"
-              iifname "${lanInterface}" tcp dport 53 accept comment "DNS/AdGuard"
-              iifname "${lanInterface}" udp dport 53 accept comment "DNS/AdGuard"
-              iifname "${lanInterface}" tcp dport 3000 accept comment "AdGuard web UI"
-              iifname "${lanInterface}" tcp dport 22 accept comment "SSH"
+                # ICMPv4 echo
+                ip protocol icmp icmp type echo-request accept
+
+                # LAN-facing services
+                iifname "${lanInterface}" udp dport 67 accept comment "DHCP"
+                iifname "${lanInterface}" tcp dport 53 accept comment "DNS/AdGuard"
+                iifname "${lanInterface}" udp dport 53 accept comment "DNS/AdGuard"
+                iifname "${lanInterface}" tcp dport 3000 accept comment "AdGuard web UI"
+                iifname "${lanInterface}" tcp dport 22 accept comment "SSH"
+              }
+
+              chain forward {
+                type filter hook forward priority filter; policy drop;
+
+                meta nfproto ipv4 tcp flags syn / syn,ack tcp option maxseg size set ${toString (tunnelMtu - 20 - 20)}
+                meta nfproto ipv6 tcp flags syn / syn,ack tcp option maxseg size set ${toString (tunnelMtu - 20)}
+
+                ct state established,related accept
+
+                # LAN -> tunnel (IPv4 internet)
+                iifname "${lanInterface}" oifname "${tunnelInterface}" accept
+
+                # LAN -> WAN (IPv6 internet)
+                iifname "${lanInterface}" oifname "ppp0" accept
+              }
+
+              chain output {
+                type filter hook output priority filter; policy accept;
+              }
             }
 
-            chain forward {
-              type filter hook forward priority filter; policy drop;
+            table ip nat {
+              chain postrouting {
+                type nat hook postrouting priority srcnat; policy accept;
 
-              meta nfproto ipv4 tcp flags syn / syn,ack tcp option maxseg size set ${toString (tunnelMtu - 20 - 20)}
-              meta nfproto ipv6 tcp flags syn / syn,ack tcp option maxseg size set ${toString (tunnelMtu - 20)}
-
-              ct state established,related accept
-
-              # LAN -> tunnel (IPv4 internet)
-              iifname "${lanInterface}" oifname "${tunnelInterface}" accept
-
-              # LAN -> WAN (IPv6 internet)
-              iifname "${lanInterface}" oifname "ppp0" accept
+                oifname "${tunnelInterface}" masquerade
+              }
             }
-
-            chain output {
-              type filter hook output priority filter; policy accept;
-            }
-          }
-
-          table ip nat {
-            chain postrouting {
-              type nat hook postrouting priority srcnat; policy accept;
-
-              oifname "${tunnelInterface}" masquerade
-            }
-          }
-        '';
+          '';
 
         services.dnsmasq = {
           enable = true;
@@ -292,22 +312,38 @@
             port = 0;
             interface = lanInterface;
             bind-interfaces = true;
-            dhcp-range = [ dhcpRange ];
+            dhcp-range = [ "${netHome.dhcp.rangeStart},${netHome.dhcp.rangeEnd},${netHome.dhcp.leaseTime}" ];
+            dhcp-host =
+              inputs.self.lib.hosts
+              |> lib.mapAttrsToList (
+                _name: host:
+                let
+                  homeNet = host.networks.home or null;
+                in
+                lib.optional (
+                  homeNet != null && (homeNet.mac or null) != null && (homeNet.ipv4 or null) != null
+                ) "${homeNet.mac},${homeNet.ipv4},${host.hostName}"
+              )
+              |> lib.concatLists;
             dhcp-option = [
               "3,${lanAddress}"
-              "6,${lanAddress}"
+              "6,${lib.concatStringsSep "," netHome.dns}"
             ];
           };
         };
-        systemd.services.dnsmasq = let lanDevice = [ "sys-subsystem-net-devices-${lanInterface}.device" ]; in {
-          bindsTo = lanDevice;
-          after = lanDevice;
-          wantedBy = lib.mkForce lanDevice;
-        };
+        systemd.services.dnsmasq =
+          let
+            lanDevice = [ "sys-subsystem-net-devices-${lanInterface}.device" ];
+          in
+          {
+            bindsTo = lanDevice;
+            after = lanDevice;
+            wantedBy = lib.mkForce lanDevice;
+          };
 
         services.adguardhome.settings.dns.bind_hosts = [ lanAddress ];
 
-        environment.systemPackages = with pkgs; [ tcpdump ];        
+        environment.systemPackages = with pkgs; [ tcpdump ];
       };
     };
 }
