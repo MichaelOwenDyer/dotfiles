@@ -9,9 +9,6 @@
         cursor-cli
         mcp-nixos
       ];
-      environment.shellAliases = {
-        agent = "cursor-agent";
-      };
     };
 
   flake.modules.darwin.cursor-cli =
@@ -21,9 +18,6 @@
         cursor-cli
         mcp-nixos
       ];
-      environment.shellAliases = {
-        agent = "cursor-agent";
-      };
     };
 
   flake.modules.homeManager.cursor-cli =
@@ -31,10 +25,14 @@
     {
       home.packages = with pkgs; [
         cursor-cli
-        mcp-nixos
       ];
-      home.shellAliases = {
-        agent = "cursor-agent";
+      home.file.".cursor/mcp.json".text = builtins.toJSON {
+        mcpServers = {
+          nixos = {
+            command = "${pkgs.mcp-nixos}/bin/mcp-nixos";
+            args = [ ];
+          };
+        };
       };
     };
 }
