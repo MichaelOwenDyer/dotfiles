@@ -32,21 +32,7 @@ in
         inherit name email;
       };
 
-      # Jujutsu configuration
-      programs.jujutsu.settings.user = {
-        inherit name email;
-      };
-
       # Ghostty: open in dotfiles directory
       programs.ghostty.settings.working-directory = "/home/michael/.dotfiles";
-
-      # Thunderbird
-      # programs.thunderbird = {
-      #   enable = true;
-      #   profiles.michael = {
-      #     isDefault = true;
-      #     search.default = "google";
-      #   };
-      # };
     };
 }

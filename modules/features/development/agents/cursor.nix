@@ -7,6 +7,7 @@
     {
       environment.systemPackages = with pkgs; [
         cursor-cli
+        mcp-nixos
       ];
       environment.shellAliases = {
         agent = "cursor-agent";
@@ -18,6 +19,7 @@
     {
       environment.systemPackages = with pkgs; [
         cursor-cli
+        mcp-nixos
       ];
       environment.shellAliases = {
         agent = "cursor-agent";
@@ -29,6 +31,7 @@
     {
       home.packages = with pkgs; [
         cursor-cli
+        mcp-nixos
       ];
       home.shellAliases = {
         agent = "cursor-agent";
