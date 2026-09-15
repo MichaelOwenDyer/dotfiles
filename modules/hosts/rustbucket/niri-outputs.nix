@@ -4,29 +4,25 @@
 {
   flake.modules.homeManager.niri-outputs-rustbucket = {
     programs.niri.settings.outputs = {
-      "DP-3" = {
+      "HDMI-A-1" = {
         mode = {
-          width = 2560;
-          height = 1440;
-          refresh = 165.0;
+          width = 1920;
+          height = 1080;
+          refresh = 59.939;
         };
-        scale = 2.0;
+        scale = 1.5;
         position = {
           x = 0;
           y = 0;
         };
       };
-      "HDMI-A-1" = {
+      "DP-1" = {
         mode = {
-          width = 3840;
-          height = 2160;
-          refresh = 60.0;
+          width = 2560;
+          height = 1440;
+          refresh = 165.0;
         };
-        scale = 2.0;
-        position = {
-          x = -1920;
-          y = -360;
-        };
+        scale = 1.0;
       };
     };
   };
