@@ -6,7 +6,7 @@
   # Default settings for all NixOS configurations
 
   flake.modules.nixos.default-settings =
-    { lib, ... }:
+    { pkgs, lib, ... }:
     {
       key = "modules/defaults/nixos-default.nix";
 
@@ -23,6 +23,8 @@
         nh
         sops
       ];
+
+      environment.systemPackages = [ pkgs.uutils-coreutils-noprefix ];
 
       # Allow running unpatched dynamic binaries (e.g., from curl | sh installers)
       programs.nix-ld.enable = true;
