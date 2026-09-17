@@ -15,11 +15,9 @@
       imports = with inputs.self.modules.nixos; [
         claptrap-hardware
         laptop
-        podman
         ly
         niri
         dank-material-shell
-        gnome-keyring
         tailscale
         plymouth
         ssh
@@ -37,13 +35,9 @@
       distributed-build-client = {
         rootSshKey = inputs.self.lib.distributedBuild.clients.claptrap.rootSshKey;
         builders = with inputs.self.lib.distributedBuild.builders; [
-          rustbucket-streaming
           rustbucket-home
-          rustbucket-tailscale
         ];
       };
-
-      programs.zoom-us.enable = true;
 
       users.users.root.openssh.authorizedKeys.keys = [
         inputs.self.lib.sshKeys."michael@rustbucket".pub
