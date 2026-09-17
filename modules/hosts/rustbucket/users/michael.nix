@@ -34,8 +34,8 @@
       programs.yazi.impermanence.enable = true;
 
       services.idle = {
-        displayTimeout = 300;
-        lockTimeout = 600;
+        displayTimeout = 600;
+        lockTimeout = 1200;
       };
 
       home.stateVersion = "24.11";
