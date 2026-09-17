@@ -302,18 +302,43 @@
             }
           '';
 
-        networking.extraHosts =
-          inputs.self.lib.hosts
-          |> lib.mapAttrsToList (
-            _name: host:
-            let
-              homeNet = host.networks.home or null;
-            in
-            lib.optionalString (homeNet != null && homeNet.ipv4 or null != null) ''
-              ${homeNet.ipv4} ${host.hostName}.${netHome.domain} ${host.hostName}
-            ''
-          )
-          |> lib.concatStrings;
+        services.adguardhome.settings = {
+          dns.bind_hosts = [ lanAddress ];
+          filtering.rewrites =
+            inputs.self.lib.hosts
+            |> lib.mapAttrsToList (
+              _name: host:
+              let
+                homeNet = host.networks.home or null;
+              in
+              lib.optionals (homeNet != null && (homeNet.ipv4 or null) != null) [
+                {
+                  domain = "${host.hostName}.${netHome.domain}";
+                  answer = homeNet.ipv4;
+                }
+                {
+                  domain = host.hostName;
+                  answer = homeNet.ipv4;
+                }
+              ]
+            )
+            |> lib.concatLists;
+          clients.persistent =
+            inputs.self.lib.hosts
+            |> lib.mapAttrsToList (
+              _name: host:
+              let
+                homeNet = host.networks.home or null;
+              in
+              lib.optionals (homeNet != null && (homeNet.ipv4 or null) != null) [
+                {
+                  name = host.hostName;
+                  ids = [ homeNet.ipv4 ] ++ lib.optional ((homeNet.mac or null) != null) homeNet.mac;
+                }
+              ]
+            )
+            |> lib.concatLists;
+        };
 
         services.dnsmasq = {
           enable = true;
@@ -350,8 +375,6 @@
             after = lanDevice;
             wantedBy = lib.mkForce lanDevice;
           };
-
-        services.adguardhome.settings.dns.bind_hosts = [ lanAddress ];
 
         environment.systemPackages = with pkgs; [ tcpdump ];
       };
