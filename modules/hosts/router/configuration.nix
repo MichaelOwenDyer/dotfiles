@@ -304,7 +304,7 @@
 
         services.adguardhome.settings = {
           dns.bind_hosts = [ lanAddress ];
-          filtering.rewrites =
+          rewrites =
             inputs.self.lib.hosts
             |> lib.mapAttrsToList (
               _name: host:
@@ -333,7 +333,7 @@
               lib.optionals (homeNet != null && (homeNet.ipv4 or null) != null) [
                 {
                   name = host.hostName;
-                  ids = [ homeNet.ipv4 ] ++ lib.optional ((homeNet.mac or null) != null) homeNet.mac;
+                  ids = [ homeNet.ipv4 ];
                 }
               ]
             )
