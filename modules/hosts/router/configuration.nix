@@ -306,12 +306,26 @@
             }
           '';
 
+        networking.extraHosts =
+          inputs.self.lib.hosts
+          |> lib.mapAttrsToList (
+            _name: host:
+            let
+              homeNet = host.networks.home or null;
+            in
+            lib.optionalString (homeNet != null && homeNet.ipv4 or null != null) ''
+              ${homeNet.ipv4} ${host.hostName}.${netHome.domain} ${host.hostName}
+            ''
+          )
+          |> lib.concatStrings;
+
         services.dnsmasq = {
           enable = true;
           settings = {
             port = 0;
             interface = lanInterface;
             bind-interfaces = true;
+            domain = netHome.domain;
             dhcp-range = [ "${netHome.dhcp.rangeStart},${netHome.dhcp.rangeEnd},${netHome.dhcp.leaseTime}" ];
             dhcp-host =
               inputs.self.lib.hosts

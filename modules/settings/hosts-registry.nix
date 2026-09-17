@@ -8,6 +8,7 @@
       subnet = "192.168.1.0/24";
       gateway = "192.168.1.1";
       prefixLength = 24;
+      domain = "home";
       dns = [ "192.168.1.1" ];
       dhcp = {
         rangeStart = "192.168.1.100";
