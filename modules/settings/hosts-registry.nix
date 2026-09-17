@@ -82,6 +82,14 @@
       };
     };
 
+    ax55 = {
+      hostName = "ax55";
+      system = null;
+      networks = {
+        home = { ipv4 = "192.168.1.4"; interface = null; mac = "01:9c:a2:f4:3a:66:d4"; };
+      };
+    };
+
     switch = {
       hostName = "switch";
       system = null;
