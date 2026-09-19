@@ -63,9 +63,6 @@
             IdentitiesOnly yes
             IdentityFile ${cfg.rootSshKey.privatePath}
             StrictHostKeyChecking accept-new
-            ControlMaster auto
-            ControlPath /root/.ssh/sockets/%r@%h-%p
-            ControlPersist 60
             ConnectTimeout 5
             ServerAliveInterval 15
             ServerAliveCountMax 3
