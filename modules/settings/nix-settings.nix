@@ -5,9 +5,11 @@
   # Nix and Flakes configuration
 
   flake.modules.nixos.nix-settings =
-    { ... }:
+    { pkgs, ... }:
     {
       nixpkgs.config.allowUnfree = true;
+
+      nix.package = pkgs.nixVersions.latest;
 
       nix.settings = {
         experimental-features = [
