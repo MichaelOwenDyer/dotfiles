@@ -28,6 +28,7 @@
         development
         gaming
         discord
+        rust
       ];
 
       # Enable yazi impermanence plugin since this host uses impermanence
