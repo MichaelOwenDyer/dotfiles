@@ -55,6 +55,7 @@
         supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
         supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
         signingKey = "rustbucket-1:AMe1QbSNHWw+Cyau5rwhAxknUDtmb49vY8tyIbOVAn0=";
+        binaryCachePort = 5000;
       };
     };
 
@@ -64,13 +65,6 @@
       networks = {
         home = { ipv4 = "192.168.1.11"; interface = "enp0s20f0u2"; mac = "00:e0:4c:0a:69:b6"; };
         tailscale = { ipv4 = "100.100.245.15"; ipv6 = "fd7a:115c:a1e0::f601:f51d"; };
-      };
-      build = {
-        maxJobs = 4;
-        speedFactor = 1;
-        supportedSystems = [ "x86_64-linux" ];
-        supportedFeatures = [ "nixos-test" "kvm" ];
-        signingKey = null;
       };
     };
 

@@ -3,7 +3,12 @@
   # Distributed build server
 
   flake.modules.nixos.distributed-build-server =
-    { lib, config, pkgs, ... }:
+    {
+      lib,
+      config,
+      pkgs,
+      ...
+    }:
     let
       cfg = config.distributed-build-server;
     in
@@ -18,8 +23,17 @@
           default = [ ];
         };
         signingKeyPath = lib.mkOption {
-          type = lib.types.nullOr (lib.types.oneOf [ lib.types.path lib.types.str ]);
+          type = lib.types.nullOr (
+            lib.types.oneOf [
+              lib.types.path
+              lib.types.str
+            ]
+          );
           default = null;
+        };
+        binaryCachePort = lib.mkOption {
+          type = lib.types.port;
+          description = "Port for Harmonia binary cache HTTP server";
         };
       };
 
@@ -43,6 +57,16 @@
 
         # Ensure SSH is enabled on the server
         services.openssh.enable = true;
+
+        services.harmonia.cache = {
+          enable = true;
+          signKeyPaths = [ cfg.signingKeyPath ];
+          settings = {
+            bind = "[::]:${toString cfg.binaryCachePort}";
+            priority = 30;
+          };
+        };
+        networking.firewall.allowedTCPPorts = [ cfg.binaryCachePort ];
 
         impermanence.persistedFiles = [
           (toString cfg.signingKeyPath) # Ensure signing key is persisted across boots

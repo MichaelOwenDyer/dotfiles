@@ -44,6 +44,7 @@
           rpi-3b.rootSshKey.pub
         ];
         signingKeyPath = "/etc/nix/cache-priv-key.pem";
+        binaryCachePort = inputs.self.lib.hosts.rustbucket.build.binaryCachePort;
       };
 
       boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
