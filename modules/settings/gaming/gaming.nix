@@ -24,9 +24,6 @@
         systemPackages = with pkgs; [
           wineWow64Packages.waylandFull
           mangohud
-          lutris
-          heroic
-          bottles
           protonup-ng
         ];
         sessionVariables = {
