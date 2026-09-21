@@ -447,13 +447,26 @@
           description = "Rollback root to blank snapshot";
           wantedBy = [ "initrd.target" ];
           before = [ "sysroot.mount" ];
+          after = [ "dev-disk-by\\x2dlabel-NIXOS.device" ];
+          requires = [ "dev-disk-by\\x2dlabel-NIXOS.device" ];
           unitConfig.DefaultDependencies = "no";
           serviceConfig.Type = "oneshot";
+          path = [
+            pkgs.btrfs-progs
+            pkgs.coreutils
+            pkgs.util-linux
+          ];
           script = ''
-            mkdir -p /mnt && mount -o subvol=/ /dev/disk/by-label/NIXOS /mnt
-            [[ -e /mnt/@root ]] && mv /mnt/@root /mnt/@root-old-$(date +%Y%m%d-%H%M%S)
-            for old in $(ls -1d /mnt/@root-old-* 2>/dev/null | sort -r | tail -n +4); do btrfs subvolume delete "$old"; done
-            btrfs subvolume snapshot /mnt/@root-blank /mnt/@root && umount /mnt
+            mkdir -p /mnt
+            mount -t btrfs -o subvol=/ /dev/disk/by-label/NIXOS /mnt
+            if [[ -e /mnt/@root ]]; then
+                mv /mnt/@root /mnt/@root-old-$(date +%Y%m%d-%H%M%S)
+            fi
+            for old in $(ls -1d /mnt/@root-old-* 2>/dev/null | sort -r | tail -n +4); do
+                btrfs subvolume delete --recursive "$old" || btrfs subvolume delete "$old"
+            done
+            btrfs subvolume snapshot /mnt/@root-blank /mnt/@root
+            umount /mnt
           '';
         };
       };
