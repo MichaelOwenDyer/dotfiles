@@ -10,9 +10,29 @@
       hardware.bluetooth = {
         enable = true;
         powerOnBoot = true;
+        settings = {
+          General = {
+            FastConnectable = true;
+            Experimental = true;
+          };
+          Policy = {
+            AutoEnable = true;
+          };
+        };
+        input = {
+          General = {
+            UserspaceHID = true;
+          };
+        };
       };
 
-      # WirePlumber configuration for Bluetooth audio
+      # Use bluetooth devices at login screen
+      systemd.services.display-manager = {
+        wants = [ "bluetooth.service" ];
+        after = [ "bluetooth.service" ];
+      };
+
+      # Bluetooth audio config
       services.pipewire.wireplumber.extraConfig = {
         "monitor.bluez.properties" = {
           "bluez5.enable-sbc-xq" = true;
