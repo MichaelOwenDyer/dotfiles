@@ -37,6 +37,12 @@
         "discord"
         "zotero"
         "ausweisapp"
+        "minecraft"
+        "syncthing-app"
+        "obsidian"
+        "alt-tab"
+        "mos"
+        "scroll-reverser"
       ];
 
       homebrew.brews = [
@@ -54,6 +60,7 @@
         work
         nethack
         typst
+        gitui
       ];
 
       programs.git.settings.user = {
