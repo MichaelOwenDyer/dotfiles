@@ -19,6 +19,7 @@
         niri
         dank-material-shell
         tailscale
+        nas
         plymouth
         ssh
         ssh-client-hosts
@@ -31,6 +32,27 @@
 
       router.trunkInterface = "enp0s20f0u2";
       router.trustedInterfaces = [ wifiInterface tailscaleInterface ];
+
+      nas = {
+        name = "nas";
+        targetDir = "/mnt/nas";
+        mountUnit = "mnt-nas.mount";
+        web.urlPath = "/filebrowser";
+        smb.guestAccess = true;
+      };
+      fileSystems."/mnt/nas" = {
+        device = "/dev/disk/by-id/usb-Genki_Genki_SavePoint_012345678934-0:0-part1";
+        fsType = "btrfs";
+        options = [
+          "nofail"
+          "x-systemd.automount"
+          "compress=zstd"
+        ];
+      };
+      systemd.tmpfiles.rules = [
+        "d /mnt/nas 2775 filebrowser users - -"
+        "z /mnt/nas 2775 filebrowser users - -"
+      ];
 
       distributed-build-client = {
         rootSshKey = inputs.self.lib.distributedBuild.clients.claptrap.rootSshKey;
