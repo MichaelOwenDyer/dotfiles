@@ -271,10 +271,10 @@
 
                 # LAN-facing services
                 iifname "${lanInterface}" udp dport 67 accept comment "DHCP"
-                iifname "${lanInterface}" tcp dport 53 accept comment "DNS/AdGuard"
                 iifname "${lanInterface}" udp dport 53 accept comment "DNS/AdGuard"
-                iifname "${lanInterface}" tcp dport 3000 accept comment "AdGuard web UI"
-                iifname "${lanInterface}" tcp dport 22 accept comment "SSH"
+                ${lib.concatMapStringsSep "\n                " (port:
+                  ''iifname "${lanInterface}" tcp dport ${toString port} accept''
+                ) config.networking.firewall.allowedTCPPorts}
               }
 
               chain forward {
