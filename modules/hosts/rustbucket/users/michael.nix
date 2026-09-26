@@ -17,7 +17,7 @@
 
   # Host-specific home-manager configuration for michael on rustbucket
   flake.modules.homeManager.michael-rustbucket =
-    { ... }:
+    { pkgs, ... }:
     {
       imports = with inputs.self.modules.homeManager; [
         michael
@@ -29,9 +29,14 @@
         gaming
         discord
         rust
+        syncthing
       ];
 
-      # Enable yazi impermanence plugin since this host uses impermanence
+      home.packages = with pkgs; [
+        zotero
+        obsidian
+      ];
+
       programs.yazi.impermanence.enable = true;
 
       services.idle = {

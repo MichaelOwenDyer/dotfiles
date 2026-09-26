@@ -24,6 +24,7 @@
         impermanence
         michael-rustbucket
         tailscale
+        syncthing
       ];
 
       networking.hostName = "rustbucket";
