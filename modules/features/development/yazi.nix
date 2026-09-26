@@ -75,6 +75,13 @@
       };
 
       config = {
+        xdg.mimeApps = {
+          enable = true;
+          defaultApplications = {
+            "inode/directory" = "yazi.desktop";
+          };
+        };
+
         programs.yazi = {
           enable = true;
           shellWrapperName = "y";

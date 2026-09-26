@@ -22,8 +22,15 @@
       # Niri 25.08+ auto-spawns xwayland-satellite on-demand when X11 clients connect
       environment.systemPackages = [ pkgs.xwayland-satellite ];
 
-      # Use GTK portal as default for Wayland
-      xdg.portal.config.common.default = [ "gtk" ];
+      # Use GTK portal as default for Wayland (provides FileChooser for GUI apps like Obsidian)
+      xdg.portal = {
+        enable = true;
+        extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
+        config.common = {
+          default = [ "gtk" ];
+          "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
+        };
+      };
     };
 
   # Niri scrolling window manager - Home Manager module

@@ -19,17 +19,20 @@
         };
 
         # Only one browser instance needed - it manages its own windows
-        programs.niri.session-manager.singleInstanceApps = [ "zen" ];
+        programs.niri.session-manager.singleInstanceApps = [ "zen" "zen-beta" ];
 
         # Set Zen as default browser for web content
         xdg.mimeApps = {
           enable = true;
-          defaultApplications = {
-            "text/html" = "zen.desktop";
-            "x-scheme-handler/http" = "zen.desktop";
-            "x-scheme-handler/https" = "zen.desktop";
-            "x-scheme-handler/about" = "zen.desktop";
-            "x-scheme-handler/unknown" = "zen.desktop";
+          defaultApplications = let zen = "zen-beta.desktop"; in {
+            "application/json" = zen;
+            "text/html" = zen;
+            "text/plain" = zen;
+            "x-scheme-handler/http" = zen;
+            "x-scheme-handler/https" = zen;
+            "x-scheme-handler/about" = zen;
+            "x-scheme-handler/mailto" = zen;
+            "x-scheme-handler/unknown" = zen;
           };
         };
       };
