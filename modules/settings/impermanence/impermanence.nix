@@ -358,6 +358,9 @@
 
           # Shell environment (bash-specific paths in bash.nix)
           "/etc/profile"
+          "/etc/profile.d"
+          "/etc/environment"
+          "/etc/environment.d"
           "/etc/set-environment"
           "/etc/shells"
 
@@ -383,6 +386,7 @@
           # Documentation
           "/etc/man_db.conf"
           "/etc/terminfo"
+          "/etc/logrotate.conf"
 
           # /var - runtime state
           "/var/.updated"

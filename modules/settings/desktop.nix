@@ -36,6 +36,8 @@
         "/etc/xdg"
         "/etc/polkit-1"
         "/etc/geoclue"
+        "/var/lib/geoclue"
+        "/var/geoclue"
         "/etc/fonts"
         "/etc/speech-dispatcher"
         # Power management (UPower often pulled in by desktop deps)

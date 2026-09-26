@@ -15,6 +15,7 @@
         # Authentication
         "/etc/pam"
         "/etc/pam.d"
+        "/etc/security"
         # Certificates
         "/etc/ssl"
         "/etc/pki"
