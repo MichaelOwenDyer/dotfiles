@@ -204,6 +204,7 @@
             bindsTo = wanDevice;
             after = wanDevice;
             wantedBy = lib.mkForce wanDevice;
+            serviceConfig.TimeoutStartSec = "infinity";
           };
 
         systemd.services.ds-lite-dynamic-bind = {
