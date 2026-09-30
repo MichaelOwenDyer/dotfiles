@@ -50,6 +50,16 @@
                   default = "0775";
                   description = "Default directory creation mask";
                 };
+                forceCreateMode = lib.mkOption {
+                  type = lib.types.str;
+                  default = "0664";
+                  description = "Forced file creation mode";
+                };
+                forceDirectoryMode = lib.mkOption {
+                  type = lib.types.str;
+                  default = "2775";
+                  description = "Forced directory creation mode";
+                };
               };
             }
           );
@@ -85,6 +95,8 @@
                 "public" = if share.guestOk then "yes" else "no";
                 "create mask" = share.createMask;
                 "directory mask" = share.directoryMask;
+                "force create mode" = share.forceCreateMode;
+                "force directory mode" = share.forceDirectoryMode;
                 "force group" = share.forceGroup;
               }
               // (lib.optionalAttrs (share.forceUser != null) {

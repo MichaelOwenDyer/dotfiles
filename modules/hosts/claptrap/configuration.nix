@@ -26,6 +26,7 @@
         distributed-build-client
         michael-claptrap
         router
+        vaultwarden
       ];
 
       networking.hostName = "claptrap";
