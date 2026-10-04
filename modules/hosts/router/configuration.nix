@@ -135,6 +135,15 @@
                 IPv6SendRA = true;
                 DHCPPrefixDelegation = true;
               };
+              dhcpPrefixDelegationConfig = {
+                UplinkInterface = "ppp0";
+                Announce = true;
+                Assign = true;
+              };
+              ipv6SendRAConfig = {
+                EmitDNS = false;
+                EmitDomains = false;
+              };
             };
 
             "20-${wanInterface}" = {
@@ -286,6 +295,9 @@
 
                 ct state established,related accept
 
+                # Forward ICMPv6 (Packet Too Big / PMTUD, NS/NA, Echo)
+                ip6 nexthdr icmpv6 accept
+
                 # LAN -> tunnel (IPv4 internet)
                 iifname "${lanInterface}" oifname "${tunnelInterface}" accept
 
@@ -307,8 +319,30 @@
             }
           '';
 
+        services.resolved.settings.Resolve.DNSStubListener = "no";
+
         services.adguardhome.settings = {
-          dns.bind_hosts = [ lanAddress ];
+          dns = {
+            bind_hosts = [
+              lanAddress
+              "::"
+            ];
+            upstream_dns = [
+              "https://dns10.quad9.net/dns-query"
+              "https://cloudflare-dns.com/dns-query"
+              "9.9.9.10"
+              "1.1.1.1"
+            ];
+            fallback_dns = [
+              "9.9.9.10"
+              "1.1.1.1"
+            ];
+            bootstrap_dns = [
+              "9.9.9.10"
+              "1.1.1.1"
+            ];
+            upstream_mode = "load_balance";
+          };
           rewrites =
             inputs.self.lib.hosts
             |> lib.mapAttrsToList (
@@ -317,10 +351,6 @@
                 homeNet = host.networks.home or null;
               in
               lib.optionals (homeNet != null && (homeNet.ipv4 or null) != null) [
-                {
-                  domain = "${host.hostName}.${netHome.domain}";
-                  answer = homeNet.ipv4;
-                }
                 {
                   domain = host.hostName;
                   answer = homeNet.ipv4;
@@ -351,7 +381,6 @@
             port = 0;
             interface = lanInterface;
             bind-interfaces = true;
-            domain = netHome.domain;
             dhcp-range = [ "${netHome.dhcp.rangeStart},${netHome.dhcp.rangeEnd},${netHome.dhcp.leaseTime}" ];
             dhcp-host =
               inputs.self.lib.hosts
