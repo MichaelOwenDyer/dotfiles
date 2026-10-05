@@ -1,4 +1,5 @@
 {
+  inputs,
   ...
 }:
 {
@@ -14,7 +15,7 @@
         server = {
           port = cfg.port;
           listen = cfg.listenAddress;
-          baseURL = cfg.urlPath;
+          baseURL = cfg.baseURL;
           sources = [
             {
               name = cfg.name;
@@ -26,6 +27,12 @@
       });
     in
     {
+      key = "filebrowser-quantum";
+
+      imports = with inputs.self.modules.nixos; [
+        cloudflare-tunnel
+      ];
+
       options.filebrowser-quantum = {
         name = lib.mkOption {
           type = lib.types.str;
@@ -50,9 +57,15 @@
           default = "127.0.0.1";
           description = "Address to bind FileBrowser Quantum to";
         };
-        urlPath = lib.mkOption {
+        subdomain = lib.mkOption {
           type = lib.types.str;
-          description = "URL path location for Tailscale HTTPS proxy";
+          default = "nas";
+          description = "Subdomain for FileBrowser Quantum on Cloudflare Tunnel (e.g. 'nas')";
+        };
+        baseURL = lib.mkOption {
+          type = lib.types.str;
+          default = "";
+          description = "Base URL path prefix if any";
         };
         database = lib.mkOption {
           type = lib.types.path;
@@ -62,11 +75,9 @@
       };
 
       config = {
-        tailscale-proxy.proxiedServices.filebrowser-quantum = {
-          path = cfg.urlPath;
+        cloudflare-tunnel.proxiedServices.filebrowser-quantum = {
+          subdomain = cfg.subdomain;
           forwardTo = "http://${cfg.listenAddress}:${toString cfg.port}";
-          proxyWebsockets = true;
-          maxBodySize = null;
         };
 
         systemd.services.filebrowser-quantum = {

@@ -19,6 +19,7 @@
         niri
         dank-material-shell
         tailscale
+        cloudflare-tunnel
         nas
         plymouth
         ssh
@@ -31,6 +32,12 @@
 
       networking.hostName = "claptrap";
 
+      cloudflare-tunnel = {
+        domain = "michaeldyer.dev";
+        tunnelName = "claptrap";
+        secretName = "cloudflare-tunnel-credentials";
+      };
+
       router.trunkInterface = "enp0s20f0u2";
       router.trustedInterfaces = [ wifiInterface tailscaleInterface ];
 
@@ -38,7 +45,7 @@
         name = "nas";
         targetDir = "/mnt/nas";
         mountUnit = "mnt-nas.mount";
-        web.urlPath = "/filebrowser";
+        web.subdomain = "nas";
         smb.guestAccess = true;
       };
       fileSystems."/mnt/nas" = {

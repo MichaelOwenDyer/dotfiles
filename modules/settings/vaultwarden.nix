@@ -19,26 +19,20 @@
       key = "vaultwarden";
 
       imports = with inputs.self.modules.nixos; [
-        tailscale-proxy
+        cloudflare-tunnel
       ];
 
       options.vaultwarden = {
-        urlPath = lib.mkOption {
+        subdomain = lib.mkOption {
           type = lib.types.str;
-          default = "/vault";
-          description = "URL path location for Tailscale HTTPS proxy (e.g. '/vault')";
+          default = "vault";
+          description = "Subdomain for Vaultwarden on Cloudflare Tunnel (e.g. 'vault')";
         };
 
         port = lib.mkOption {
           type = lib.types.port;
           default = 8222;
           description = "Internal Rocket server port for Vaultwarden";
-        };
-
-        maxBodySize = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
-          default = "525m";
-          description = "Maximum client upload size for vault attachments and Send feature";
         };
 
         environmentFile = lib.mkOption {
@@ -54,18 +48,16 @@
           configureNginx = false;
           environmentFile = cfg.environmentFile;
           config = {
-            DOMAIN = "https://${config.tailscale-proxy.fqdn}${cfg.urlPath}";
+            DOMAIN = config.cloudflare-tunnel.proxiedServices.vaultwarden.url;
             ENABLE_WEBSOCKET = true;
             ROCKET_ADDRESS = "127.0.0.1";
             ROCKET_PORT = cfg.port;
           };
         };
 
-        tailscale-proxy.proxiedServices.vaultwarden = {
-          path = cfg.urlPath;
+        cloudflare-tunnel.proxiedServices.vaultwarden = {
+          subdomain = cfg.subdomain;
           forwardTo = "http://127.0.0.1:${toString cfg.port}";
-          proxyWebsockets = true;
-          maxBodySize = cfg.maxBodySize;
         };
 
         impermanence.persistedDirectories = [

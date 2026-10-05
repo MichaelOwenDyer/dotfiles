@@ -4,7 +4,7 @@
 }:
 {
   # NAS Feature Module - Unified Google Drive replacement
-  # Combines FileBrowser Quantum (Web UI over Tailscale HTTPS), Samba (SMB native drive), and Tailscale Proxy
+  # Combines FileBrowser Quantum (Web UI over Cloudflare Tunnel) and Samba (SMB native drive)
 
   flake.modules.nixos.nas =
     { lib, config, ... }:
@@ -12,7 +12,6 @@
       imports = with inputs.self.modules.nixos; [
         samba
         filebrowser-quantum
-        tailscale-proxy
       ];
 
       options.nas = {
@@ -29,9 +28,10 @@
           default = null;
           description = "Optional systemd mount unit dependency (e.g. 'mnt-nas.mount')";
         };
-        web.urlPath = lib.mkOption {
+        web.subdomain = lib.mkOption {
           type = lib.types.str;
-          description = "URL path for FileBrowser Quantum in Tailscale HTTPS proxy";
+          default = "nas";
+          description = "Subdomain for FileBrowser Quantum on Cloudflare Tunnel";
         };
         smb.guestAccess = lib.mkOption {
           type = lib.types.bool;
@@ -48,7 +48,7 @@
             name = cfg.name;
             targetDir = cfg.targetDir;
             mountUnit = cfg.mountUnit;
-            urlPath = cfg.web.urlPath;
+            subdomain = cfg.web.subdomain;
           };
 
           samba = {
