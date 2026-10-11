@@ -7,6 +7,7 @@
         jetbrains.rust-rover
         rustup
         gcc
+        gnumake
       ];
     };
 }
