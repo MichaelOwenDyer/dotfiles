@@ -52,6 +52,15 @@
             ENABLE_WEBSOCKET = true;
             ROCKET_ADDRESS = "127.0.0.1";
             ROCKET_PORT = cfg.port;
+
+            # Hardening
+            SIGNUPS_ALLOWED = false;
+            INVITATIONS_ALLOWED = false;
+            SHOW_PASSWORD_HINT = false;
+
+            # Proxy IP headers from Cloudflare Tunnel
+            IP_HEADER = "CF-Connecting-IP";
+            TRUSTED_PROXIES = builtins.toJSON [ "127.0.0.1" ];
           };
         };
 
