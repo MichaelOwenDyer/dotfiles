@@ -29,6 +29,7 @@
         router
         vaultwarden
         paperless
+        actual-budget
       ];
 
       networking.hostName = "claptrap";
