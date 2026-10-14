@@ -28,6 +28,7 @@
         michael-claptrap
         router
         vaultwarden
+        paperless
       ];
 
       networking.hostName = "claptrap";
