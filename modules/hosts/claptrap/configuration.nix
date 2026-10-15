@@ -30,6 +30,7 @@
         vaultwarden
         paperless
         actual-budget
+        spliit
       ];
 
       networking.hostName = "claptrap";
