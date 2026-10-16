@@ -6,7 +6,7 @@
   # Dell XPS 13 9360 laptop (temporarily also acting as single-arm router)
 
   flake.modules.nixos.claptrap =
-    { ... }:
+    { config, ... }:
     let
       wifiInterface = "wlp58s0";
       tailscaleInterface = "tailscale0";
@@ -39,6 +39,12 @@
         domain = "michaeldyer.dev";
         tunnelName = "claptrap";
         secretName = "cloudflare-tunnel-credentials";
+      };
+
+      sops.secrets."spliit-env" = { };
+
+      spliit = {
+        environmentFile = config.sops.secrets."spliit-env".path;
       };
 
       router.trunkInterface = "enp0s20f0u2";
