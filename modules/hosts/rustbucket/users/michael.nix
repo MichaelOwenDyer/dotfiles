@@ -3,8 +3,6 @@
   ...
 }:
 {
-  # Assign user michael to host rustbucket with host-specific configuration
-
   flake.modules.nixos.michael-rustbucket =
     { ... }:
     {
@@ -15,7 +13,6 @@
       };
     };
 
-  # Host-specific home-manager configuration for michael on rustbucket
   flake.modules.homeManager.michael-rustbucket =
     { pkgs, ... }:
     {
@@ -46,4 +43,11 @@
 
       home.stateVersion = "24.11";
     };
+
+  flake.lib.keys.ssh.user."michael@rustbucket" = {
+    pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHvS0a2EKa9kxQ1DK3JMS6UVYOXnOvlTFQzukp9U/M4n michael@rustbucket";
+    privateKeySecret = "ssh-michael-rustbucket";
+    deployPath = "/home/michael/.ssh/id_ed25519";
+    owner = "michael";
+  };
 }

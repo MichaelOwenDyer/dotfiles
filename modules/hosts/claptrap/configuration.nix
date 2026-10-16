@@ -79,9 +79,23 @@
       };
 
       users.users.root.openssh.authorizedKeys.keys = [
-        inputs.self.lib.sshKeys."michael@rustbucket".pub
+        inputs.self.lib.keys.ssh.user."michael@rustbucket".pub
       ];
 
       system.stateVersion = "24.11";
     };
+
+  flake.lib.keys.ssh = {
+    host.claptrap = {
+      pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMp1vwRlPjCkZRyN6Tgc0FD9mwKsAFPCjslVPe26M5nG root@claptrap";
+      path = "/etc/ssh/ssh_host_ed25519_key";
+      persistPath = "/persist/etc/ssh/ssh_host_ed25519_key";
+    };
+    root."root@claptrap" = {
+      pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHQ0T01LHYpwEHrUPz7MAzVAj0QPP2BDyiKdSlL38Yp8 root@claptrap";
+      privateKeySecret = "ssh-root-claptrap";
+      deployPath = "/root/.ssh/nixremote";
+      owner = "root";
+    };
+  };
 }

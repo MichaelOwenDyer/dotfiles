@@ -30,12 +30,12 @@
           "podman"
           "docker"
         ];
-        openssh.authorizedKeys.keys = with inputs.self.lib; [
-          sshKeys."michael@rustbucket".pub
-          sshKeys."michael@claptrap".pub
-          sshKeys."michael@rpi-3b".pub
-          sshKeys."michael@mac".pub
-          sshKeys."michael@phone".pub
+        openssh.authorizedKeys.keys = with inputs.self.lib.keys.ssh.user; [
+          "michael@rustbucket".pub
+          "michael@claptrap".pub
+          "michael@rpi-3b".pub
+          "michael@mac".pub
+          "michael@phone".pub
         ];
       };
     };

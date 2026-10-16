@@ -25,10 +25,10 @@
           "podman"
           "docker"
         ];
-        openssh.authorizedKeys.keys = with inputs.self.lib; [
-          sshKeys."michael@claptrap".pub
-          sshKeys."michael@rustbucket".pub
-          sshKeys."michael@mac".pub
+        openssh.authorizedKeys.keys = with inputs.self.lib.keys.ssh.user; [
+          "michael@claptrap".pub
+          "michael@rustbucket".pub
+          "michael@mac".pub
         ];
       };
     };
@@ -47,4 +47,11 @@
 
       home.stateVersion = "25.11";
     };
+
+  flake.lib.keys.ssh.user."michael@rpi-3b" = {
+    pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE1RmSKMqa9vAqyHjJzEmjFOJYV+qT/imHpXDmeWl6PI michael@rpi-3b";
+    privateKeySecret = "ssh-michael-rpi-3b";
+    deployPath = "/home/michael/.ssh/id_ed25519";
+    owner = "michael";
+  };
 }

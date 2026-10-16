@@ -3,8 +3,6 @@
   ...
 }:
 {
-  # Assign user michael to host claptrap with host-specific configuration
-
   flake.modules.nixos.michael-claptrap =
     { ... }:
     {
@@ -15,7 +13,6 @@
       };
     };
 
-  # Host-specific home-manager configuration for michael on claptrap
   flake.modules.homeManager.michael-claptrap =
     { ... }:
     {
@@ -29,4 +26,11 @@
 
       home.stateVersion = "24.11";
     };
+
+  flake.lib.keys.ssh.user."michael@claptrap" = {
+    pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINtKFTvyCJo4u7KstzHIZ/ZdBCfS5ukmItX75tC0aM5O michael@claptrap";
+    privateKeySecret = "ssh-michael-claptrap";
+    deployPath = "/home/michael/.ssh/id_ed25519";
+    owner = "michael";
+  };
 }

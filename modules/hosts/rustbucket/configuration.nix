@@ -59,4 +59,18 @@
 
       system.stateVersion = "24.11";
     };
+
+  flake.lib.keys = {
+    signing.rustbucket = {
+      pub = "rustbucket-1:AMe1QbSNHWw+Cyau5rwhAxknUDtmb49vY8tyIbOVAn0=";
+      privateKeySecret = "nix-signing-rustbucket";
+      deployPath = "/etc/nix/cache-priv-key.pem";
+      owner = "root";
+    };
+    ssh.host.rustbucket = {
+      pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGw0ssMwpvMC+mVlHIrRnYaIV+oCaRj6jiyxL9wu1Mr7 root@rustbucket";
+      path = "/etc/ssh/ssh_host_ed25519_key";
+      persistPath = "/persist/etc/ssh/ssh_host_ed25519_key";
+    };
+  };
 }

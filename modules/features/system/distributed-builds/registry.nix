@@ -7,7 +7,7 @@
 
   flake.lib.distributedBuild =
     let
-      inherit (inputs.self.lib) hosts hostsLib sshKeys;
+      inherit (inputs.self.lib) hosts hostsLib keys;
 
       mkBuilder =
         hostName:
@@ -33,8 +33,8 @@
     in
     {
       clients = {
-        claptrap.rootSshKey = sshKeys."root@claptrap";
-        rpi-3b.rootSshKey = sshKeys."root@rpi-3b";
+        claptrap.rootSshKey = keys.ssh.root."root@claptrap";
+        rpi-3b.rootSshKey = keys.ssh.root."root@rpi-3b";
       };
 
       builders = {
