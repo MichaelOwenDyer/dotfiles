@@ -20,6 +20,7 @@ in
         zen-browser
         loupe
         nethack
+        claude-code-cli
       ];
 
       home = {
