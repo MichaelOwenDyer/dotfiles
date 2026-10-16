@@ -6,8 +6,6 @@
   # Default settings needed for all darwinConfigurations
 
   flake.modules.darwin.default-settings = {
-    imports = [ inputs.self.modules.darwin.overlays ];
-
     nixpkgs.config.allowUnfree = true;
 
     nix = {

@@ -3,6 +3,15 @@
   ...
 }:
 {
+  flake-file.inputs = {
+    stylix = {
+      url = "github:danth/stylix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+  };
+
   flake.modules.nixos.stylix = {
     imports = [
       inputs.stylix.nixosModules.stylix

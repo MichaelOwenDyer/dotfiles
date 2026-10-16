@@ -15,7 +15,6 @@
 
       imports = with inputs.self.modules.nixos; [
         impermanence-options # Enable modules to declare impermanence config
-        overlays
         nix-settings
         locale
         security-defaults
