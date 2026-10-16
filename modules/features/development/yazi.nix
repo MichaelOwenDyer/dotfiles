@@ -75,7 +75,7 @@
       };
 
       config = {
-        xdg.mimeApps = {
+        xdg.mimeApps = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
           enable = true;
           defaultApplications = {
             "inode/directory" = "yazi.desktop";
