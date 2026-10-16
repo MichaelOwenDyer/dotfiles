@@ -59,4 +59,19 @@
       owner = "root";
     };
   };
+  flake.lib.hosts.rpi-3b = {
+    hostName = "rpi-3b";
+    system = "aarch64-linux";
+    networks = {
+      home = { ipv4 = "192.168.1.253"; interface = "enu1u1"; mac = null; };
+      tailscale = { ipv4 = "100.125.219.23"; ipv6 = "fd7a:115c:a1e0::2f37:db17"; };
+    };
+    build = {
+      maxJobs = 4;
+      speedFactor = 1;
+      supportedSystems = [ "aarch64-linux" ];
+      supportedFeatures = [ ];
+      signingKey = null;
+    };
+  };
 }

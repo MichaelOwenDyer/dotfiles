@@ -98,4 +98,13 @@
       owner = "root";
     };
   };
+
+  flake.lib.hosts.claptrap = {
+    hostName = "claptrap";
+    system = "x86_64-linux";
+    networks = {
+      home = { ipv4 = "192.168.1.11"; interface = "enp0s20f0u2"; mac = "00:e0:4c:0a:69:b6"; };
+      tailscale = { ipv4 = "100.100.245.15"; ipv6 = "fd7a:115c:a1e0::f601:f51d"; };
+    };
+  };
 }

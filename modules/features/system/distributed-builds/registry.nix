@@ -7,7 +7,7 @@
 
   flake.lib.distributedBuild =
     let
-      inherit (inputs.self.lib) hosts hostsLib keys;
+      inherit (inputs.self.lib) hosts keys;
 
       mkBuilder =
         hostName:
@@ -17,7 +17,7 @@
         }:
         let
           host = hosts.${hostName};
-          host-ipv4 = hostsLib.getIpForNetwork network host;
+          host-ipv4 = host.networks.${network}.ipv4 or host.networks.tailscale.ipv4 or null;
         in
         {
           inherit hostName network host-ipv4;

@@ -73,4 +73,22 @@
       persistPath = "/persist/etc/ssh/ssh_host_ed25519_key";
     };
   };
+
+  flake.lib.hosts.rustbucket = {
+    hostName = "rustbucket";
+    system = "x86_64-linux";
+    networks = {
+      home = { ipv4 = "192.168.1.10"; interface = "wlan0"; mac = "e8:62:be:b9:c0:6c"; };
+      streaming = { ipv4 = "192.168.50.1"; interface = "enp4s0"; isGateway = true; };
+      tailscale = { ipv4 = "100.115.183.8"; ipv6 = "fd7a:115c:a1e0::c401:b77e"; };
+    };
+    build = {
+      maxJobs = 8;
+      speedFactor = 1;
+      supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
+      supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+      signingKey = "rustbucket-1:AMe1QbSNHWw+Cyau5rwhAxknUDtmb49vY8tyIbOVAn0=";
+      binaryCachePort = 5000;
+    };
+  };
 }
