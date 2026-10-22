@@ -421,7 +421,7 @@
               |> lib.concatLists;
             dhcp-option = [
               "3,${cfg.lanAddress}"
-              "6,${lib.concatStringsSep "," cfg.lanAddress}"
+              "6,${lib.concatStringsSep "," inputs.self.lib.networks.home.dns}"
             ];
           };
         };

@@ -72,7 +72,7 @@
       ];
 
       distributed-build-client = {
-        rootSshKey = inputs.self.lib.hosts.claptrap.keys.root;
+        rootSshKey = { inherit (inputs.self.lib.hosts.claptrap.keys.root) pub deployPath; };
         builders = with inputs.self.lib.distributedBuild.builders; [
           rustbucket-home
         ];

@@ -28,7 +28,7 @@
       documentation.man.generateCaches = false;
 
       distributed-build-client = {
-        rootSshKey = inputs.self.lib.hosts.rpi-3b.keys.root;
+        rootSshKey = { inherit (inputs.self.lib.hosts.rpi-3b.keys.root) pub deployPath; };
         builders = with inputs.self.lib.distributedBuild.builders; [
           rustbucket-home
           rustbucket-tailscale

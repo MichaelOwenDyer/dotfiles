@@ -15,7 +15,7 @@
         let
           baseConfig = ''
             User michael
-            ${lib.optionalString (userKey != null) "IdentityFile ${userKey.privatePath}"}
+            ${lib.optionalString (userKey != null) "IdentityFile ${userKey.deployPath}"}
             StrictHostKeyChecking accept-new
             ControlMaster auto
             ControlPath ~/.ssh/sockets/%r@%h-%p

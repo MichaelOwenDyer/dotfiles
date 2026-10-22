@@ -1,11 +1,11 @@
 { ... }:
 {
   flake.lib.networks = {
-    home = {
+    home = rec {
       subnet = "192.168.1.0/24";
       gateway = "192.168.1.1";
       prefixLength = 24;
-      dns = [ "192.168.1.1" ];
+      dns = [ gateway ];
       dhcp = {
         rangeStart = "192.168.1.100";
         rangeEnd = "192.168.1.200";
@@ -29,10 +29,5 @@
       ipv4Prefix = "100";
       ipv6Prefix = "fd7a:115c:a1e0";
     };
-  };
-
-  flake.lib.tailnet = {
-    domain = "tail0fdbb0.ts.net";
-    ipv6Prefix = "fd7a:115c:a1e0";
   };
 }

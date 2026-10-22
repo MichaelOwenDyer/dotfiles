@@ -14,7 +14,7 @@
     }:
     let
       cfg = config.tailscale-proxy;
-      domain = inputs.self.lib.tailnet.domain;
+      domain = inputs.self.lib.networks.tailscale.domain;
       fqdn = "${config.networking.hostName}.${domain}";
       certDir = "/var/lib/tailscale-certs";
     in

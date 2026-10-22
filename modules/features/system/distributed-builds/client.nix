@@ -13,7 +13,7 @@
         rootSshKey.pub = lib.mkOption {
           type = lib.types.str;
         };
-        rootSshKey.privatePath = lib.mkOption {
+        rootSshKey.deployPath = lib.mkOption {
           type = lib.types.oneOf [
             lib.types.path
             lib.types.str
@@ -46,7 +46,7 @@
                 protocol
                 sshUser
                 ;
-              sshKey = cfg.rootSshKey.privatePath;
+              sshKey = cfg.rootSshKey.deployPath;
             });
 
           settings = {
@@ -77,7 +77,7 @@
               HostName ${builder.host-ipv4}
               User ${builder.sshUser}
               IdentitiesOnly yes
-              IdentityFile ${cfg.rootSshKey.privatePath}
+              IdentityFile ${cfg.rootSshKey.deployPath}
               StrictHostKeyChecking accept-new
               ConnectTimeout 5
               ServerAliveInterval 15
