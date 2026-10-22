@@ -27,7 +27,7 @@
       home.stateVersion = "24.11";
     };
 
-  flake.lib.keys.ssh.user."michael@claptrap" = {
+  flake.lib.hosts.claptrap.keys.users.michael = {
     pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINtKFTvyCJo4u7KstzHIZ/ZdBCfS5ukmItX75tC0aM5O michael@claptrap";
     privateKeySecret = "ssh-michael-claptrap";
     deployPath = "/home/michael/.ssh/id_ed25519";

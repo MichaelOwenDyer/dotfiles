@@ -78,7 +78,7 @@
       };
     };
 
-  flake.lib.keys.ssh.user."michael@mac" = {
+  flake.lib.hosts.mac.keys.users.michael = {
     pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAaQ4EQjxoG3L5kMu5wK1eE1w6V4y1lw3/ynJfd/0Nis michael.dyer@JGFQQXM192";
     privateKeySecret = null; # macOS, not managed by sops
     deployPath = "/Users/michael/.ssh/id_ed25519";

@@ -3,21 +3,18 @@
   ...
 }:
 {
-  flake.lib.keys.ssh.user = {
-    "michael@phone" = {
-      pub = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBL3MxiYU5PIzSCwLkOklV2Ofo4l0AvR9ve61j+UnbSVKZCjthTsegWp+OBpmEOP5VLzfZAw2bIUNcej98U92jp4=";
-      privateKeySecret = null; # phone, not managed by sops
-      deployPath = null;
-      owner = null;
-    };
-  };
-
   flake.lib.hosts = {
     phone = {
       hostName = "michaels-nothing-phone-4a";
       networks = {
         home = { ipv4 = "192.168.1.15"; interface = null; mac = "82:29:bc:59:7d:3b"; };
         tailscale = { ipv4 = "100.103.19.121"; ipv6 = "fd7a:115c:a1e0::ec01:138c"; };
+      };
+      keys.users.michael = {
+        pub = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBL3MxiYU5PIzSCwLkOklV2Ofo4l0AvR9ve61j+UnbSVKZCjthTsegWp+OBpmEOP5VLzfZAw2bIUNcej98U92jp4=";
+        privateKeySecret = null; # phone, not managed by sops
+        deployPath = null;
+        owner = null;
       };
     };
 
@@ -56,14 +53,6 @@
       hostName = "idils-laptop";
       networks = {
         home = { ipv4 = "192.168.1.21"; interface = null; mac = "7c:b5:66:b7:95:30"; };
-      };
-    };
-
-    router = {
-      hostName = "router";
-      system = "x86_64-linux";
-      networks = {
-        home = { ipv4 = "192.168.1.1"; interface = "lan"; mac = null; };
       };
     };
   };

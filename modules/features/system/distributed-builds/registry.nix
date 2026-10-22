@@ -32,11 +32,6 @@
         };
     in
     {
-      clients = {
-        claptrap.rootSshKey = keys.ssh.root."root@claptrap";
-        rpi-3b.rootSshKey = keys.ssh.root."root@rpi-3b";
-      };
-
       builders = {
         rustbucket-tailscale = mkBuilder "rustbucket" {
           network = "tailscale";

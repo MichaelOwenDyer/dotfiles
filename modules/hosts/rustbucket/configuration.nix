@@ -40,9 +40,9 @@
 
       distributed-build-server = {
         sshUser = "nixremote";
-        authorizedClients = with inputs.self.lib.distributedBuild.clients; [
-          claptrap.rootSshKey.pub
-          rpi-3b.rootSshKey.pub
+        authorizedClients = with inputs.self.lib.hosts; [
+          claptrap.keys.root.pub
+          rpi-3b.keys.root.pub
         ];
         signingKeyPath = "/etc/nix/cache-priv-key.pem";
         binaryCachePort = inputs.self.lib.hosts.rustbucket.build.binaryCachePort;
@@ -60,21 +60,7 @@
       system.stateVersion = "24.11";
     };
 
-  flake.lib.keys = {
-    signing.rustbucket = {
-      pub = "rustbucket-1:AMe1QbSNHWw+Cyau5rwhAxknUDtmb49vY8tyIbOVAn0=";
-      privateKeySecret = "nix-signing-rustbucket";
-      deployPath = "/etc/nix/cache-priv-key.pem";
-      owner = "root";
-    };
-    ssh.host.rustbucket = {
-      pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGw0ssMwpvMC+mVlHIrRnYaIV+oCaRj6jiyxL9wu1Mr7 root@rustbucket";
-      path = "/etc/ssh/ssh_host_ed25519_key";
-      persistPath = "/persist/etc/ssh/ssh_host_ed25519_key";
-    };
-  };
-
-  flake.lib.hosts.rustbucket = {
+  flake.lib.hosts.rustbucket = rec {
     hostName = "rustbucket";
     system = "x86_64-linux";
     networks = {
@@ -87,8 +73,20 @@
       speedFactor = 1;
       supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
       supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
-      signingKey = "rustbucket-1:AMe1QbSNHWw+Cyau5rwhAxknUDtmb49vY8tyIbOVAn0=";
+      signingKey = keys.signing.pub;
       binaryCachePort = 5000;
+    };
+    keys = {
+      host = {
+        pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGw0ssMwpvMC+mVlHIrRnYaIV+oCaRj6jiyxL9wu1Mr7 root@rustbucket";
+        path = "/etc/ssh/ssh_host_ed25519_key";
+      };
+      signing = {
+        pub = "rustbucket-1:AMe1QbSNHWw+Cyau5rwhAxknUDtmb49vY8tyIbOVAn0=";
+        privateKeySecret = "nix-signing-rustbucket";
+        deployPath = "/etc/nix/cache-priv-key.pem";
+        owner = "root";
+      };
     };
   };
 }

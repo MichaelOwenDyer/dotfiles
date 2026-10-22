@@ -14,6 +14,7 @@
       ...
     }:
     let
+      cfg = config.router;
       lanVlanId = 10;
       wanVlanId = 40;
       lanInterface = "lan";
@@ -21,12 +22,36 @@
       tunnelInterface = "ds-lite";
       tunnelRemote = "2001:a60:0:2::ffff";
       tunnelMtu = 1452; # Adjusted for PPPoE (1500 - 8 - 40)
-      netHome = inputs.self.lib.networks.home;
-      lanAddress = inputs.self.lib.hosts.router.networks.home.ipv4;
-      lanPrefixLength = netHome.prefixLength;
     in
     {
       options.router = {
+        lanAddress = lib.mkOption {
+          type = lib.types.str;
+          default = "192.168.1.1";
+          description = "IPv4 address of the router on the LAN";
+        };
+        lanPrefixLength = lib.mkOption {
+          type = lib.types.int;
+          default = 24;
+          description = "IPv4 prefix length of the LAN subnet";
+        };
+        dhcp = {
+          rangeStart = lib.mkOption {
+            type = lib.types.str;
+            default = "192.168.1.100";
+            description = "Start of the DHCP address range";
+          };
+          rangeEnd = lib.mkOption {
+            type = lib.types.str;
+            default = "192.168.1.200";
+            description = "End of the DHCP address range";
+          };
+          leaseTime = lib.mkOption {
+            type = lib.types.str;
+            default = "24h";
+            description = "DHCP lease time";
+          };
+        };
         trunkInterface = lib.mkOption {
           type = lib.types.str;
           description = "Physical interface used as VLAN trunk to the managed switch";
@@ -128,7 +153,7 @@
 
             "20-${lanInterface}" = {
               matchConfig.Name = lanInterface;
-              address = [ "${lanAddress}/${toString lanPrefixLength}" ];
+              address = [ "${cfg.lanAddress}/${toString cfg.lanPrefixLength}" ];
               networkConfig = {
                 ConfigureWithoutCarrier = true;
                 # Enable IPv6 routing and distribute the M-net prefix to the LAN
@@ -324,7 +349,7 @@
         services.adguardhome.settings = {
           dns = {
             bind_hosts = [
-              lanAddress
+              cfg.lanAddress
               "::"
             ];
             upstream_dns = [
@@ -381,7 +406,7 @@
             port = 0;
             interface = lanInterface;
             bind-interfaces = true;
-            dhcp-range = [ "${netHome.dhcp.rangeStart},${netHome.dhcp.rangeEnd},${netHome.dhcp.leaseTime}" ];
+            dhcp-range = [ "${cfg.dhcp.rangeStart},${cfg.dhcp.rangeEnd},${cfg.dhcp.leaseTime}" ];
             dhcp-host =
               inputs.self.lib.hosts
               |> lib.mapAttrsToList (
@@ -395,8 +420,8 @@
               )
               |> lib.concatLists;
             dhcp-option = [
-              "3,${lanAddress}"
-              "6,${lib.concatStringsSep "," netHome.dns}"
+              "3,${cfg.lanAddress}"
+              "6,${lib.concatStringsSep "," cfg.lanAddress}"
             ];
           };
         };

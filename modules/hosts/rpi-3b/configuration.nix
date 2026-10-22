@@ -28,7 +28,7 @@
       documentation.man.generateCaches = false;
 
       distributed-build-client = {
-        rootSshKey = inputs.self.lib.distributedBuild.clients.rpi-3b.rootSshKey;
+        rootSshKey = inputs.self.lib.hosts.rpi-3b.keys.root;
         builders = with inputs.self.lib.distributedBuild.builders; [
           rustbucket-home
           rustbucket-tailscale
@@ -36,7 +36,7 @@
       };
 
       users.users.root.openssh.authorizedKeys.keys = [
-        inputs.self.lib.keys.ssh.user."michael@rustbucket".pub
+        inputs.self.lib.hosts.rustbucket.keys.users.michael.pub
       ];
 
       services.adguardhome.settings.dns.bind_hosts = [
@@ -46,19 +46,6 @@
       system.stateVersion = "25.11";
     };
 
-  flake.lib.keys.ssh = {
-    host.rpi-3b = {
-      pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG69KLqwVXfDt4LF1E9v8tL8jlJbdqt+1MpT7J7M0i8r root@rpi-3b";
-      path = "/etc/ssh/ssh_host_ed25519_key";
-      persistPath = null; # no impermanence
-    };
-    root."root@rpi-3b" = {
-      pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAPQY1jga8pE59ErPEGTt5Rz0GjwGKJq8svjeWWnqeSc root@rpi-3b";
-      privateKeySecret = "ssh-root-rpi-3b";
-      deployPath = "/root/.ssh/nixremote";
-      owner = "root";
-    };
-  };
   flake.lib.hosts.rpi-3b = {
     hostName = "rpi-3b";
     system = "aarch64-linux";
@@ -66,12 +53,17 @@
       home = { ipv4 = "192.168.1.253"; interface = "enu1u1"; mac = null; };
       tailscale = { ipv4 = "100.125.219.23"; ipv6 = "fd7a:115c:a1e0::2f37:db17"; };
     };
-    build = {
-      maxJobs = 4;
-      speedFactor = 1;
-      supportedSystems = [ "aarch64-linux" ];
-      supportedFeatures = [ ];
-      signingKey = null;
+    keys = {
+      host = {
+        pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG69KLqwVXfDt4LF1E9v8tL8jlJbdqt+1MpT7J7M0i8r root@rpi-3b";
+        path = "/etc/ssh/ssh_host_ed25519_key";
+      };
+      root = {
+        pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAPQY1jga8pE59ErPEGTt5Rz0GjwGKJq8svjeWWnqeSc root@rpi-3b";
+        privateKeySecret = "ssh-root-rpi-3b";
+        deployPath = "/root/.ssh/nixremote";
+        owner = "root";
+      };
     };
   };
 }

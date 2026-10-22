@@ -9,12 +9,12 @@
     { lib, config, ... }:
     let
       cfg = config.keys.deployment;
-      keys = inputs.self.lib.keys;
+      hosts = inputs.self.lib.hosts;
 
       userKeyConfigs = builtins.filter (k: k.privateKeySecret != null)
-        (map (name: keys.ssh.user.${name}) cfg.userKeys);
-      rootKeyConfigs = map (name: keys.ssh.root.${name}) cfg.rootKeys;
-      signingKeyConfigs = map (name: keys.signing.${name}) cfg.signingKeys;
+        (map (name: hosts.${name}.keys.users.${name}) cfg.userKeys);
+      rootKeyConfigs = map (name: hosts.${name}.keys.root) cfg.rootKeys;
+      signingKeyConfigs = map (name: hosts.${name}.keys.signing) cfg.signingKeys;
 
       allSecrets = map (k: k.privateKeySecret)
         (userKeyConfigs ++ rootKeyConfigs ++ signingKeyConfigs);

@@ -72,32 +72,18 @@
       ];
 
       distributed-build-client = {
-        rootSshKey = inputs.self.lib.distributedBuild.clients.claptrap.rootSshKey;
+        rootSshKey = inputs.self.lib.hosts.claptrap.keys.root;
         builders = with inputs.self.lib.distributedBuild.builders; [
           rustbucket-home
         ];
       };
 
       users.users.root.openssh.authorizedKeys.keys = [
-        inputs.self.lib.keys.ssh.user."michael@rustbucket".pub
+        inputs.self.lib.hosts.rustbucket.keys.users.michael.pub
       ];
 
       system.stateVersion = "24.11";
     };
-
-  flake.lib.keys.ssh = {
-    host.claptrap = {
-      pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMp1vwRlPjCkZRyN6Tgc0FD9mwKsAFPCjslVPe26M5nG root@claptrap";
-      path = "/etc/ssh/ssh_host_ed25519_key";
-      persistPath = "/persist/etc/ssh/ssh_host_ed25519_key";
-    };
-    root."root@claptrap" = {
-      pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHQ0T01LHYpwEHrUPz7MAzVAj0QPP2BDyiKdSlL38Yp8 root@claptrap";
-      privateKeySecret = "ssh-root-claptrap";
-      deployPath = "/root/.ssh/nixremote";
-      owner = "root";
-    };
-  };
 
   flake.lib.hosts.claptrap = {
     hostName = "claptrap";
@@ -105,6 +91,18 @@
     networks = {
       home = { ipv4 = "192.168.1.11"; interface = "enp0s20f0u2"; mac = "00:e0:4c:0a:69:b6"; };
       tailscale = { ipv4 = "100.100.245.15"; ipv6 = "fd7a:115c:a1e0::f601:f51d"; };
+    };
+    keys = {
+      host = {
+        pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMp1vwRlPjCkZRyN6Tgc0FD9mwKsAFPCjslVPe26M5nG root@claptrap";
+        path = "/etc/ssh/ssh_host_ed25519_key";
+      };
+      root = {
+        pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHQ0T01LHYpwEHrUPz7MAzVAj0QPP2BDyiKdSlL38Yp8 root@claptrap";
+        privateKeySecret = "ssh-root-claptrap";
+        deployPath = "/root/.ssh/nixremote";
+        owner = "root";
+      };
     };
   };
 }

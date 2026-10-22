@@ -44,7 +44,7 @@
       home.stateVersion = "24.11";
     };
 
-  flake.lib.keys.ssh.user."michael@rustbucket" = {
+  flake.lib.hosts.rustbucket.keys.users.michael = {
     pub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHvS0a2EKa9kxQ1DK3JMS6UVYOXnOvlTFQzukp9U/M4n michael@rustbucket";
     privateKeySecret = "ssh-michael-rustbucket";
     deployPath = "/home/michael/.ssh/id_ed25519";

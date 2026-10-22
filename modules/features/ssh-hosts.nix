@@ -8,8 +8,8 @@
   flake.modules.nixos.ssh-client-hosts =
     { lib, config, ... }:
     let
-      inherit (inputs.self.lib) hosts keys;
-      userKey = keys.ssh.user."michael@${config.networking.hostName}" or null;
+      inherit (inputs.self.lib) hosts;
+      userKey = hosts.${config.networking.hostName}.keys.users.michael or null;
 
       mkHostConfig = name: host:
         let
