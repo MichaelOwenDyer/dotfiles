@@ -5,7 +5,13 @@
 }:
 {
   options.flake.lib = lib.mkOption {
-    type = lib.types.attrsOf lib.types.unspecified;
+    type = lib.types.submodule {
+      freeformType = lib.types.attrsOf lib.types.unspecified;
+      options.hosts = lib.mkOption {
+        type = lib.types.attrsOf lib.types.anything;
+        default = { };
+      };
+    };
     default = { };
   };
 
