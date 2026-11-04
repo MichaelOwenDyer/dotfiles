@@ -25,7 +25,6 @@
 
         # Silent boot (plymouth may override with stricter settings)
         consoleLogLevel = lib.mkDefault 3;
-        initrd.verbose = lib.mkDefault false;
         kernelParams = lib.mkDefault [
           "quiet"
           "udev.log_level=3"

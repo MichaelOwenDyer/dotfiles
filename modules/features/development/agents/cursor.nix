@@ -7,7 +7,6 @@
     {
       environment.systemPackages = with pkgs; [
         cursor-cli
-        mcp-nixos
       ];
     };
 
@@ -16,7 +15,6 @@
     {
       environment.systemPackages = with pkgs; [
         cursor-cli
-        mcp-nixos
       ];
     };
 
@@ -26,13 +24,5 @@
       home.packages = with pkgs; [
         cursor-cli
       ];
-      home.file.".cursor/mcp.json".text = builtins.toJSON {
-        mcpServers = {
-          nixos = {
-            command = "${pkgs.mcp-nixos}/bin/mcp-nixos";
-            args = [ ];
-          };
-        };
-      };
     };
 }

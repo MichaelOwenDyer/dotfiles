@@ -7,7 +7,6 @@
     {
       environment.systemPackages = with pkgs; [
         github-copilot-cli
-        mcp-nixos
       ];
     };
 
@@ -16,7 +15,6 @@
     {
       environment.systemPackages = with pkgs; [
         github-copilot-cli
-        mcp-nixos
       ];
     };
 
@@ -25,7 +23,6 @@
     {
       home.packages = with pkgs; [
         github-copilot-cli
-        mcp-nixos
       ];
     };
 }
