@@ -28,7 +28,7 @@
       system.primaryUser = "michael.dyer";
 
       homebrew.casks = [
-        "arc"
+        "thebrowsercompany-dia"
         "google-chrome"
         "rustdesk"
         "vlc"
@@ -43,6 +43,11 @@
         "alt-tab"
         "mos"
         "scroll-reverser"
+        "zed"
+      ];
+
+      fonts.packages = with pkgs; [
+        jetbrains-mono
       ];
 
       homebrew.brews = [
@@ -61,6 +66,7 @@
         nethack
         typst
         gitui
+        pi
       ];
 
       programs.git.settings.user = {
